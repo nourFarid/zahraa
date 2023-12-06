@@ -14,8 +14,8 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
   if(!student){
     return next (new Error (`In-valid student Id `,{cause:400}))
   }
-  if (female == 'female'){
-  const nameOfStudent = student.userName
+  if (female == 'انثي'){
+  const nameOfStudent = student.studentName
   const expulsion = await studentExpulsion.create({
     nameOfStudent,penaltyKind,reason , cancellation
   //  ,createdBy:userId
@@ -30,7 +30,7 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
    const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
    student.expulsionStudent==true
   return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
-}return res.status(201).json({message:"gender doesn't match "})
+}   return next (new Error (`gender doesn't match`,{cause:400}))
 }
 )
 
@@ -45,8 +45,8 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
     return next (new Error (`In-valid student Id `,{cause:400}))
   }
  
-  if (male == 'male'){
-  const nameOfStudent = student.userName
+  if (male == 'ذكر'){
+  const nameOfStudent = student.studentName
   const expulsion = await studentExpulsion.create({
     nameOfStudent,penaltyKind,reason , cancellation
   //  ,createdBy:userId
@@ -61,21 +61,26 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
   const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
  
  return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
-}return res.status(201).json({message:"gender doesn't match"})
+}    return next (new Error (`gender doesn't match`,{cause:400}))
+
 }
 )
 
 const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
  const {studentId} = req.params
  const user = await userModel.findById(studentId)
- const student = await userModel.updateOne(
-   { _id: studentId },
-   { $set: { expulsionStudent: false } }
- );
- // student.expulsionStudent = true
- // const cancelExpulsion = student.expulsionStudent
- 
- return res.json ({message:"expulsion removed", student})
+ if(!user){
+  return next (new Error (`In-valid student Id `,{cause:400}))
+}
+if(user.expulsionStudent == true){
+  const student = await userModel.updateOne(
+    { _id: studentId },
+    { $set: { expulsionStudent: false } }
+  )} else{
+    return next (new Error (`no expulsion found to this student `,{cause:400}))
+  }
+ return res.status(200).json({status : httpStatusText.SUCCESS , message:`Expulsion has been removed`})
 })
+
 
 module.exports = {createExpulsionfemale,createExpulsionMale,cancel}

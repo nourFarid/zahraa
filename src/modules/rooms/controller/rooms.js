@@ -10,9 +10,10 @@ const addRoom = errorHandling.asyncHandler(async(req,res,next)=>{
     if(! await FloorModel.findOne({_id:FloorId})){
       return next (new Error (`In-valid floor ID`,{cause:400}))
     }
-    const userId = req.user._id
+    //const userId = req.user._id
     const room = await roomsModel.create({
-        roomNumber , FloorId  , roomType , Type , numOfBeds , Capacity,createdBy:userId
+        roomNumber , FloorId  , roomType , Type , numOfBeds , Capacity
+        //,createdBy:userId
      })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {room}})
 }

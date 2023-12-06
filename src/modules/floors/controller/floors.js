@@ -8,11 +8,11 @@ const addFloor = errorHandling.asyncHandler(async(req,res,next)=>{
     if(! await BuildingModel.findOne({_id:BuildingId})){
       return next (new Error (`In-valid building ID`,{cause:400}))
     }
-    const userId = req.user._id
+    //const userId = req.user._id
     const floor = await floorModel.create({
         Name,
         BuildingId,
-        createdBy:userId,
+        //createdBy:userId,
      })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {floor}})
 }
