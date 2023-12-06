@@ -9,6 +9,8 @@ const express = require ('express')
 const initApp = require ('./src/index.router.js')
 const app = express()
 // setup port and the baseUrl
+const cors = require('cors');
+app.use(cors());
 const port = process.env.PORT || 5000
 initApp(app ,express)
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
