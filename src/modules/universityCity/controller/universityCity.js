@@ -5,9 +5,9 @@ const httpStatusText = require('../../../utils/httpStatusText.js')
 //add addUniversityCity
 const addUniversityCity = errorHandling.asyncHandler(async(req,res,next)=>{
     const{Name }= req.body
-   const userId = req.user._id
+   //const userId = req.user._id
     const universityCity = await UniversityCityModel.create({
-       createdBy:userId,
+    //   createdBy:userId,
         Name
     })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {universityCity}})

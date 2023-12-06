@@ -10,11 +10,12 @@ const addBuilding = errorHandling.asyncHandler(async(req,res,next)=>{
       return next (new Error (`In-valid city ID`,{cause:400}))
 
     }
-    const userId = req.user._id
+    //const userId = req.user._id
     const building = await BuildingsModel.create({
         Name,
         Gender,
-        UniversityCityId,createdBy:userId,
+        UniversityCityId,
+        //createdBy:userId,
      })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {building}})
 }
