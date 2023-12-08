@@ -13,8 +13,8 @@ const pentalyFemale = errorHandling.asyncHandler(async(req,res,next)=>{
   if(!student){
     return next (new Error (`In-valid student Id `,{cause:400}))
   }
-  if (female == 'female'){
-  const studentName = student.userName
+  if (female == 'انثي'){
+  const studentName = student.studentName
   const penatly = await penatlyModel.create({
     studentName,penaltyKind,reason , cancellation,
   //  ,createdBy:userId
@@ -26,7 +26,7 @@ const pentalyFemale = errorHandling.asyncHandler(async(req,res,next)=>{
   );
 
   return res.status(201).json({status : httpStatusText.SUCCESS , data : {penatly}})
-}return res.status(404).json({message:"gender doesn't match"})
+}   return next (new Error (`gender doesn't match`,{cause:400}))
 }
 )
 
@@ -40,8 +40,8 @@ const pentalyMale = errorHandling.asyncHandler(async(req,res,next)=>{
     if(!student){
       return next (new Error (`In-valid student Id `,{cause:400}))
     }
-    if (male == 'male'){
-    const studentName = student.userName
+    if (male == 'ذكر'){
+    const studentName = student.studentName
     const penatly = await penatlyModel.create({
       studentName,penaltyKind,reason , cancellation,
     //  ,createdBy:userId
@@ -53,21 +53,29 @@ const pentalyMale = errorHandling.asyncHandler(async(req,res,next)=>{
     );
   
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {penatly}})
-  }return res.status(404).json({message:"gender doesn't match"})
-  }
+  }   return next (new Error (`gender doesn't match`,{cause:400}))
+}
   )
 
 const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   const {studentId} = req.params
   const user = await userModel.findById(studentId)
+  if(!user){
+   return next (new Error (`In-valid student Id `,{cause:400}))
+ }
+ if(user.penalty == true){
   const student = await userModel.updateOne(
     { _id: studentId },
     { $set: { penalty: false } }
-  );
+  )} else{
+    return next (new Error (`no penalties found to this student `,{cause:400}))
+  }
   // student.expulsionStudent = true
   // const cancelExpulsion = student.expulsionStudent
   
-  return res.json ({message:"success:panalty process is removed ",student})
-})
+  return res.status(200).json({status : httpStatusText.SUCCESS , message:`penalty has been removed`})
+ })
+ 
+ 
 
 module.exports = {pentalyFemale,pentalyMale,cancel}

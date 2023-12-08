@@ -51,11 +51,9 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
-    gender: {
-      type: String,
-      //enum: ["Male", "Female"],
-      required: true,
-    },
+    gender:{
+      type:String,
+      enum:['ذكر' , 'انثي']},
 
     religion: {
       type: String,
@@ -229,6 +227,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+      buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
+      floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
+      roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
+      housingDate :{type: Date},
+      evacuationDate :{type: Date}, // إخلاء السكن
+      evacuationType : {type : String, enum:['نصف العام الدراسي' , 'نهاية العام الدراسي']},
+      evacuationReason :{type: String, enum :['إخلاء اجازات' , 'إخلاء انتقالات']},
+      expulsionStudent:{ type: Boolean,default:false},
+      penalty:{type: Boolean,default:false},
     image: String,
     DOB: String,
   },

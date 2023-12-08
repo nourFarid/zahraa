@@ -5,10 +5,10 @@ const httpStatusText = require('../../../utils/httpStatusText.js')
 //add instructions
 const addInstructions = errorHandling.asyncHandler(async(req,res,next)=>{
     const{contextOfInstructions}= req.body
-    const userId = req.user._id
+    //const userId = req.user._id
 
     const instructions = await instructionsModel.create({
-        createdBy:userId,
+      //  createdBy:userId,
         contextOfInstructions
     })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {instructions}})

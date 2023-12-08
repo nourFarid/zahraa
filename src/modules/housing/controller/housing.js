@@ -27,11 +27,14 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
   if(!building){
     return next (new Error (`In-valid building ID`,{cause:400}))
   }
+  if (student.expulsionStudent == true){
+    return next (new Error (`this student is blocked from housing`,{cause:400}))
+  }
 
   // to check that building gender is same as student gender
   if (building.Gender == student.gender){
   const gender = student.gender
-  const userName = student.userName
+  const userName = student.studentName
   //to check that student is not in room
   if(!room.occupants.includes(studentId) ){
     if((room.occupants.length< room.numOfBeds)){
@@ -49,7 +52,7 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
 } )
 
 const getStudentMale = errorHandling.asyncHandler( async(req,res,next)=>{
-  const males = await userModel.find({gender:'male'}, {"__v":false})
+  const males = await userModel.find({gender:'ذكر'}, {"__v":false})
   if(!males){
     return next (new Error (`no males found! please try again later`,{cause:404}))
   }
@@ -57,7 +60,7 @@ const getStudentMale = errorHandling.asyncHandler( async(req,res,next)=>{
 })
 
 const getStudentFemale = errorHandling.asyncHandler( async(req,res,next)=>{
-  const females = await userModel.find({gender:'female'}, {"__v":false})
+  const females = await userModel.find({gender:'انثي'}, {"__v":false})
   if(!females){
     return next (new Error (`no females found! please try again later`,{cause:404}))
   }
@@ -71,7 +74,7 @@ const updateHousedMale = errorHandling.asyncHandler(async(req,res,next)=>
           evacuationType,evacuationReason,roomId}=req.body
         const user = await userModel.findById(userId)
         const male = user.gender
-          if (male == 'male'){
+          if (male == 'ذكر'){
             const student = await userModel.findByIdAndUpdate({ _id:userId},{studentName,buildingId, floorId,housingDate, evacuationDate, 
             evacuationType,evacuationReason,roomId },{new:true})
             if(!student){
@@ -80,7 +83,7 @@ const updateHousedMale = errorHandling.asyncHandler(async(req,res,next)=>
             }
           return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
         }
-        return res.status(200).json({message:"gender doesn't match"})
+        return res.status(400).json({message:"gender doesn't match"})
       
     } 
     
@@ -92,8 +95,8 @@ const updateHousedFemale = errorHandling.asyncHandler(async(req,res,next)=>
         const {studentName,buildingId, floorId,housingDate, evacuationDate, 
           evacuationType,evacuationReason,roomId}=req.body
         const user = await userModel.findById(userId)
-        const male = user.gender
-          if (male == 'female'){
+        const female = user.gender
+          if (female == 'انثي'){
             const student = await userModel.findByIdAndUpdate({ _id:userId},{studentName,buildingId, floorId,housingDate, evacuationDate, 
             evacuationType,evacuationReason,roomId },{new:true})
             if(!student){
@@ -102,7 +105,7 @@ const updateHousedFemale = errorHandling.asyncHandler(async(req,res,next)=>
             }
           return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
         }
-        return res.status(200).json({message:"gender doesn't match"})
+        return res.status(400).json({message:"gender doesn't match"})
       
     } 
     
