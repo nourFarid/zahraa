@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const fees = new mongoose.Schema(
+const feesForStudents = new mongoose.Schema(
   {
     id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -45,4 +45,4 @@ const fees = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("fees", fees);
+module.exports = mongoose.model("feesForStudents", feesForStudents);
