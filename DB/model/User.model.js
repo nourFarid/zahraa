@@ -140,6 +140,9 @@ const userSchema = new mongoose.Schema(
     College: {
       type: String,
     },
+    year:{
+      type: String,
+    },
     grade: {
       type: Number,
     },
