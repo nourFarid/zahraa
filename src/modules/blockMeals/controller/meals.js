@@ -5,16 +5,17 @@ const userModel = require('../../../../DB/model/User.model.js');
 const feesModel = require('../../../../DB/model/fees/feesForStudents.js');
 
 const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
-  const { dateFrom, dateTo, reason, meals, id } = req.body;
+  const { dateFrom, dateTo, reason, meals } = req.body;
   const { studentId } = req.params;
 
   const student = await userModel.findById(studentId);
-  const feePayment = await feesModel.find({id:id});
+  const feePayment = await feesModel.find({id:studentId});
   // console.log(feePayment.PaymentValueNumber);
   const {PaymentValueNumber}=feePayment[0]
   if (!student) {
     return next(new Error(`In-valid student Id`, { cause: 400 }));
   }
+  const {studentName} = student
   const studentMeals = await mealsModel.find({StudentId:studentId})
   if (meals === "عشاء" || meals === "غداء" ) {
     if (!feePayment) {
@@ -27,6 +28,7 @@ const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
     // Create meals if all conditions are met
     const mealsEntry = await mealsModel.create({
       StudentId: studentId,
+      studentName: studentName,
       dateFrom,
       dateTo,
       reason,
@@ -55,7 +57,6 @@ const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
     }
   
 }}});
-
 
 const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   const {studentId} = req.params

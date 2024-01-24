@@ -17,7 +17,7 @@ const classifyStudents = require("./modules/classificationOfStudents/classificat
 const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAboutAdmissionRouter.js");
 const fees = require("./modules/fees/fees.router");
 const blockMeals= require("./modules/blockMeals/meals.router.js")
-
+const absence = require("./modules/absence&Permission/absence.router.js")
 const initApp = (app, express) => {
   //convert Buffer Data
   app.use(express.json({}));
@@ -39,6 +39,8 @@ const initApp = (app, express) => {
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
   app.use(`/blockMeals` , blockMeals)
+  app.use(`/absence` , absence)
+
 
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");
