@@ -18,15 +18,19 @@ const GenerateAndVerifyToken = require ('../../../utils/GenerateAndVerifyToken.j
 
  const signIn = async(req,res,next)=>{
     //ast2bel el data
-    const {NationalId,password} = req.body;
+    const {nationalID,password} = req.body;
     //check el email mawgood wla la2
-    const user = await userModel.findOne({NationalId})
+    const user = await userModel.find({nationalID:nationalID})
+    console.log('====================================');
+    console.log(user[0].password);
+
+    console.log('====================================');
     if (!user){
         return next (new Error ("in-valid user",{cause:404}))
     }
     //user.password de elly feha el hash password elly f el db
     //password da el password elly hwa b3tholk
-    const match = hashAndCompare.compare(password,user.password)
+    const match = hashAndCompare.compare(password,user[0].password)
     if (!match){
         return next (new Error ("miss matched data",{cause:400}))
     }
