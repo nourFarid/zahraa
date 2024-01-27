@@ -4,10 +4,11 @@ const instructionsController = require ("./controller/instructions.js")
 const auth = require('../../middleware/auth.js')
 
 router.post('/',
-  //  auth.auth([auth.roles.admin]),
+   auth.auth([auth.roles.admin]),
      instructionsController.addInstructions)
 
 router.get('/'
+
     , instructionsController.getInstructions)
 
 

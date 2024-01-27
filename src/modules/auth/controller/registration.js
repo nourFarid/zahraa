@@ -35,9 +35,12 @@ const GenerateAndVerifyToken = require ('../../../utils/GenerateAndVerifyToken.j
         return next (new Error ("miss matched data",{cause:400}))
     }
     const payload = {
-        id :user._id,
-        email:user.email
+        id :user[0]._id,
+        email:user[0].email
     }
+    console.log('====================================');
+    console.log(payload);
+    console.log('====================================');
     const token = GenerateAndVerifyToken.generateToken({payload})
     return res.status(200).json ({message :"done",token})
     //ana bhtag mn el sign in el token
