@@ -1,6 +1,8 @@
 const instructionsModel = require('../../../../DB/model/acceptanceInstructions.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
+const fs = require('fs');
+
 
 //add instructions
 const addInstructions = errorHandling.asyncHandler(async(req,res,next)=>{
@@ -54,6 +56,45 @@ const deleteInstruction = errorHandling.asyncHandler(async(req,res,next)=>{
     return res.status(200).json({status:httpStatusText.SUCCESS , message:'Instruction Deleted Successfully'})
 })
 
-module.exports = {addInstructions , deleteInstruction , getInstructions,updateInstructions}
+const uploadFile = async (req, res, next) => {
+      if (req.file) {
+          const { originalname, path } = req.file;
+
+          const buffer = fs.readFileSync(path);
+          const newPdf = new instructionsModel({
+              avatar: originalname,
+              data: buffer,
+          });
+
+          await newPdf.save();
+          // fs.unlinkSync(path);
+          return res.status(201).json({status: httpStatusText.SUCCESS, data: { newPdf } });
+      } 
+        return res.status(404).json({ status: httpStatusText.FAIL, message: 'No file provided' });
+      
+};
+
+const downloadFile = async (req, res, next) => {
+  const fileId = req.params.id;
+  const file = await instructionsModel.findById(fileId);
+
+  if (!file) {
+      return res.status(404).json({ status: httpStatusText.FAIL, message: 'File not found' });
+    }
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=${file.avatar}`);
+
+  res.send(file.data);
+};
+
+
+module.exports = {
+  addInstructions , 
+  deleteInstruction , 
+  getInstructions,
+  updateInstructions , 
+  uploadFile,
+  downloadFile}
         
     
