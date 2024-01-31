@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       min: [9, "StudentCode must be at at least 9 numbers"],
       //  max: [10 , 'StudentCode must be at max 10 numbers']
     },
+    acadimicYear: {
+      type: String, 
+      required: true 
+    },
 
     studentName: {
       type: String,
@@ -172,7 +176,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
 
-    HousingType: {
+    0: {
       type: String,
     },
 
@@ -230,6 +234,29 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    //الحاجات الي ليها علاقه بالبيانات الاساسيه
+    collegeStudent:{
+      type: Boolean,
+      default: false,
+    },
+    FromOutsideTheUniversity:{
+      type: Boolean,
+    default: false,
+    },
+    Evacuation:{ //اخلاء
+      type: Boolean,
+    default: false,
+    },
+    Requesting:{
+      type: Boolean,
+    default: false,
+    },
+    Accepting:{
+      type: Boolean,
+    default: false,
+    },
+    
+    
       buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
@@ -274,3 +301,10 @@ module.exports = mongoose.model("User", userSchema);
 // phone: {
 //   type: String,
 // },
+
+
+
+
+
+
+
