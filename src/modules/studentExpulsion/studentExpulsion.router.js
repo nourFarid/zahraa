@@ -8,11 +8,11 @@ router.post('/female/:studentId',
     expulsion.createExpulsionfemale)
 
 
-    router.post('/male/:studentId',
+router.post('/male/:studentId',
     // auth.auth([auth.roles.admin]),
     expulsion.createExpulsionMale)
 
-    router.post('/:studentId',
+router.post('/:studentId',
     // auth.auth([auth.roles.admin]),
     expulsion.cancel)
 module.exports = router
