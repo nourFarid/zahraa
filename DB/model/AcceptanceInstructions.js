@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 
 const acceptanceInstructionsSchema = new mongoose.Schema({
     contextOfInstructions: { type: String },
-    avatar:{type: String},
     data:{type: Buffer},
+    avatar:{type: String},
     createdBy: { type: mongoose.ObjectId, ref: 'User', required: false },
 
 

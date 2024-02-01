@@ -3,7 +3,6 @@ const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 const fs = require('fs');
 
-
 //add instructions
 const addInstructions = errorHandling.asyncHandler(async(req,res,next)=>{
     const{contextOfInstructions}= req.body
@@ -56,24 +55,26 @@ const deleteInstruction = errorHandling.asyncHandler(async(req,res,next)=>{
     return res.status(200).json({status:httpStatusText.SUCCESS , message:'Instruction Deleted Successfully'})
 })
 
+//Upload file
 const uploadFile = async (req, res, next) => {
-      if (req.file) {
-          const { originalname, path } = req.file;
+  if (req.file) {
+      const { originalname, path } = req.file;
 
-          const buffer = fs.readFileSync(path);
-          const newPdf = new instructionsModel({
-              avatar: originalname,
-              data: buffer,
-          });
+      const buffer = fs.readFileSync(path);
+      const newPdf = new instructionsModel({
+          avatar: originalname,
+          data: buffer,
+      });
 
-          await newPdf.save();
-          // fs.unlinkSync(path);
-          return res.status(201).json({status: httpStatusText.SUCCESS, data: { newPdf } });
-      } 
-        return res.status(404).json({ status: httpStatusText.FAIL, message: 'No file provided' });
-      
+      await newPdf.save();
+      // fs.unlinkSync(path);
+      return res.status(201).json({status: httpStatusText.SUCCESS, data: { newPdf } });
+  } 
+    return res.status(404).json({ status: httpStatusText.FAIL, message: 'No file provided' });
+  
 };
 
+//download file
 const downloadFile = async (req, res, next) => {
   const fileId = req.params.id;
   const file = await instructionsModel.findById(fileId);
@@ -88,13 +89,13 @@ const downloadFile = async (req, res, next) => {
   res.send(file.data);
 };
 
-
 module.exports = {
   addInstructions , 
   deleteInstruction , 
   getInstructions,
   updateInstructions , 
-  uploadFile,
-  downloadFile}
+  downloadFile,
+  uploadFile
+  }
         
     

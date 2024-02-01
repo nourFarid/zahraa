@@ -4,6 +4,12 @@ const instructionsController = require ("./controller/instructions.js")
 const auth = require('../../middleware/auth.js')
 const uploadFile = require('../../middleware/upload.js')
 
+router.post("/upload" ,
+  uploadFile.upload.single('avatar'),instructionsController.uploadFile)
+
+  
+router.get('/download/:id', instructionsController.downloadFile);
+
 router.post('/',
   //  auth.auth([auth.roles.admin]),
      instructionsController.addInstructions)
@@ -20,10 +26,5 @@ router.delete('/:instructionsId',
 //auth.auth([auth.roles.admin]),
    instructionsController.deleteInstruction)
 
-router.post("/upload" ,
-  uploadFile.upload.single('avatar'),instructionsController.uploadFile)
-
-  
-router.get('/download/:id', instructionsController.downloadFile);
 
 module.exports = router
