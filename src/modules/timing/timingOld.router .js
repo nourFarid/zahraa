@@ -15,7 +15,7 @@ const {
 
 router.post(
   "/addOldFemales",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   addToAndFromDateFemales
 );
 router.get(
@@ -25,18 +25,18 @@ router.get(
 );
 router.put(
   "/updateOldFemales/:id",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   updateDateFemales
 );
 router.delete(
   "/deleteOldFemales/:id",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   deleteDateFemales
 );
 
 router.post(
   "/addOldMales",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   addToAndFromDateMales
 );
 router.get(
@@ -46,12 +46,12 @@ router.get(
 );
 router.put(
   "/updateOldMales/:id",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   updateDateMales
 );
 router.delete(
   "/deleteOldMales/:id",
-  auth.auth([auth.roles.admin]),
+  // auth.auth([auth.roles.admin]),
   deleteDateMales
 );
 

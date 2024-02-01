@@ -16,8 +16,13 @@ const registration = require("./modules/registration/registration.router");
 const classifyStudents = require("./modules/classificationOfStudents/classification.router.js");
 const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAboutAdmissionRouter.js");
 const fees = require("./modules/fees/fees.router");
+
 const blockMeals= require("./modules/blockMeals/meals.router.js")
 const absence = require("./modules/absence&Permission/absence.router.js")
+
+const typeOfSpecialHousing= require("./modules/typeOfHousing/typeOfSpecialHousing.router.js")
+const detailsAboutTypeOfSpecialHousing=require("./modules/typeOfHousing/detailsAboutTypeOfSpecialHousing.router.js")
+
 const initApp = (app, express) => {
   //convert Buffer Data
   app.use(express.json({}));
@@ -38,9 +43,14 @@ const initApp = (app, express) => {
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
+
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
 
+
+
+  app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
+  app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
 
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");

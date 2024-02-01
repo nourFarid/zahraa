@@ -5,7 +5,7 @@ const httpStatusText = require("../../../utils/httpStatusText.js");
 //*NEW FEMALES
 const addToAndFromDateFemales = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const { to, from } = req.body;
+    const { to, from,ofYear } = req.body;
     console.log(to, from);
     const toDate = new Date(to);
     const fromDate = new Date(from);
@@ -22,6 +22,7 @@ const addToAndFromDateFemales = errorHandling.asyncHandler(
     const toFromDate = await TimingOldFemalesSchema.create({
       to: formatToDate.format(toDate),
       from: formatFromDate.format(fromDate),
+      ofYear:ofYear
     });
 
     return res
@@ -38,7 +39,7 @@ const getDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
 });
 const updateDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
   const dateId = req.params.id;
-  const { to, from } = req.body;
+  const { to, from,ofYear } = req.body;
   console.log(to, from);
   const toDate = new Date(to);
   const fromDate = new Date(from);
@@ -60,6 +61,7 @@ const updateDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
       $set: {
         to: formatToDate.format(toDate),
         from: formatFromDate.format(fromDate),
+        ofYear:ofYear
       },
     },
     { new: true }
@@ -82,7 +84,7 @@ const deleteDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
 //*NEW MALES
 const addToAndFromDateMales = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const { to, from } = req.body;
+    const { to, from,ofYear } = req.body;
     const toDate = new Date(to);
     const fromDate = new Date(from);
     const formatToDate = new Intl.DateTimeFormat("en-us", {
@@ -98,6 +100,7 @@ const addToAndFromDateMales = errorHandling.asyncHandler(
     const toFromDate = await TimingOldMalesSchema.create({
       to: formatToDate.format(toDate),
       from: formatFromDate.format(fromDate),
+      ofYear:ofYear
     });
 
     return res
@@ -114,7 +117,7 @@ const getDateMales = errorHandling.asyncHandler(async (req, res, next) => {
 });
 const updateDateMales = errorHandling.asyncHandler(async (req, res, next) => {
   const dateId = req.params.id;
-  const { to, from } = req.body;
+  const { to, from,ofYear } = req.body;
   console.log(to, from);
   const toDate = new Date(to);
   const fromDate = new Date(from);
@@ -135,6 +138,7 @@ const updateDateMales = errorHandling.asyncHandler(async (req, res, next) => {
       $set: {
         to: formatToDate.format(toDate),
         from: formatFromDate.format(fromDate),
+        ofYear:ofYear
       },
     },
     { new: true }

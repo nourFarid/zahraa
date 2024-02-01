@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const timingNewFemalesSchema = new mongoose.Schema(
   {
+    ofYear:{
+      type:String,
+      
+    },
+
+
     to: {
       type: String,
       required: [true, "date is required"],

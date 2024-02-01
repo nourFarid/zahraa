@@ -11,10 +11,11 @@ router.post("/upload" ,
 router.get('/download/:id', instructionsController.downloadFile);
 
 router.post('/',
-  //  auth.auth([auth.roles.admin]),
+   auth.auth([auth.roles.admin]),
      instructionsController.addInstructions)
 
 router.get('/'
+
     , instructionsController.getInstructions)
 
 
