@@ -85,21 +85,21 @@ const deleteDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
 const addToAndFromDateMales = errorHandling.asyncHandler(
   async (req, res, next) => {
     const { to, from,ofYear } = req.body;
-    const toDate = new Date(to);
-    const fromDate = new Date(from);
-    const formatToDate = new Intl.DateTimeFormat("en-us", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-    const formatFromDate = new Intl.DateTimeFormat("en-us", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    // const toDate = new Date(to);
+    // const fromDate = new Date(from);
+    // const formatToDate = new Intl.DateTimeFormat("en-us", {
+    //   day: "2-digit",
+    //   month: "2-digit",
+    //   year: "numeric",
+    // });
+    // const formatFromDate = new Intl.DateTimeFormat("en-us", {
+    //   day: "2-digit",
+    //   month: "2-digit",
+    //   year: "numeric",
+    // });
     const toFromDate = await TimingOldMalesSchema.create({
-      to: formatToDate.format(toDate),
-      from: formatFromDate.format(fromDate),
+      to: to,
+      from: from,
       ofYear:ofYear
     });
 
@@ -119,25 +119,25 @@ const updateDateMales = errorHandling.asyncHandler(async (req, res, next) => {
   const dateId = req.params.id;
   const { to, from,ofYear } = req.body;
   console.log(to, from);
-  const toDate = new Date(to);
-  const fromDate = new Date(from);
-  console.log(toDate, fromDate);
-  const formatToDate = new Intl.DateTimeFormat("en-us", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  const formatFromDate = new Intl.DateTimeFormat("en-us", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  // const toDate = new Date(to);
+  // const fromDate = new Date(from);
+  // console.log(toDate, fromDate);
+  // const formatToDate = new Intl.DateTimeFormat("en-us", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "numeric",
+  // });
+  // const formatFromDate = new Intl.DateTimeFormat("en-us", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "numeric",
+  // });
   const updatedDate = await TimingOldMalesSchema.findByIdAndUpdate(
     dateId,
     {
       $set: {
-        to: formatToDate.format(toDate),
-        from: formatFromDate.format(fromDate),
+        to: to,
+        from: from,
         ofYear:ofYear
       },
     },
