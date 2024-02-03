@@ -7,24 +7,24 @@ const addToAndFromDateFemales = errorHandling.asyncHandler(
   async (req, res, next) => {
     const { to, from,ofYear } = req.body;
     console.log(to, from);
-    const toDate = new Date(to);
-    const fromDate = new Date(from);
-    const formatToDate = new Intl.DateTimeFormat("en-us", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-    const formatFromDate = new Intl.DateTimeFormat("en-us", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    // const toDate = new Date(to);
+    // const fromDate = new Date(from);
+    // const formatToDate = new Intl.DateTimeFormat("en-us", {
+    //   day: "2-digit",
+    //   month: "2-digit",
+    //   year: "numeric",
+    // });
+    // const formatFromDate = new Intl.DateTimeFormat("en-us", {
+    //   day: "2-digit",
+    //   month: "2-digit",
+    //   year: "numeric",
+    // });
 
-    console.log(toDate, fromDate);
+    // console.log(toDate, fromDate);
 
     const toFromDate = await TimingNewFemalesSchema.create({
-      to: formatToDate.format(toDate),
-      from: formatFromDate.format(fromDate),
+      to: to,
+      from: from,
       ofYear:ofYear
     });
 
