@@ -82,7 +82,7 @@ const updateDateFemales = errorHandling.asyncHandler(async (req, res, next) => {
   // const toDate = new Date(to);
   // const fromDate = new Date(from);
 
-  console.log(toDate, fromDate);
+  // console.log(toDate, fromDate);
   // const formatToDate = new Intl.DateTimeFormat("en-us", {
   //   day: "2-digit",
   //   month: "2-digit",
