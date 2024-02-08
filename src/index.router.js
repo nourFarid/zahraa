@@ -43,7 +43,6 @@ const initApp = (app, express) => {
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
-
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
 

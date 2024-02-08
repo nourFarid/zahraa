@@ -83,4 +83,8 @@ if(user.expulsionStudent == true){
 })
 
 
-module.exports = {createExpulsionfemale,createExpulsionMale,cancel}
+module.exports = {
+  createExpulsionfemale,
+  createExpulsionMale,
+  cancel
+}
