@@ -1,20 +1,23 @@
+const BuildingsModel = require('../../../../DB/model/rooms/BuildingsModel.js')
 const FloorModel = require('../../../../DB/model/rooms/FloorModel.js')
 const roomsModel = require('../../../../DB/model/rooms/RoomsModel.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 
-//add floor
+//add room
 const addRoom = errorHandling.asyncHandler(async(req,res,next)=>{
     const{roomNumber , FloorId  , roomType , Type , numOfBeds , Capacity}= req.body
-    
+
     if(! await FloorModel.findOne({_id:FloorId})){
       return next (new Error (`In-valid floor ID`,{cause:400}))
     }
     //const userId = req.user._id
     const room = await roomsModel.create({
-        roomNumber , FloorId  , roomType , Type , numOfBeds , Capacity
+        roomNumber , FloorId  , roomType , Type , numOfBeds , Capacity, // Set the new value of numOfRooms
+
         //,createdBy:userId
-     })
+
+      })
     return res.status(201).json({status : httpStatusText.SUCCESS , data : {room}})
 }
 )

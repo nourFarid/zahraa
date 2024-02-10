@@ -1,4 +1,3 @@
-const { boolean } = require('joi')
 const mongoose = require('mongoose')
 
 const mealSchema = new mongoose.Schema({
@@ -13,4 +12,4 @@ const mealSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('meals', mealSchema)
+module.exports = mongoose.model('BlockMeals', mealSchema)

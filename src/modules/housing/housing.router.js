@@ -16,6 +16,7 @@ router.put('/update/male/:userId',
       housingController.updateHousedFemale)
 
 router.get('/female',housingController.getStudentFemale)
+
 router.get('/male',housingController.getStudentMale)
 
 

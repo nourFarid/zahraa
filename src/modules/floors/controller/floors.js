@@ -26,8 +26,7 @@ const getAllFloor = errorHandling.asyncHandler( async(req,res,next)=>{
     }])
 
     if(!floor){
-      return next (new Error (`no floors found! please try again later`,{cause:404}))
-      //return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "no floors found! please try again later"}});
+      return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "no floors found! please try again later"}});
     }
     return res.status(200).json({status : httpStatusText.SUCCESS , data : {floor}})
 })
@@ -40,8 +39,7 @@ const getFloor = errorHandling.asyncHandler( async(req,res,next)=>{
   }]);
 
   if(!floor){
-    return next (new Error (`no rooms found with that ID`,{cause:404}))
-    //return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "no floor found with that ID"}});
+    return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "no floor found with that ID"}});
   }
   return res.status(200).json({status : httpStatusText.SUCCESS , data : {floor}})
 })
@@ -54,8 +52,7 @@ const updateFloor = errorHandling.asyncHandler(async(req,res,next)=>
         
         const floor = await floorModel.findByIdAndUpdate({_id:floorId},{Name})
         if(!floor){
-          return next (new Error (`no floor found with that ID`,{cause:400}))
-          //res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
+          res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
         }
         return res.status(200).json({status : httpStatusText.SUCCESS , data : {floor}})
     } 
@@ -68,9 +65,7 @@ const deleteFloor = errorHandling.asyncHandler(async(req,res,next)=>{
      const {floorId} = req.params
      const floor = await floorModel.findOne({_id:floorId})
      if (!floor) {
-      return next (new Error (`no floor found with that ID`,{cause:400}))
-
-      //return res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
+      return res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
        }
       
     await floorModel.deleteOne({_id: floorId})
