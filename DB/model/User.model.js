@@ -279,11 +279,11 @@ const userSchema = new mongoose.Schema(
       default: "bending",
 
     },
-   acceptedOnlineRequests:{
-    type: Boolean,
-    default: false,
+  //  acceptedOnlineRequests:{
+  //   type: Boolean,
+  //   default: false,
 
-    }
+  //   }
 
   },
   {
