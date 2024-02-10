@@ -263,6 +263,16 @@ const userSchema = new mongoose.Schema(
       penalty:{type: Boolean,default:false},
     image: String,
     DOB: String,
+    statusOfOnlineRequests:{
+      type: String,
+      default: "bending",
+
+    },
+   acceptedOnlineRequests:{
+    type: Boolean,
+    default: false,
+
+    }
   },
   {
     timestamps: true,
