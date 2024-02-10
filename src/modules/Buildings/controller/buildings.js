@@ -23,7 +23,9 @@ const addBuilding = errorHandling.asyncHandler(async(req,res,next)=>{
 
  //get All buildings
 const getAllBuilding = errorHandling.asyncHandler( async(req,res,next)=>{
-    const Building = await BuildingsModel.find({}, {"__v":false}).populate([
+    const Building = await BuildingsModel.find({}, {"__v":false , "sportsHall":false,
+    "InternetHall": false,
+    "AdministrativeRooms": false}).populate([
       {
         path:"UniversityCityId",
         path:"FLOORS"
@@ -39,7 +41,9 @@ const getAllBuilding = errorHandling.asyncHandler( async(req,res,next)=>{
 
 // get one building
 const getBuilding = errorHandling.asyncHandler( async(req,res,next)=>{
-    const building = await BuildingsModel.findById(req.params.BuildingID ,  {"__v":false}).populate([
+    const building = await BuildingsModel.findById(req.params.BuildingID ,  {"__v":false , "sportsHall":false,
+    "InternetHall": false,
+    "AdministrativeRooms": false}).populate([
       {
         path:"UniversityCityId",
         path:"FLOORS"

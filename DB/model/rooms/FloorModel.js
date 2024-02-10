@@ -4,7 +4,8 @@ const FloorSchema = new mongoose.Schema({
   Name : {type: String , required : true},
   BuildingId:{ type: mongoose.ObjectId, ref: 'Buildings' , required : true},
   createdBy: { type: mongoose.ObjectId, ref: 'Admin' },
-  createdAt:{type: Date, default: Date.now()}
+  createdAt:{type: Date, default: Date.now()},
+
 }, {
 //  strictPopulate: false ,
 

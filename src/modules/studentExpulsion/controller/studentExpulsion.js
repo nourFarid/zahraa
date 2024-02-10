@@ -28,8 +28,10 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
     { $set: { expulsionStudent: true } }
   );
    const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
-   student.expulsionStudent==true
-  return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
+
+   await userModel.findByIdAndUpdate(studentId, { isHoused: false });
+
+   return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
 }   return next (new Error (`gender doesn't match`,{cause:400}))
 }
 )
@@ -59,7 +61,9 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
     { $set: { expulsionStudent: true } }
   );
   const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
- 
+
+  await userModel.findByIdAndUpdate(studentId, { isHoused: false });
+
  return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
 }    return next (new Error (`gender doesn't match`,{cause:400}))
 
@@ -69,6 +73,7 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
 const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
  const {studentId} = req.params
  const user = await userModel.findById(studentId)
+
  if(!user){
   return next (new Error (`In-valid student Id `,{cause:400}))
 }
@@ -76,7 +81,8 @@ if(user.expulsionStudent == true){
   const student = await userModel.updateOne(
     { _id: studentId },
     { $set: { expulsionStudent: false } }
-  )} else{
+  )
+} else{
     return next (new Error (`no expulsion found to this student `,{cause:400}))
   }
  return res.status(200).json({status : httpStatusText.SUCCESS , message:`Expulsion has been removed`})

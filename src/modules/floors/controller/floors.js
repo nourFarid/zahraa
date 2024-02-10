@@ -5,7 +5,6 @@ const BuildingModel = require('../../../../DB/model/rooms/BuildingsModel.js')
 //add floor
 const addFloor = errorHandling.asyncHandler(async(req,res,next)=>{
     const{Name , BuildingId}= req.body
-    
     if(! await BuildingModel.findOne({_id:BuildingId})){
       return next (new Error (`In-valid building ID`,{cause:400}))
     }

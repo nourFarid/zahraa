@@ -1,6 +1,8 @@
 const UniversityCityModel = require('../../../../DB/model/rooms/UniversityCityModel.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
+const buildingModel = require('../../../../DB/model/rooms/BuildingsModel.js')
+const floorModel = require('../../../../DB/model/rooms/FloorModel.js')
 
 //add addUniversityCity
 const addUniversityCity = errorHandling.asyncHandler(async(req,res,next)=>{
@@ -16,9 +18,11 @@ const addUniversityCity = errorHandling.asyncHandler(async(req,res,next)=>{
 
 //get all cities
 const getAllCities = errorHandling.asyncHandler( async(req,res,next)=>{
-    const city = await UniversityCityModel.find({}, {"__v ":false}).populate([
+    const city = await UniversityCityModel.find({},  {"__v":false ,"createdAt":false, "updatedAt": false,}).populate([
       {
-        path : 'BUILDINGS'
+        path : 'BUILDINGS',
+        select: { __v: false, createdAt: false, updatedAt: false, sportsHall:false, InternetHall:false , AdministrativeRooms:false },
+
       }
     ])
     if(!city){
@@ -29,9 +33,11 @@ const getAllCities = errorHandling.asyncHandler( async(req,res,next)=>{
 
 //get one city
 const getCity = errorHandling.asyncHandler( async(req,res,next)=>{
-  const city = await UniversityCityModel.findById(req.params.UniversityCityId ,  {"__v":false}).populate([
+  const city = await UniversityCityModel.findById(req.params.UniversityCityId ,  {"__v":false ,"createdAt":false, "updatedAt": false,}).populate([
     {
-      path : 'BUILDINGS'
+      path : 'BUILDINGS',
+      select: { __v: false, createdAt: false, updatedAt: false,sportsHall:false, InternetHall:false , AdministrativeRooms:false },
+
     }
   ]);
 
@@ -68,6 +74,8 @@ const deleteCity = errorHandling.asyncHandler(async(req,res,next)=>{
     await UniversityCityModel.deleteOne({_id: UniversityCityId})
     return res.status(200).json({status:httpStatusText.SUCCESS , message:'City Deleted Successfully'})
 })
+
+
 
  module.exports = {addUniversityCity,
                   updateUniversityCity,

@@ -35,12 +35,18 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
   if (building.Gender == student.gender){
   const gender = student.gender
   const userName = student.studentName
+
   //to check that student is not in room
   if(!room.occupants.includes(studentId) ){
     if((room.occupants.length< room.numOfBeds)){
     //  room.occupants.push(studentId);
-      const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$addToSet:{occupants:studentId}}, {studentId,buildingId, gender,userName,
-        floorId,housingDate, evacuationDate, evacuationType,evacuationReason},{new:true})
+      const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$addToSet:{occupants:studentId
+          // studentId: studentId , userName: userName , gender:gender
+}}, {studentId,buildingId, gender,userName,
+        floorId,housingDate, evacuationDate, evacuationType,evacuationReason },{new:true})
+
+        await userModel.findByIdAndUpdate(studentId, { isHoused: true });
+
   
       return res.status(201).json({status : httpStatusText.SUCCESS , data : {updatedRoom , gender , userName}})
     }  
@@ -66,6 +72,7 @@ const getStudentFemale = errorHandling.asyncHandler( async(req,res,next)=>{
   }
   return res.status(200).json({status : httpStatusText.SUCCESS , data : {females}})
 })
+
 //تعديل بيانات الطالب الساكن
 const updateHousedMale = errorHandling.asyncHandler(async(req,res,next)=>
     {
