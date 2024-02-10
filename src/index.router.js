@@ -29,7 +29,7 @@ const detailsAboutTypeOfSpecialHousing=require("./modules/typeOfHousing/detailsA
 const cityStructure = require ('./modules/CityStructure/cityStructure.router.js')
 
 const statistics=require("./modules/statistics/statistics.router")
-
+const applications= require("./modules/applications/apllications.router")
 
 const initApp = (app, express) => {
   //convert Buffer Data
@@ -63,6 +63,7 @@ const initApp = (app, express) => {
   app.use("/cityStructure" , cityStructure)
 
 app.use("/statistics",statistics)
+app.use("/applications",applications)
 
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");
