@@ -3,19 +3,41 @@ const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
-    newEgyption: {
+    //2023-2024
+    ofYear:{
+      type:String,
+      
+    },
+
+    // newEgyption: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // oldEgyption: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // newExpartriates: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // oldExpartriates: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    newStudent: {
       type: Boolean,
       default: false,
     },
-    oldEgyption: {
+    oldStudent: {
       type: Boolean,
       default: false,
     },
-    newExpartriates: {
+    expartriates: {
       type: Boolean,
       default: false,
     },
-    oldExpartriates: {
+    egyptions: {
       type: Boolean,
       default: false,
     },
@@ -128,7 +150,7 @@ const userSchema = new mongoose.Schema(
     guardianNationalId: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
     },
 
     guardianPhone: {

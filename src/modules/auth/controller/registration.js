@@ -1,8 +1,9 @@
 const userModel = require('../../../../DB/model/User.model.js')
 const hashAndCompare = require  ('../../../utils/HashAndCompare.js')
 const GenerateAndVerifyToken = require ('../../../utils/GenerateAndVerifyToken.js')
+const errorHandling = require("../../../utils/errorHandling.js");
 
- const signUp = async(req,res,next)=>{
+ const signUp = errorHandling.asyncHandler(async(req,res,next)=>{
   
     //check el email mawgood wla la2
     const isNationalIdExist = await userModel.findOne({email:req.body.NationalId})
@@ -13,10 +14,10 @@ const GenerateAndVerifyToken = require ('../../../utils/GenerateAndVerifyToken.j
     const user = await userModel.create(req.body)
     return res.status(201).json ({message :"done",user})
 }   
+ )
 
 
-
- const signIn = async(req,res,next)=>{
+ const signIn = errorHandling.asyncHandler(async(req,res,next)=>{
     //ast2bel el data
     const {nationalID,password} = req.body;
     //check el email mawgood wla la2
@@ -46,7 +47,7 @@ const GenerateAndVerifyToken = require ('../../../utils/GenerateAndVerifyToken.j
     //ana bhtag mn el sign in el token
 
 }
-
+ )
 module.exports = {signIn , signUp}
 
 //authorization de y3ny salahyt el d5oll da elly hwa el role
