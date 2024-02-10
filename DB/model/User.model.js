@@ -4,6 +4,14 @@ const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
+
+    //2023-2024
+    ofYear:{
+      type:String,
+      
+    },
+
+
     // newEgyption: {
     //   type: Boolean,
     //   default: false,
@@ -151,7 +159,7 @@ const userSchema = new mongoose.Schema(
     guardianNationalId: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
     },
 
     guardianPhone: {

@@ -21,11 +21,15 @@ const classifyOldMaleStudents = errorHandling.asyncHandler(
     const studentsWithDistancesAndAges = await Promise.all(
       oldStudents.map(async (student) => {
         const distance = await getCoordinatesAndCalculateDistance(
-          student.placeOfBirth // replace with the actual property
+          student.residence // replace with the actual property
         );
 
         // Calculate age from date of birth
         const birthDate = new Date(student.birthDate);
+        console.log('====================================');
+        console.log(student.birthDate);
+        console.log(birthDate);
+        console.log('====================================');
         const today = new Date();
         const age = today.getFullYear() - birthDate.getFullYear();
 
@@ -67,7 +71,7 @@ const classifyOldFemaleStudents = errorHandling.asyncHandler(
     const studentsWithDistancesAndAges = await Promise.all(
       oldStudents.map(async (student) => {
         const distance = await getCoordinatesAndCalculateDistance(
-          student.placeOfBirth // replace with the actual property
+          student.residence // replace with the actual property
         );
 
         // Calculate age from date of birth

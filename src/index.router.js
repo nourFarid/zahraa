@@ -16,15 +16,21 @@ const registration = require("./modules/registration/registration.router");
 const classifyStudents = require("./modules/classificationOfStudents/classification.router.js");
 const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAboutAdmissionRouter.js");
 const fees = require("./modules/fees/fees.router");
+
 const correctNationalId = require("./modules/correctNationalId/correctNationalId.router.js");
 const updateStudentCode = require("./modules/updateStudentCode/updateStudentCode.router.js")
 
+
 const blockMeals= require("./modules/blockMeals/meals.router.js")
 const absence = require("./modules/absence&Permission/absence.router.js")
-
 const typeOfSpecialHousing= require("./modules/typeOfHousing/typeOfSpecialHousing.router.js")
 const detailsAboutTypeOfSpecialHousing=require("./modules/typeOfHousing/detailsAboutTypeOfSpecialHousing.router.js")
+
 const cityStructure = require ('./modules/CityStructure/cityStructure.router.js')
+
+const statistics=require("./modules/statistics/statistics.router")
+
+
 const initApp = (app, express) => {
   //convert Buffer Data
   app.use(express.json({}));
@@ -45,13 +51,19 @@ const initApp = (app, express) => {
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
+
   app.use(`/correctNationalId`, correctNationalId);
   app.use(`/updateStudentCode` , updateStudentCode)
+
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
+
   app.use("/cityStructure" , cityStructure)
+
+app.use("/statistics",statistics)
+
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");
   });
