@@ -7,7 +7,7 @@ const studentExpulsionSchema = new mongoose.Schema({
   penaltyKind:{type:String},
   reason:{
   type:String,
-  enum:[ 'جزاء اداري' , 'جزاء سلوكي']},
+  enum:[ 'اخلاء مؤقت' , 'اخلاء نهائي']},
   cancellation:{type:String},
   createdBy: { type: mongoose.ObjectId, ref: 'Admin' },
   createdAt:{type: Date, default: Date.now()}

@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
+
 const userSchema = new mongoose.Schema(
   {
+
     //2023-2024
     ofYear:{
       type:String,
       
     },
+
 
     // newEgyption: {
     //   type: Boolean,
@@ -45,6 +48,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       //required: true,
       unique: true,
+      match: /^\d{14}$/,
     },
     studentCode: {
       type: Number,
@@ -79,6 +83,11 @@ const userSchema = new mongoose.Schema(
 
     religion: {
       type: String,
+    },
+    
+    isHoused:{
+      type: Boolean,
+      default: false
     },
 
     residence: {
@@ -240,6 +249,7 @@ const userSchema = new mongoose.Schema(
       default: "User",
       enum: ["User", "Admin"],
     },
+
     active: {
       type: Boolean,
       default: false,
@@ -261,6 +271,7 @@ const userSchema = new mongoose.Schema(
       evacuationReason :{type: String, enum :['إخلاء اجازات' , 'إخلاء انتقالات']},
       expulsionStudent:{ type: Boolean,default:false},
       penalty:{type: Boolean,default:false},
+
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
@@ -273,6 +284,7 @@ const userSchema = new mongoose.Schema(
     default: false,
 
     }
+
   },
   {
     timestamps: true,
@@ -280,29 +292,3 @@ const userSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("User", userSchema);
-
-// userName: {
-//   type: String,
-//   // required: [true, 'userName is required'],
-//   min: [2, "minimum length 2 char"],
-//   max: [20, "max length 2 char"],
-// },
-// NationalId: {
-//   type: Number,
-//   required: [true, "NationalId is required"],
-//   unique: [true, "NationalId must be unique value"],
-//   min: [14, "National Id must be at leadt 14 characters"],
-//   //  max: [14 , 'National Id must be at max14 characters']
-// },
-// email: {
-//   type: String,
-//   unique: [true, "email must be unique value"],
-//   required: [true, "userName is required"],
-// },
-// password: {
-//   type: String,
-//   required: [true, "password is required"],
-// },
-// phone: {
-//   type: String,
-// },
