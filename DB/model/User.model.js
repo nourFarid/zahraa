@@ -271,8 +271,19 @@ const userSchema = new mongoose.Schema(
       evacuationReason :{type: String, enum :['إخلاء اجازات' , 'إخلاء انتقالات']},
       expulsionStudent:{ type: Boolean,default:false},
       penalty:{type: Boolean,default:false},
-      image: String,
-      DOB: String,
+
+    image: String,
+    DOB: String,
+    statusOfOnlineRequests:{
+      type: String,
+      default: "bending",
+
+    },
+   acceptedOnlineRequests:{
+    type: Boolean,
+    default: false,
+
+    }
 
   },
   {
