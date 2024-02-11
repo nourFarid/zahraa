@@ -30,7 +30,7 @@ const cityStructure = require ('./modules/CityStructure/cityStructure.router.js'
 
 const statistics=require("./modules/statistics/statistics.router")
 const applications= require("./modules/applications/applications.router.js")
-
+const basicData=require("./modules/basicData/basicData.router.js");
 const initApp = (app, express) => {
   //convert Buffer Data
   app.use(express.json({}));
@@ -64,6 +64,7 @@ const initApp = (app, express) => {
 
 app.use("/statistics",statistics)
 app.use("/applications",applications)
+app.use("/basicData", basicData);
 
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");
