@@ -29,7 +29,7 @@ const detailsAboutTypeOfSpecialHousing=require("./modules/typeOfHousing/detailsA
 const cityStructure = require ('./modules/CityStructure/cityStructure.router.js')
 
 const statistics=require("./modules/statistics/statistics.router")
-const applications= require("./modules/applications/apllications.router")
+const applications= require("./modules/applications/applications.router.js")
 
 const initApp = (app, express) => {
   //convert Buffer Data
