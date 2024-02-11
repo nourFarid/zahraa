@@ -147,7 +147,7 @@ const userSchema = new mongoose.Schema(
     year:{
       type: String,
     },
-    grade: {
+    grade: {//التقدير
       type: Number,
     },
     //طلاب قدامي سواء مصرين او وافدين
@@ -176,7 +176,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
 
-    0: {
+    HousingType: {
       type: String,
     },
 
@@ -198,6 +198,10 @@ const userSchema = new mongoose.Schema(
     policy: {
       type: Boolean,
       required: true,
+    },
+    isHoused:{ 
+      type:Boolean,
+      default: false,
     },
     //معلومات زياده عن الطلاب الوافدين
     PassportNumber: {

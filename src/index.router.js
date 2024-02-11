@@ -18,6 +18,7 @@ const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAb
 const fees = require("./modules/fees/fees.router");
 const BasicData=require("./modules/BasicData/basicData.router.js");
 const retrieveData=require("./modules/retrieveData/retrieveData.router.js")
+const StatementOfTheSituation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js");
 
 
 const initApp = (app, express) => {
@@ -37,11 +38,12 @@ const initApp = (app, express) => {
   app.use(`/expulsion`, expulsionRouter);
   app.use(`/penalty`, penaltyRouter);
   app.use("/registration", registration);
-  
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use(`/BasicData`, BasicData);
   app.use(`/retrieveData`, retrieveData);
+  app.use(`/somedata`,StatementOfTheSituation);
+  app.use(`/retrieveHousingData`,StatementOfTheSituation);
   app.use("/fees", fees);
   app.all("*", (req, res, next) => {
     res.send("In-valid Routing Plz check url  or  method");
