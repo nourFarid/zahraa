@@ -43,7 +43,7 @@ const getBasicData = errorHandling.asyncHandler(async (req, res, next) => {
   // const query = {};
     // if (nationality) {
     //   query.nationality = nationality;
-    // 
+    // }
 
 
     // if (College) {
