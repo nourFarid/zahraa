@@ -29,6 +29,25 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
   });
 
 
+
+const getDetailsAboutTypeOfSpecialHousing= errorHandling.asyncHandler(async(req,res,next)=>{
+
+const id= req.params.id;
+
+const detailsAboutTypeOfSpecialHousing = await DetailsAboutTypeOfSpecialHousing.find({id:id});
+if(!detailsAboutTypeOfSpecialHousing)
+
+{
+  return next (new Error (`CAN'T GET THE DETAILS `,{cause:400}))
+
+}
+return res
+.status(201)
+.json({ status: httpStatusText.SUCCESS, data: { detailsAboutTypeOfSpecialHousing } });
+
+
+})
+
   const deleteDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
     const id = req.params.id;
     const housing = await DetailsAboutTypeOfSpecialHousing.findByIdAndDelete(id);
@@ -41,4 +60,4 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
     });
   
   module.exports={
-addDetailsAboutTypeOfSpecialHousing ,deleteDetailsAboutTypeOfSpecialHousing }
+addDetailsAboutTypeOfSpecialHousing ,deleteDetailsAboutTypeOfSpecialHousing,getDetailsAboutTypeOfSpecialHousing }

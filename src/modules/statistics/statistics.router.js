@@ -1,9 +1,9 @@
 const express = require ('express')
 const router = express.Router()
-const{getNumberOfResidents,getNumberOfAllStudents}= require("./controller/statistics")
+const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfAppliers}= require("./controller/statistics")
 //اعداد المتقدمين
 
-
+router.get('/getNumberOfappliers',getNumberOfAppliers)
 
 //اعداد المقيمين
 router.get('/getNumberOfResidents',getNumberOfResidents)
