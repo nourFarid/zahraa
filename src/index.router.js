@@ -9,6 +9,7 @@ const roomsRouter = require("./modules/rooms/rooms.router.js");
 const floorsRouter = require("./modules/floors/floors.router.js");
 const buildingsRouter = require("./modules/Buildings/buildings.router.js");
 const universityCityRouter = require("./modules/universityCity/universityCity.router.js");
+const mealsRouter = require("./modules/meals/mealsRouter.js");
 const housingRouter = require("./modules/housing/housing.router.js");
 const expulsionRouter = require("./modules/studentExpulsion/studentExpulsion.router.js");
 const penaltyRouter = require("./modules/penalty/penatlyRouter.js");
@@ -39,6 +40,7 @@ const initApp = (app, express) => {
   app.use(`/user`, userRouter);
   app.use(`/instructions`, instructionsRouter);
   app.use(`/timingNew`, timingNewRouter);
+  app.use(`/mealsAdd`, mealsRouter);
   app.use(`/timingOld`, timingOldRouter);
   app.use(`/rooms`, roomsRouter);
   app.use(`/floors`, floorsRouter);
