@@ -5,7 +5,7 @@ const TypeOfSpecialHousing= require("../../../../DB/model/typeOfSpecialHousing/t
 
 
 const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
-  const {name,cityType,capacity} = req.body
+  const {name,cityType,capacity,isActive} = req.body
   id=req.params.id
   console.log('====================================');
   console.log(id);
@@ -21,6 +21,7 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
         name:name,
         cityType:cityType,
         capacity:capacity,
+        isActive:isActive
     
     });
     return res
