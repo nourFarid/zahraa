@@ -4,9 +4,11 @@ const User = require('../../../../DB/model/User.model.js')
 //اعداد المتقدمين
 const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
 
-    var { ofYear,College, bending, rejected,waitingForClassification,accepted ,egyptions,expartriates,muslim , christian, expartriates, normalHousing, specialHousing, oldStudent,
+    var { ofYear,College, bending, rejected,waitingForClassification,accepted ,egyptions,expartriates,
+        muslim , christian, expartriates, normalHousing,
+         specialHousing, oldStudent,
         newStudent, grade,gradePercentage,residentsOfTheYreviousYear, } = req.query;
-var statusOfOnlineRequests
+
 const onlineRequests = [];
 
 if (bending==='true'){
@@ -52,7 +54,7 @@ console.log('====================================');
             oldStudent,
             newStudent,
             // grade,
-            gradePercentage,
+            // gradePercentage,
             residentsOfTheYreviousYear
 }
 
