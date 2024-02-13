@@ -266,17 +266,14 @@ const userSchema = new mongoose.Schema(
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       housingDate :{type: Date},
-      evacuationDate :{type: Date}, // إخلاء السكن
-      evacuationType : {type : String, enum:['نصف العام الدراسي' , 'نهاية العام الدراسي']},
-      evacuationReason :{type: String, enum :['إخلاء اجازات' , 'إخلاء انتقالات']},
-      expulsionStudent:{ type: Boolean,default:false},
-      penalty:{type: Boolean,default:false},
-
+      expulsionStudent:{ type: Boolean,default:false}, //فصل
+      penalty:{type: Boolean,default:false}, //جزاء
+      isEvacuated:{type: Boolean,default:true}, //إخلاء
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
       type: String,
-      default: "bending",
+      default: "pending",
 
     },
   //  acceptedOnlineRequests:{

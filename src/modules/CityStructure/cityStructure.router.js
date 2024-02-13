@@ -6,6 +6,9 @@ const cityController = require('./controller/cityStructure')
 
 router.get('/', cityController.getCityStructure)
 
+//حالة الغرف
+router.get('/status', cityController.RoomsStatus)
+
 
 
 module.exports = router
