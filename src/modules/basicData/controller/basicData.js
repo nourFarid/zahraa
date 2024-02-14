@@ -58,11 +58,19 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
         }
     
             console.log('Query:', query);
-            const students = await User.find(query);
-            if(!students){
-              return next (new Error (`CAN't retrieve any students `,{cause:400}))
+            let students
+            if(req.query.length>0) {
+                 students = await User.find(query);
             }
-            console.log('Result:', students);
+            else{
+                 students = await User.find({role:"User",gender: "ذكر"});
+            }
+
+            
+            // if(!students){
+            //   return next (new Error (`CAN't retrieve any students `,{cause:400}))
+            // }
+            // console.log('Result:', students);
             return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
           } 
        
@@ -122,7 +130,16 @@ const getBasicDataFemales = errorHandling.asyncHandler(async (req, res, next) =>
         }
     
             console.log('Query:', query);
-            const students = await User.find(query);
+            let students
+            if(req.query.length>0) {
+                 students = await User.find(query);
+            }
+            else{
+                 students = await User.find({role:"User",
+                  gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]
+            }});
+            }
+
             if(!students){
               return next (new Error (`CAN't retrieve any students `,{cause:400}))
             }
@@ -132,4 +149,58 @@ const getBasicDataFemales = errorHandling.asyncHandler(async (req, res, next) =>
        
     );
 
-  module.exports = { getBasicDataMales ,getBasicDataFemales};
+
+ 
+
+const searchMales = errorHandling.asyncHandler(async (req, res, next) => {
+    const { studentName, nationalID, studentCode } = req.query;
+
+    const conditions = [];
+
+    if (studentName) {
+        conditions.push({ studentName: { $regex: studentName, $options: 'i' } });
+    }
+    if (nationalID) {
+        conditions.push({ nationalID: { $regex: nationalID, $options: 'i' } });
+    }
+    if (studentCode) {
+        conditions.push({ studentCode: { $regex: studentCode, $options: 'i' } });
+    }
+
+    try {
+        const results = await User.find({ $or: conditions,  gender:"ذكر"});
+
+        return res.status(200).json({ status: httpStatusText.SUCCESS, data: { results } });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+const searchFemales = errorHandling.asyncHandler(async (req, res, next) => {
+    const { studentName, nationalID, studentCode } = req.query;
+
+    const conditions = [];
+
+    if (studentName) {
+        conditions.push({ studentName: { $regex: studentName, $options: 'i' } });
+    }
+    if (nationalID) {
+        conditions.push({ nationalID: { $regex: nationalID, $options: 'i' } });
+    }
+    if (studentCode) {
+        conditions.push({ studentCode: { $regex: studentCode, $options: 'i' } });
+    }
+
+    try {
+        const results = await User.find({ $or: conditions ,gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]}});
+
+        return res.status(200).json({ status: httpStatusText.SUCCESS, data: { results } });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+  
+
+  module.exports = { getBasicDataMales ,getBasicDataFemales,searchMales,searchFemales};
