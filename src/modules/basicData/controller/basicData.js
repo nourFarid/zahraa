@@ -1,7 +1,7 @@
 const User = require("../../../../DB/model/User.model.js");
 const errorHandling = require("../../../utils/errorHandling.js");
 const httpStatusText = require("../../../utils/httpStatusText.js");
-
+//gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]
 const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
         
             const { ofYear
@@ -24,13 +24,16 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
             let statusOfOnlineRequests;
 
             if (appliers === 'true') {
-                statusOfOnlineRequests = 'bending';
+                statusOfOnlineRequests = 'pending';
             } 
-            if(acceptedApplications === 'true') {
+            else if(acceptedApplications === 'true') {
                 statusOfOnlineRequests = 'accepted';
             }
+            else{
+                statusOfOnlineRequests = 'pending';
+            }
             
-            var query = {
+             query = {
                 ofYear,
               College,
               egyptions,
@@ -57,95 +60,105 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
             }
         }
     
-            console.log('Query:', query);
+          
+            console.log(Object.keys(req.query).length > 0);
             let students
-            if(req.query.length>0) {
+            if(Object.keys(req.query).length > 0) {
+                console.log('====================================');
+                console.log("in if");
+                console.log('Query:', query);
+                console.log('====================================');
                  students = await User.find(query);
             }
             else{
+                console.log('====================================');
+                console.log("in else");
+                console.log('====================================');
                  students = await User.find({role:"User",gender: "ذكر"});
             }
 
-            
-            // if(!students){
-            //   return next (new Error (`CAN't retrieve any students `,{cause:400}))
-            // }
-            // console.log('Result:', students);
             return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
           } 
        
     );
 const getBasicDataFemales = errorHandling.asyncHandler(async (req, res, next) => {
         
-            const { ofYear
-                ,College
-                ,egyptions, expartriates, normalHousing, specialHousing,
-              oldStudent,newStudent,appliers,
-             acceptedApplications
-            
-            } = req.query;
-            const housingTypes = [];
-            var query = {};
-          
-            if (normalHousing === 'true') {
-                housingTypes.push('عادى');
-            }
-          
-            if (specialHousing === 'true') {
-                housingTypes.push('سكن مميز فردى طلبة');
-            }
-            let statusOfOnlineRequests;
-
-            if (appliers === 'true') {
-                statusOfOnlineRequests = 'bending';
-            } 
-            if(acceptedApplications === 'true') {
-                statusOfOnlineRequests = 'accepted';
-            }
-            
-            var query = {
-                ofYear,
-              College,
-              egyptions,
-              expartriates, 
-            
-              oldStudent,
-              newStudent,
-              gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } 
-
-          };
-     
-          if (housingTypes.length > 0) {
-            query.HousingType = { $in: housingTypes };
-        }
-      
-        // Loop over each key-value pair in the query object
-        for (const key in query) {
-            if (query.hasOwnProperty(key)) {
-                // If the value is undefined, set it to false
-                if (query[key] === undefined) {
-                    query[key] = false;
-                }
-            }
-        }
+                
+    const { ofYear
+        ,College
+        ,egyptions, expartriates, normalHousing, specialHousing,
+      oldStudent,newStudent,appliers,
+     acceptedApplications
     
-            console.log('Query:', query);
-            let students
-            if(req.query.length>0) {
-                 students = await User.find(query);
-            }
-            else{
-                 students = await User.find({role:"User",
-                  gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]
-            }});
-            }
+    } = req.query;
+    const housingTypes = [];
+    var query = {};
+  
+    if (normalHousing === 'true') {
+        housingTypes.push('عادى');
+    }
+  
+    if (specialHousing === 'true') {
+        housingTypes.push('سكن مميز فردى طالبات');
+    }
+    let statusOfOnlineRequests;
 
-            if(!students){
-              return next (new Error (`CAN't retrieve any students `,{cause:400}))
-            }
-            console.log('Result:', students);
-            return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
-          } 
+    if (appliers === 'true') {
+        statusOfOnlineRequests = 'pending';
+    } 
+    else if(acceptedApplications === 'true') {
+        statusOfOnlineRequests = 'accepted';
+    }
+    else{
+        statusOfOnlineRequests = 'pending';
+    }
+    
+     query = {
+        ofYear,
+      College,
+      egyptions,
+      expartriates, 
+    
+      oldStudent,
+      newStudent,
+      statusOfOnlineRequests,
+      gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]}
+
+  };
+
+  if (housingTypes.length > 0) {
+    query.HousingType = { $in: housingTypes };
+}
+
+// Loop over each key-value pair in the query object
+for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (query[key] === undefined) {
+            query[key] = false;
+        }
+    }
+}
+
+  
+    console.log(Object.keys(req.query).length > 0);
+    let students
+    if(Object.keys(req.query).length > 0) {
+        console.log('====================================');
+        console.log("in if");
+        console.log('Query:', query);
+        console.log('====================================');
+         students = await User.find(query);
+    }
+    else{
+        console.log('====================================');
+        console.log("in else");
+        console.log('====================================');
+         students = await User.find({role:"User",   gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]}});
+    }
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+   } 
        
     );
 
