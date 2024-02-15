@@ -166,21 +166,72 @@ const getNumberOfResidents = errorHandling.asyncHandler(async(req, res, next) =>
 //اعداد جميع الطلاب
 
 const getNumberOfAllStudents = errorHandling.asyncHandler(async(req,res,next)=>{
-   
-    const count= await User.countDocuments()
-    
-    if (!count){
-    
-    
-      return next (new Error (`CAN'T GET THE NUMBER OF ALL STUDENTS `,{cause:400}))
-    
+   const { ofYear, 
+      egyptions, expartriates,
+      oldStudent,newStudent,
+      normalHousing, specialHousing,
+      withSpecialNeeds
+     }= req.query
+     const housingTypes = [];
+      query = {};
+     
+    if (normalHousing === 'true') {
+        housingTypes.push('عادى');
     }
+  
+    if (specialHousing === 'true') {
+        housingTypes.push('سكن مميز فردى طلبة');
+    }
+  
+    query = {
+        ofYear,
+        egyptions,
+        expartriates,
+        newStudent,
+        oldStudent,  
+        withSpecialNeeds,
+        gender:"ذكر"
+    };
+  
+
+    if (housingTypes.length > 0) {
+        query.HousingType = { $in: housingTypes };
+    }
+
+    // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (query[key] === undefined) {
+            query[key] = false;
+        }
+    }
+}
+let students
+if(Object.keys(req.query).length > 0) {
+    console.log('====================================');
+    console.log("in if");
+    console.log('Query:', query);
+    console.log('====================================');
+     students = await User.find(query);
+}
+else{
+    console.log('====================================');
+    console.log("in else");
+    console.log('====================================');
+     students = await User.find({role:"User",gender: "ذكر"});
+}
+const count = students.length;
+
+console.log('====================================');
+console.log("COUNT: "+count);
+console.log('====================================');
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students,count } });
+
     
-       
-     return res.status(200).json({status : httpStatusText.SUCCESS , data : {count}})
     
-      }
-      )
+    }    )
       
 
 //تجهيز الوجبات

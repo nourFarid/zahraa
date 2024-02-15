@@ -212,6 +212,7 @@ const userSchema = new mongoose.Schema(
     },
     withSpecialNeeds: {
       type: Boolean,
+      default: false,
     },
     ThefamilyIsOutside: {
       type: Boolean,

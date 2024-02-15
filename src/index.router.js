@@ -37,6 +37,7 @@ const AcceptanceNotification= require("./modules/AcceptanceNotification/Acceptan
 const evacuation = require("./modules/evacuation/evacuated.router.js")
 
 const universityPhotos = require("./modules/universityPhotos/universityPhotos.router.js")
+const excludedCountries= require("./modules/excludedCountries/excludedCountries.router.js")
 const path= require("path")
 const initApp = (app, express) => {
   //convert Buffer Data
@@ -79,6 +80,7 @@ const initApp = (app, express) => {
   app.use("/universityPhotos" , universityPhotos)
 
    app.use('/uploads',express.static(path.join(__dirname,'../uploads') ))
+   app.use("/excludedCountries",excludedCountries)
 
   app.all("*", (req, res, next) => {
     console.log(`Invalid request: ${req.method} ${req.url}`);
