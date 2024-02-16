@@ -269,7 +269,7 @@ const userSchema = new mongoose.Schema(
       housingDate :{type: Date},
       expulsionStudent:{ type: Boolean,default:false}, //فصل
       penalty:{type: Boolean,default:false}, //جزاء
-      isEvacuated:{type: Boolean,default:true}, //إخلاء
+      isEvacuated:{type: Boolean,default:false}, //إخلاء
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
@@ -277,11 +277,11 @@ const userSchema = new mongoose.Schema(
       default: "pending",
 
     },
-  //  acceptedOnlineRequests:{
-  //   type: Boolean,
-  //   default: false,
+    waitingForClassification:{
+    type: Boolean,
+    default: false,
 
-  //   }
+    }
 
   },
   {
