@@ -14,7 +14,7 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
             const housingTypes = [];
             var query = {};
           
-            if (normalHousing === 'true') {
+            if (normalHousing === 'true') { 
                 housingTypes.push('عادى');
             }
           
