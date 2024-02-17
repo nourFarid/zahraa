@@ -17,7 +17,10 @@ const detailsAboutTypeOfSpecialHousing = new mongoose.Schema({
 
       capacity:{
         type:Number,
-      }
+      },
+      isActive:{
+        type:Boolean,
+      },
 
 
 }, {

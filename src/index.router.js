@@ -9,6 +9,7 @@ const roomsRouter = require("./modules/rooms/rooms.router.js");
 const floorsRouter = require("./modules/floors/floors.router.js");
 const buildingsRouter = require("./modules/Buildings/buildings.router.js");
 const universityCityRouter = require("./modules/universityCity/universityCity.router.js");
+const mealsRouter = require("./modules/meals/mealsRouter.js");
 const housingRouter = require("./modules/housing/housing.router.js");
 const expulsionRouter = require("./modules/studentExpulsion/studentExpulsion.router.js");
 const penaltyRouter = require("./modules/penalty/penatlyRouter.js");
@@ -26,18 +27,30 @@ const cityStructure = require ('./modules/CityStructure/cityStructure.router.js'
 const statistics=require("./modules/statistics/statistics.router")
 const applications= require("./modules/applications/applications.router.js")
 const basicData=require("./modules/basicData/basicData.router.js");
+
 const situation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
 
 
 
+
+
+const AcceptanceNotification= require("./modules/AcceptanceNotification/AcceptanceNotificatio.Router.js")
+const evacuation = require("./modules/evacuation/evacuated.router.js")
+
+const universityPhotos = require("./modules/universityPhotos/universityPhotos.router.js")
+const excludedCountries= require("./modules/excludedCountries/excludedCountries.router.js")
+const path= require("path")
+
 const initApp = (app, express) => {
   //convert Buffer Data
+
   app.use(express.json({}));
   //Setup API Routing
   app.use(`/auth`, authRouter);
   app.use(`/user`, userRouter);
   app.use(`/instructions`, instructionsRouter);
   app.use(`/timingNew`, timingNewRouter);
+  app.use(`/mealsAdd`, mealsRouter);
   app.use(`/timingOld`, timingOldRouter);
   app.use(`/rooms`, roomsRouter);
   app.use(`/floors`, floorsRouter);
@@ -57,16 +70,23 @@ const initApp = (app, express) => {
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
   app.use("/cityStructure" , cityStructure)
+  app.use(`/situation`,situation);
   app.use("/statistics",statistics)
   app.use("/applications",applications)
   app.use("/basicData", basicData);
-  app.use(`/situation`,situation);
+  app.use(`/AcceptanceNotification`, AcceptanceNotification);
+  app.use("/evacuation" , evacuation)
+  app.use("/universityPhotos" , universityPhotos)
+  app.use('/uploads',express.static(path.join(__dirname,'../uploads') ))
+  app.use("/excludedCountries",excludedCountries)
+
 
   app.all("*", (req, res, next) => {
+    console.log(`Invalid request: ${req.method} ${req.url}`);
     res.send("In-valid Routing Plz check url  or  method");
   });
   app.use(errorHandling.globalErrorHandling);
-
+ 
   connectDB();
 };
 

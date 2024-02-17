@@ -7,7 +7,12 @@ router.post('/:studentId',
   //auth.auth([auth.roles.admin]),
   absenceController.absencePermissions)
 
+router.post('/',
+  //auth.auth([auth.roles.admin]),
+  absenceController.allAbsencePermissions)
+
 router.get('/',
   // auth.auth([auth.roles.admin]),
   absenceController.getPermissions)
+
 module.exports = router

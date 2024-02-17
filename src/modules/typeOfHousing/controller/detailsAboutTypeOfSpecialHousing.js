@@ -5,7 +5,7 @@ const TypeOfSpecialHousing= require("../../../../DB/model/typeOfSpecialHousing/t
 
 
 const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
-  const {name,cityType,capacity} = req.body
+  const {name,cityType,capacity,isActive} = req.body
   id=req.params.id
   console.log('====================================');
   console.log(id);
@@ -21,6 +21,7 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
         name:name,
         cityType:cityType,
         capacity:capacity,
+        isActive:isActive
     
     });
     return res
@@ -28,6 +29,25 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
       .json({ status: httpStatusText.SUCCESS, data: { detailsAboutTypeOfSpecialHousing } });
   });
 
+
+
+const getDetailsAboutTypeOfSpecialHousing= errorHandling.asyncHandler(async(req,res,next)=>{
+
+const id= req.params.id;
+
+const detailsAboutTypeOfSpecialHousing = await DetailsAboutTypeOfSpecialHousing.find({id:id});
+if(!detailsAboutTypeOfSpecialHousing)
+
+{
+  return next (new Error (`CAN'T GET THE DETAILS `,{cause:400}))
+
+}
+return res
+.status(201)
+.json({ status: httpStatusText.SUCCESS, data: { detailsAboutTypeOfSpecialHousing } });
+
+
+})
 
   const deleteDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
     const id = req.params.id;
@@ -41,4 +61,4 @@ const addDetailsAboutTypeOfSpecialHousing = errorHandling.asyncHandler(async (re
     });
   
   module.exports={
-addDetailsAboutTypeOfSpecialHousing ,deleteDetailsAboutTypeOfSpecialHousing }
+addDetailsAboutTypeOfSpecialHousing ,deleteDetailsAboutTypeOfSpecialHousing,getDetailsAboutTypeOfSpecialHousing }
