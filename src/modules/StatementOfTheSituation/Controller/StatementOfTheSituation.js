@@ -9,23 +9,21 @@ const retrieveSomeStudentDataMales = errorHandling.asyncHandler
 (async (req, res, next) => { 
   const { ofYear
     ,College
-    ,egyptions, expartriates, normalHousing, specialHousing,
-  oldStudent,newStudent,appliers,
- acceptedApplications
+    ,egyptions, expartriates,
+  appliers,acceptedApplications,
+  oldStudent,newStudent,
+ normalHousing, specialHousing,
+ isHoused,isEvacuated,
 
 } = req.query;
 const housingTypes = [];
-var query = {};
-
 if (normalHousing === 'true') {
     housingTypes.push('عادى');
 }
-
 if (specialHousing === 'true') {
     housingTypes.push('سكن مميز فردى طلبة');
 }
 let statusOfOnlineRequests;
-
 if (appliers === 'true') {
     statusOfOnlineRequests = 'bending';
 } 
@@ -34,20 +32,38 @@ if(acceptedApplications === 'true') {
 }
 
 var query = {
-    ofYear,
-  College,
-  egyptions,
-  expartriates, 
-
-  oldStudent,
-  newStudent,
-  statusOfOnlineRequests,
+  role:"User",
   gender: "ذكر"
-
 };
-
+if(ofYear){
+  query.ofYear = ofYear
+}
+if(College){
+  query.College = College
+}
+if(egyptions){
+  query.egyptions = egyptions
+}
+if(expartriates){
+  query.expartriates = expartriates
+}
+if(statusOfOnlineRequests){
+  query.statusOfOnlineRequests = statusOfOnlineRequests
+}
+if(oldStudent){
+  query.oldStudent = oldStudent
+}
+if(newStudent){
+  query.newStudent = newStudent
+}
 if (housingTypes.length > 0) {
 query.HousingType = { $in: housingTypes };
+}
+if(isHoused){
+  query.isHoused = isHoused
+}
+if(isEvacuated){
+  query.isEvacuated = isEvacuated
 }
 
 // Loop over each key-value pair in the query object
@@ -60,13 +76,24 @@ if (query.hasOwnProperty(key)) {
 }
 }
 
-console.log('Query:', query);
-const students = await User.find(query);
-if(!students){
-  return next (new Error (`CAN't retrieve any students `,{cause:400}))
+console.log(Object.keys(req.query).length > 0);
+let students
+if(Object.keys(req.query).length > 0) {
+    console.log('====================================');
+    console.log("in if");
+    console.log('Query:', query);
+    console.log('====================================');
+     students = await User.find(query);
 }
-console.log('Result:', students);
+else{
+    console.log('====================================');
+    console.log("in else");
+    console.log('====================================');
+     students = await User.find({role:"User",   gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]}});
+}
+
 return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+
 } 
 
 );
