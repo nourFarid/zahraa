@@ -1,6 +1,7 @@
 const TypeOfSpecialHousing= require("../../../../DB/model/typeOfSpecialHousing/typeOfSpecialHousing.js")
 const httpStatusText = require("../../../utils/httpStatusText.js");
 const errorHandling = require ('../../../utils/errorHandling.js')
+const DetailsAboutTypeOfSpecialHousing= require("../../../../DB/model/typeOfSpecialHousing/detailsAboutTypeOfSpecialHousing.js")
 
 
 const addTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
@@ -38,12 +39,13 @@ const getTypeOfSpecialHousingById = errorHandling.asyncHandler(async (req, res, 
   const deleteTypeOfSpecialHousing = errorHandling.asyncHandler(async (req, res, next) => {
     const id = req.params.id;
     const housing = await TypeOfSpecialHousing.findByIdAndDelete(id);
+    const details=await DetailsAboutTypeOfSpecialHousing.findOneAndDelete(id)
     if(!housing){
       return next (new Error (`housing doesn't exsit`,{cause:400}))
     }
       return res
         .status(201)
-        .json({ status: httpStatusText.SUCCESS, data: { housing } });
+        .json({ status: httpStatusText.SUCCESS, data: { housing ,details} });
     });
   
   

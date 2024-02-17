@@ -25,7 +25,7 @@ if (specialHousing === 'true') {
 }
 let statusOfOnlineRequests;
 if (appliers === 'true') {
-    statusOfOnlineRequests = 'bending';
+    statusOfOnlineRequests = 'pending';
 } 
 if(acceptedApplications === 'true') {
     statusOfOnlineRequests = 'accepted';
@@ -67,16 +67,16 @@ if(isEvacuated){
 }
 
 // Loop over each key-value pair in the query object
-for (const key in query) {
-if (query.hasOwnProperty(key)) {
-    // If the value is undefined, set it to false
-    if (query[key] === undefined) {
-        query[key] = false;
+      // Loop over each key-value pair in the query object
+      for (const key in query) {
+        if (query.hasOwnProperty(key)) {
+            // If the value is 0, remove the key-value pair from the object
+            if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
+                delete query[key];
+            }
+        }
     }
-}
-}
 
-console.log(Object.keys(req.query).length > 0);
 let students
 if(Object.keys(req.query).length > 0) {
     console.log('====================================');
@@ -89,7 +89,7 @@ else{
     console.log('====================================');
     console.log("in else");
     console.log('====================================');
-     students = await User.find({role:"User",   gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"]}});
+     students = await User.find({role:"User",   gender:"ذكر"});
 }
 
 return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
