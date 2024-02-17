@@ -163,14 +163,14 @@ const getBasicDataFemales = errorHandling.asyncHandler(async (req, res, next) =>
 }
 
 // Loop over each key-value pair in the query object
-for (const key in query) {
-    if (query.hasOwnProperty(key)) {
-        // If the value is undefined, set it to false
-        if (query[key] === undefined) {
-            query[key] = false;
-        }
-    }
-}
+// for (const key in query) {
+//     if (query.hasOwnProperty(key)) {
+//         // If the value is undefined, set it to false
+//         if (query[key] === undefined) {
+//             query[key] = false;
+//         }
+//     }
+// }
 
   
     console.log(Object.keys(req.query).length > 0);
