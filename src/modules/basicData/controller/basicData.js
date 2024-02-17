@@ -29,7 +29,8 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
 
   if (appliers === "true") {
     statusOfOnlineRequests = "pending";
-  } else if (acceptedApplications === "true") {
+  }
+  if (acceptedApplications === "true") {
     statusOfOnlineRequests = "accepted";
   }
   // else{
@@ -78,9 +79,14 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
   // Loop over each key-value pair in the query object
   for (const key in query) {
     if (query.hasOwnProperty(key)) {
-      // If the value is undefined, set it to false
-      if (query[key] === undefined) {
-        query[key] = false;
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "false" ||
+        query[key] == false ||
+        query[key] == "undefined"
+      ) {
+        delete query[key];
       }
     }
   }
