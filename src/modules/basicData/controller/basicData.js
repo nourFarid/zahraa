@@ -29,26 +29,58 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
             else if(acceptedApplications === 'true') {
                 statusOfOnlineRequests = 'accepted';
             }
-            else{
-                statusOfOnlineRequests = 'pending';
+            // else{
+            //     statusOfOnlineRequests = 'pending';
+            // }
+
+            query = {
+                //     ofYear,
+                //   College,
+                //   egyptions,
+                //   expartriates, 
+                
+                //   oldStudent,
+                //   newStudent,
+                //   statusOfOnlineRequests,
+                role:"User",
+                  gender: "ذكر"
+    
+              };
+            if (ofYear){
+                query.ofYear = ofYear;
+
+            }
+
+           
+
+            if(College)
+            {
+                query.College = College;
+            }
+            if(egyptions)
+            {
+                query.egyptions = egyptions
+            }
+            if(expartriates)
+            {
+                query.expartriates = expartriates
+            }
+            if (housingTypes.length > 0) {
+                query.HousingType = { $in: housingTypes };
             }
             
-             query = {
-                ofYear,
-              College,
-              egyptions,
-              expartriates, 
+            if(oldStudent){
+                query.oldStudent = oldStudent
+            }
+            if(newStudent){
+                query.newStudent = newStudent
+            }
+            if(statusOfOnlineRequests)
+            {
+                query.statusOfOnlineRequests = statusOfOnlineRequests
+            }
             
-              oldStudent,
-              newStudent,
-              statusOfOnlineRequests,
-              gender: "ذكر"
-
-          };
      
-          if (housingTypes.length > 0) {
-            query.HousingType = { $in: housingTypes };
-        }
       
         // Loop over each key-value pair in the query object
         for (const key in query) {
