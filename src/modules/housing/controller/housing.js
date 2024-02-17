@@ -27,35 +27,47 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
   if(!building){
     return next (new Error (`In-valid building ID`,{cause:400}))
   }
+
   if (student.expulsionStudent == true){
     return next (new Error (`this student is blocked from housing`,{cause:400}))
   }
+  if(student.isHoused == true){
+    return next (new Error (`this student is already housed`,{cause:400}))
 
-  // to check that building gender is same as student gender
-  if (building.Gender == student.gender){
-  const gender = student.gender
-  const userName = student.studentName
+  }
 
-  //to check that student is not in room
-  if(!room.occupants.includes(studentId) ){
-    if((room.occupants.length< room.numOfBeds)){
-    //  room.occupants.push(studentId);
-      const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$addToSet:{occupants:studentId
-          // studentId: studentId , userName: userName , gender:gender
-}}, {studentId,buildingId, gender,userName,
-        floorId,housingDate, evacuationDate, evacuationType,evacuationReason },{new:true})
+  const { statusOfOnlineRequests } = student;
 
-        await userModel.findByIdAndUpdate(studentId, { isHoused: true });
+  if(statusOfOnlineRequests == 'accepted'){
 
+    // to check that building gender is same as student gender
+    if (building.Gender == student.gender){
+    const gender = student.gender
+    const userName = student.studentName
   
-      return res.status(201).json({status : httpStatusText.SUCCESS , data : {updatedRoom , gender , userName}})
+    //to check that student is not in room
+    if(!room.occupants.includes(studentId) ){
+      if((room.occupants.length< room.numOfBeds)){
+      //  room.occupants.push(studentId);
+        const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$addToSet:{occupants:studentId
+            // studentId: studentId , userName: userName , gender:gender
+  }}, {studentId,buildingId, gender,userName,
+          floorId,housingDate, evacuationDate, evacuationType,evacuationReason, isEvacuated },{new:true})
+  
+          await userModel.findByIdAndUpdate(studentId, { isHoused: true , isEvacuated:false });
+  
+        return res.status(201).json({status : httpStatusText.SUCCESS , data : {updatedRoom , gender , userName}})
+      }  
+        return next (new Error (`this room is full`,{cause:400}))
     }  
-      return next (new Error (`this room is full`,{cause:400}))
-  }  
-    return next (new Error (`person already in this room`,{cause:400}))
-}
-  return next (new Error (`gender doesn't match`,{cause:400}))
-} )
+      return next (new Error (`person already in this room`,{cause:400}))
+  }
+    return next (new Error (`gender doesn't match`,{cause:400}))
+  }
+  return next (new Error (`request for this request doesn't accept`,{cause:400}))
+  
+})
+
 
 const getStudentMale = errorHandling.asyncHandler( async(req,res,next)=>{
   const males = await userModel.find({gender:'ذكر'}, {"__v":false})
@@ -78,15 +90,14 @@ const updateHousedMale = errorHandling.asyncHandler(async(req,res,next)=>
     {
         const {userId} = req.params
         const {studentName,buildingId, floorId,housingDate, evacuationDate, 
-          evacuationType,evacuationReason,roomId}=req.body
+          evacuationType,evacuationReason,roomId,isEvacuated}=req.body
         const user = await userModel.findById(userId)
         const male = user.gender
           if (male == 'ذكر'){
             const student = await userModel.findByIdAndUpdate({ _id:userId},{studentName,buildingId, floorId,housingDate, evacuationDate, 
-            evacuationType,evacuationReason,roomId },{new:true})
+            evacuationType,evacuationReason,roomId ,isEvacuated},{new:true})
             if(!student){
-              return next (new Error (`no student found with that ID`,{cause:400}))
-              //res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
+              return res.status(400).json({status: httpStatusText.ERROR , message : 'No student found with that ID'})
             }
           return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
         }
@@ -100,15 +111,14 @@ const updateHousedFemale = errorHandling.asyncHandler(async(req,res,next)=>
     {
         const {userId} = req.params
         const {studentName,buildingId, floorId,housingDate, evacuationDate, 
-          evacuationType,evacuationReason,roomId}=req.body
+          evacuationType,evacuationReason,roomId,isEvacuated}=req.body
         const user = await userModel.findById(userId)
         const female = user.gender
           if (female == 'انثي'){
             const student = await userModel.findByIdAndUpdate({ _id:userId},{studentName,buildingId, floorId,housingDate, evacuationDate, 
-            evacuationType,evacuationReason,roomId },{new:true})
+            evacuationType,evacuationReason,roomId,isEvacuated },{new:true})
             if(!student){
-              return next (new Error (`no student found with that ID`,{cause:400}))
-              //res.status(400).json({status: httpStatusText.ERROR , message : 'No floor found with that ID'})
+              return res.status(400).json({status: httpStatusText.ERROR , message : 'No student found with that ID'})
             }
           return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
         }

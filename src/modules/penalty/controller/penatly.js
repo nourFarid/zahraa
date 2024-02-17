@@ -70,9 +70,7 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   )} else{
     return next (new Error (`no penalties found to this student `,{cause:400}))
   }
-  // student.expulsionStudent = true
-  // const cancelExpulsion = student.expulsionStudent
-  
+
   return res.status(200).json({status : httpStatusText.SUCCESS , message:`penalty has been removed`})
  })
  
