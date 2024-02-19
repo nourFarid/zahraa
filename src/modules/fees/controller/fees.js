@@ -122,8 +122,8 @@ const feeStatement = errorHandling.asyncHandler(async (req, res, next) => {
     return next(new Error(`User not found`, { cause: 400 }));
   }
 
-  const {studentName,nationalID,PassportNumber,College,year,detailedAddress,phoneNumber}=user
-  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber };
+  const {studentName,nationalID,PassportNumber,College,year,detailedAddress,phoneNumber,HousingType}=user
+  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber,HousingType };
  const fees = await  FeesForStudents.find({id:id})
 
  if (!fees) {
