@@ -5,7 +5,7 @@ const  {
     addDetailsAboutTypeOfSpecialHousing,deleteDetailsAboutTypeOfSpecialHousing,getDetailsAboutTypeOfSpecialHousing}= require("./controller/detailsAboutTypeOfSpecialHousing.js")
 
 router.post("/addDetailsAboutTypeOfSpecialHousing/:id",
- auth.auth([auth.roles.admin]),
+//  auth.auth([auth.roles.admin]),
 addDetailsAboutTypeOfSpecialHousing
 )
 router.delete("/deleteDetailsAboutTypeOfSpecialHousing/:id",
