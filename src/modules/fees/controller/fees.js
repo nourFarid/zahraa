@@ -123,7 +123,7 @@ const feeStatement = errorHandling.asyncHandler(async (req, res, next) => {
   }
 
   const {studentName,nationalID,PassportNumber,College,year,detailedAddress,phoneNumber,HousingType}=user
-  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber,HousingType };
+  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber, };
  const fees = await  FeesForStudents.find({id:id})
 
  if (!fees) {
