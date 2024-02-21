@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
     nationalID: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
       match: /^\d{14}$/,
     },
     studentCode: {
@@ -84,11 +84,7 @@ const userSchema = new mongoose.Schema(
     religion: {
       type: String,
     },
-    
-    isHoused:{
-      type: Boolean,
-      default: false
-    },
+ 
 
     residence: {
       //محل الاقامه
@@ -232,7 +228,7 @@ const userSchema = new mongoose.Schema(
     //معلومات زياده عن الطلاب الوافدين
     PassportNumber: {
       type: String,
-      // required: true,
+      //required: true,
       // unique: true,
     },
     IssuingAuthority: {
@@ -272,6 +268,11 @@ const userSchema = new mongoose.Schema(
       expulsionStudent:{ type: Boolean,default:false}, //فصل
       penalty:{type: Boolean,default:false}, //جزاء
       isEvacuated:{type: Boolean,default:false}, //إخلاء
+         
+    isHoused:{
+      type: Boolean,
+      default: false
+    },
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
