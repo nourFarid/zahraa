@@ -4,6 +4,7 @@ const evacuationSchema = new mongoose.Schema(
 {
 studentId : {type: mongoose.ObjectId, ref: 'User'},
 studentName:{type:String},
+College:{type:String},
 roomId:{type: mongoose.ObjectId, ref: 'Rooms'},
 evacuationDate :{type: Date}, // إخلاء السكن
 evacuationType : {type : String, enum:['نصف العام الدراسي' , 'نهاية العام الدراسي']},

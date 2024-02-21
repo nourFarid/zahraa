@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
     //2023-2024
     ofYear:{
       type:String,
-      
     },
 
 
@@ -274,13 +273,9 @@ const userSchema = new mongoose.Schema(
     statusOfOnlineRequests:{
       type: String,
       default: "pending",
-
     },
-  //  acceptedOnlineRequests:{
-  //   type: Boolean,
-  //   default: false,
+    evacuationDate :{type: Date}, // إخلاء السكن
 
-  //   }
 
   },
   {

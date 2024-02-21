@@ -5,14 +5,7 @@ const bcrypt = require('bcrypt');
 
 
 const getStudentByNationalId = errorHandling.asyncHandler( async(req,res,next)=>{
-  const student = await UserModel.findOne({ nationalID: req.params.nationalID }, { "__v": false , "penalty" : false  , "expulsionStudent" : false,
-  "isHoused" : false , "housingDate":false,"buildingId" : false , "floorId":false , "roomId":false , "role":false,
-  "active":false , "confirmEmail":false, "blocked":false ,"gradeOfLastYear":false , "gradePercentage":false , "housingInLastYears":false,
-  "HousingType":false , "HousingWithoutFood":false , "password" : false , "policy":false , "egyptions":false,"expartriates":false , "oldStudent":false,
-  "newStudent":false , "placeOfBirth":false , "birthDate":false ,"email":false , "detailedAddress":false,
-"religion":false , "fatherNationalId":false , "fatherName":false , "phoneNumber":false , "landLinePhone":false,"updatedAt":false,
-"createdAt":false , "ofYear":false , "gender":false , "fatherJop":false , "fatherPhone":false  , "_id":false,"statusOfOnlineRequests":false , "isEvacuated":false});
-
+  const student = await UserModel.findOne({ nationalID: req.params.nationalID}, 'nationalID studentName studentCode College year residence')
 
   if(!student){
      return res.status(404).json({status : httpStatusText.FAIL , data : {data : "no student found with that ID"}});
@@ -22,10 +15,10 @@ const getStudentByNationalId = errorHandling.asyncHandler( async(req,res,next)=>
 
 //تصحيح الرقم القومي للطالب
 const correctNationalID = errorHandling.asyncHandler(async (req, res, next) => {
-  const { newNationalID } = req.body; // Assuming the new national ID is provided in the request body
+  const { ofYear, newNationalID } = req.body; // Assuming the new national ID is provided in the request body
 
   const student = await UserModel.findOneAndUpdate(
-      { nationalID: req.params.nationalID },
+      { nationalID: req.params.nationalID, ofYear:ofYear},
       { nationalID: newNationalID }, // Specify the new value for nationalID
       { new: true})
   if (!student) {
@@ -39,16 +32,18 @@ const correctNationalID = errorHandling.asyncHandler(async (req, res, next) => {
     residence: student.residence,
     College: student.College,
     year: student.year,
+    updatedAt: student.updatedAt,
+
   };
 
   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });});;
 
 //تغيير رقم الطالب
 const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
-  const { studentCode } = req.body;
+  const {ofYear, studentCode } = req.body;
 
   const student = await UserModel.findOneAndUpdate(
-      { nationalID: req.params.nationalID },
+      { nationalID: req.params.nationalID, ofYear:ofYear },
       { studentCode: studentCode },
       { new: true} )
 
@@ -63,16 +58,18 @@ const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
     residence: student.residence,
     College: student.College,
     year: student.year,
+    updatedAt: student.updatedAt,
+
   };
 
   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });});
 
 // تغيير اسم الطالب
 const changeStudentName = errorHandling.asyncHandler(async (req, res, next) => {
-  const { studentName } = req.body;
+  const {ofYear, studentName } = req.body;
 
   const student = await UserModel.findOneAndUpdate(
-      { nationalID: req.params.nationalID },
+      { nationalID: req.params.nationalID, ofYear:ofYear },
       { studentName: studentName },
       { new: true } )
 
@@ -87,6 +84,8 @@ const changeStudentName = errorHandling.asyncHandler(async (req, res, next) => {
     residence: student.residence,
     College: student.College,
     year: student.year,
+    updatedAt: student.updatedAt,
+
   };
 
   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
