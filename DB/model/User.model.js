@@ -177,13 +177,14 @@ const userSchema = new mongoose.Schema(
     grade: {
       type: Number,
     },
+    gradePercentage: {
+      type: Number,
+    },
     //طلاب قدامي سواء مصرين او وافدين
     gradeOfLastYear: {
       type: String,
     },
-    gradePercentage: {
-      type: Number,
-    },
+    
     housingInLastYears: {
       type: String,
     },
@@ -216,6 +217,7 @@ const userSchema = new mongoose.Schema(
     },
     ThefamilyIsOutside: {
       type: Boolean,
+      default: false,
     },
     password: {
       type: String,
@@ -230,8 +232,8 @@ const userSchema = new mongoose.Schema(
     //معلومات زياده عن الطلاب الوافدين
     PassportNumber: {
       type: String,
-      //required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
     },
     IssuingAuthority: {
       // جهه الصدور
