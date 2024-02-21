@@ -79,6 +79,7 @@ const getAllHousedStudents = errorHandling.asyncHandler(async (req, res, next) =
 
 //إخلاء جماعي
 const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) => {
+
   const { studentIds } = req.body;
 
   const studentIdsArray = studentIds.split(',');
@@ -96,7 +97,7 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
         const evacuated = await evacuation.create({
           studentName: student.studentName,
           College: student.College,
-          evacuationDate:student.evacuationDate,
+          evacuationDate: student.evacuationDate,
         });
 
         // Update the student to mark as evacuated
