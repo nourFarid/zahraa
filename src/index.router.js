@@ -27,8 +27,7 @@ const cityStructure = require ('./modules/CityStructure/cityStructure.router.js'
 const statistics=require("./modules/statistics/statistics.router")
 const applications= require("./modules/applications/applications.router.js")
 const basicData=require("./modules/basicData/basicData.router.js");
-
-const situation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
+const StatementOfTheSituation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
 
 
 
@@ -70,7 +69,7 @@ const initApp = (app, express) => {
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
   app.use("/cityStructure" , cityStructure)
-  app.use(`/situation`,situation);
+  app.use(`/StatementOfTheSituation`,StatementOfTheSituation);
   app.use("/statistics",statistics)
   app.use("/applications",applications)
   app.use("/basicData", basicData);
