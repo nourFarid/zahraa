@@ -25,23 +25,24 @@ const absencePermissions = errorHandling.asyncHandler(async (req, res, next) => 
     return res.status(400).json({ status: httpStatusText.ERROR, message: "The start date must be before the end date" });
   }
 
-  const { studentName } = student;
-  const [feePayment] = await feesModel.find({ id: studentId });
-  const paymentDate = feePayment.paymentDate;
-  const PaymentValueNumber = feePayment.PaymentValueNumber;
+  // Check if there is a feePayment for the student
+  const feePayment = await feesModel.findOne({ id: studentId });
+  if (!feePayment || !feePayment.paymentDate || !feePayment.PaymentValueNumber) {
+    return res.status(400).json({ status: httpStatusText.ERROR, message: "This student didn't pay his fees" });
+  }
 
   const absence = await absencesPermissionModel.find({ StudentId: studentId });
 
   if (absence.length === 0) {
     const absencePermission = await absencesPermissionModel.create({
       StudentId: studentId,
-      studentName: studentName,
+      studentName: student.studentName,
       dateFrom,
       dateTo,
       TakeMeal,
       notes,
-      paymentDate: paymentDate,
-      PaymentValueNumber: PaymentValueNumber,
+      paymentDate: feePayment.paymentDate,
+      PaymentValueNumber: feePayment.PaymentValueNumber,
       TypeOfAbsence,
     });
     return res.status(201).json({ status: httpStatusText.SUCCESS, data: { absencePermission } });

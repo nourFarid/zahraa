@@ -15,4 +15,6 @@ router.post('/male/:studentId',
 router.post('/:studentId',
     // auth.auth([auth.roles.admin]),
     expulsion.cancel)
+
+    
 module.exports = router

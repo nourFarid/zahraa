@@ -3,21 +3,21 @@ const userModel = require('../../../../DB/model/User.model.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 const studentExpulsion = require('../../../../DB/model/studentExpulsion/studentExpulsionModel.js') // فصل الطلاب
+// const feePayment = require('../../../../DB/model/fees/feesForStudents.js')
 
 const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
   const{penaltyKind,reason,roomId,cancellation}= req.body
   const {studentId} = req.params
   const room =  await roomsModel.findById(roomId)
   const student = await userModel.findById(studentId)
-  const female = student.gender
   //const userId = req.user._id
   if(!student){
     return next (new Error (`In-valid student Id `,{cause:400}))
   }
-  if (female == 'انثي'){
-  const nameOfStudent = student.studentName
+  if (student.gender == 'انثي'){
   const expulsion = await studentExpulsion.create({
-    nameOfStudent,penaltyKind,reason , cancellation
+    nameOfStudent: student.studentName,
+    penaltyKind,reason , cancellation
   //  ,createdBy:userId
    })
    if(!room.occupants.includes(studentId)){
@@ -27,11 +27,11 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
     { _id: studentId },
     { $set: { expulsionStudent: true } }
   );
-   const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
+    await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
 
-   await userModel.findByIdAndUpdate(studentId, { isHoused: false });
+   await userModel.findByIdAndUpdate(studentId, { isHoused: false , roomId: null, floorId: null, buildingId: null});
 
-   return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
+   return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion}})
 }   return next (new Error (`gender doesn't match`,{cause:400}))
 }
 )
@@ -41,16 +41,15 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
   const {studentId} = req.params
   const room =  await roomsModel.findById(roomId)
   const student = await userModel.findById(studentId)
-  const male = student.gender
   //const userId = req.user._id
   if(!student){
     return next (new Error (`In-valid student Id `,{cause:400}))
   }
  
-  if (male == 'ذكر'){
-  const nameOfStudent = student.studentName
+  if (student.gender == 'ذكر'){
   const expulsion = await studentExpulsion.create({
-    nameOfStudent,penaltyKind,reason , cancellation
+    nameOfStudent: student.studentName,
+    penaltyKind,reason , cancellation
   //  ,createdBy:userId
    })
    if(!room.occupants.includes(studentId)){
@@ -60,11 +59,11 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
     { _id: studentId },
     { $set: { expulsionStudent: true } }
   );
-  const updatedRoom = await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
+  await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
 
-  await userModel.findByIdAndUpdate(studentId, { isHoused: false });
+  await userModel.findByIdAndUpdate(studentId, { isHoused: false, roomId: null, floorId: null, buildingId: null });
 
- return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion,updatedRoom}})
+ return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion}})
 }    return next (new Error (`gender doesn't match`,{cause:400}))
 
 }
@@ -78,7 +77,7 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   return next (new Error (`In-valid student Id `,{cause:400}))
 }
 if(user.expulsionStudent == true){
-  const student = await userModel.updateOne(
+  await userModel.updateOne(
     { _id: studentId },
     { $set: { expulsionStudent: false } }
   )
@@ -92,5 +91,5 @@ if(user.expulsionStudent == true){
 module.exports = {
   createExpulsionfemale,
   createExpulsionMale,
-  cancel
+  cancel,
 }

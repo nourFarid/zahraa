@@ -108,7 +108,7 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
     );
 
     // Remove students from the room's occupants
-    await roomsModel.updateOne(
+    await roomsModel.updateMany(
       { occupants: { $in: studentIdsArray } },
       { $pullAll: { occupants: studentIdsArray } },
       { new: true }

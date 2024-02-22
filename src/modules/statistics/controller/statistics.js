@@ -1,6 +1,7 @@
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 const User = require('../../../../DB/model/User.model.js')
+
 //اعداد المتقدمين
 const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
 
@@ -97,7 +98,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 //اعداد المقيمين
-
 
 const getNumberOfResidents = errorHandling.asyncHandler(async(req, res, next) => {
   // Extract query parameter
