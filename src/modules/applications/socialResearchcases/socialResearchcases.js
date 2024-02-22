@@ -5,36 +5,33 @@ const User = require('../../../../DB/model/User.model')
 const socialResearchcases= errorHandling.asyncHandler(async(req, res, next) => {
     // Extract query parameter
     var {
-         oldStudent,
-         newStudent,
-         distance,
+        
          divorce,
-         death,
-         social,
-         sick,
-         id,
-       
-        } = req.query;
+         deathFather,
+         deathParents,
+      } = req.query;
   
     var query = {};
     const cases = [];
-  if (distance === 'true') {
-        cases.push('بعد المسافة');
-    }
+  
   if (divorce === 'true') {
         cases.push("انفصال");
     }
-  if (death === 'true') {
-        cases.push("وفاة");
+  if (deathFather === 'true') {
+        cases.push("وفاة الوالد");
     }
-  if (social === 'true') {
-        cases.push("اجتماعي");
-    }
-  if (sick === 'true') {
-        cases.push("مرضي");
+  if (deathParents === 'true') {
+        cases.push("وفاة الوالدين");
     }
 
-  const user= await User.findById(id)
+    if(cases.length > 0) {
+      query.AsituationRelatedToTheParents={ $in: cases }
+      query.gender="ذكر",
+      query.role="User"
+    }
+
+
+  const user= await User.find(query)
 
 
   
