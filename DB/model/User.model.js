@@ -273,6 +273,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    isHousingFeePaied:{
+      type: Boolean,
+      default: false
+    },
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
@@ -285,6 +289,7 @@ const userSchema = new mongoose.Schema(
     default: false,
 
     }
+
 
   },
   {

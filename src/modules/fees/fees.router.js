@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth.js");
-const { addFeesForStudents,addFeeType,updateFeeType ,deleteFeeType,addFeeOptions,updateFeeOptions,feeStatement} = require("./controller/fees");
+const { addFeesForStudents,addFeeType,updateFeeType ,deleteFeeType,addFeeOptions,updateFeeOptions,feeStatement,getFeeType} = require("./controller/fees");
 //الطلاب و الطالبات
 router.post("/addFeesForStudents",//  auth.auth([auth.roles.admin]),
 addFeesForStudents);
@@ -10,6 +10,9 @@ addFeesForStudents);
 router.post("/addFeeType",
 //  auth.auth([auth.roles.admin]),
 addFeeType);
+router.get("/getFeeType",
+//  auth.auth([auth.roles.admin]),
+getFeeType);
 router.put("/updateFeeType/:id", 
 //  auth.auth([auth.roles.admin]),
 updateFeeType);

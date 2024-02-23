@@ -11,13 +11,44 @@ const { date } = require("joi");
 const addFeesForStudents = errorHandling.asyncHandler(async (req, res, next) => {
   const { id, ...fee } = req.body;
 
+
+  var feesForStudents
+  const{kind}=fee
+  if(kind=='رسوم اقامة')
+  {
+    
+    const user = await User.findOneAndUpdate(
+
+      {_id:id},
+      {$set:{isHousingFeePaied:true}},
+      {new:true}
+    );
+    if (!user) {
+      return next(new Error(`User not found`, { cause: 400 }));
+    }
+    const { studentName } = user;
+    
+   feesForStudents = new FeesForStudents({
+    ...fee,
+    id,
+    studentName: studentName,
+  });
+
+  await feesForStudents.save();
+  return res
+  .status(201)
+  .json({ status: httpStatusText.SUCCESS, data: { feesForStudents } });
+
+  }
+
+
   const user = await User.findById(id);
   if (!user) {
     return next(new Error(`User not found`, { cause: 400 }));
   }
   const { studentName } = user;
 
-  const feesForStudents = new FeesForStudents({
+ feesForStudents = new FeesForStudents({
     ...fee,
     id,
     studentName: studentName,
@@ -64,6 +95,21 @@ const updateFeeType = errorHandling.asyncHandler(async (req, res, next) => {
  
 });
 
+
+const getFeeType = errorHandling.asyncHandler(async (req, res, next) => {
+  // const id = req.params.id; 
+
+  
+    const fees = await FeeTypes.find();
+
+    if (!fees) {
+      // If no documents were deleted, it means the record with the given ID was not found
+      return res.status(404).json({ status: httpStatusText.NOT_FOUND, message: 'Fees not found.' });
+    }
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data:{fees}});
+
+});
 
 const deleteFeeType = errorHandling.asyncHandler(async (req, res, next) => {
   const id = req.params.id; 
@@ -169,6 +215,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: {userData,fe
 module.exports = {
   addFeesForStudents,
   addFeeType,
+  getFeeType,
   updateFeeType,
   deleteFeeType,
   addFeeOptions,
