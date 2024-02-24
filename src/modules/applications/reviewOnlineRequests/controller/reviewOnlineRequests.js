@@ -51,8 +51,8 @@ if(rejectedApplications === 'true') {
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is undefined, set it to false
-            if (query[key] === undefined) {
-                query[key] = false;
+            if (query[key] === undefined||query[key] === false||query[key] === "false") {
+                delete query[key] ;
             }
         }
     }
@@ -89,7 +89,7 @@ const reviewOnlineRequestsMales= errorHandling.asyncHandler(async(req, res, next
     let statusOfOnlineRequests;
 
 if (newApplications === 'true') {
-    statusOfOnlineRequests = 'bending';
+    statusOfOnlineRequests = 'pending';
 } 
 if(rejectedApplications === 'true') {
     statusOfOnlineRequests = 'rejected';
@@ -118,8 +118,8 @@ if(rejectedApplications === 'true') {
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is undefined, set it to false
-            if (query[key] === undefined) {
-                query[key] = false;
+            if (query[key] === undefined||query[key] === false||query[key] === "false") {
+                delete query[key] ;
             }
         }
     }
@@ -138,12 +138,15 @@ if(rejectedApplications === 'true') {
   
 
 
+
+
+
 const acceptOnlineRequests =errorHandling.asyncHandler(async(req, res,next)=>{
 
     const id = req.params.id
     const user = await User.findOneAndUpdate(
         { _id: id },
-        { $set: { statusOfOnlineRequests: 'accepted' } },
+        { $set: { statusOfOnlineRequests: 'accepted',waitingForClassification:true } },
         { new: true } 
     );
     if(!user){
