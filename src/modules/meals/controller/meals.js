@@ -1,13 +1,16 @@
 const mealsModel = require('../../../../DB/model/meals/mealsModel.js')
+const mealsModelBlocked = require('../../../../DB/model/BlockMeals/Meals.js')
+
 const userModel = require('../../../../DB/model/User.model.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 
-//add Building
+//add 
 const addMeals = errorHandling.asyncHandler(async(req, res, next) => {
     const {
         mealsName, mealsKind, mealStartTime, mealEndTime, RamadanMeal,
-        mealReligion, studentReligion, mealAfterSubsidy, mealBeforeSubsidy, editAndAdd, createdAt
+        mealReligion, studentReligion, mealAfterSubsidy, mealBeforeSubsidy, editAndAdd, createdAt,isPrepared,
+        // dateTo, dateFrom, academicYear, day,
     } = req.body;
 
     // const { studentId } = req.params;
@@ -42,12 +45,37 @@ const addMeals = errorHandling.asyncHandler(async(req, res, next) => {
         mealBeforeSubsidy,
         editAndAdd,
         createdAt,
+        isPrepared,
+        // dateTo, dateFrom, academicYear, day
         // createdBy: userId,
     });
 
     return res.status(201).json({ status: httpStatusText.SUCCESS, data: { meals } });
 });
 
+//تجهيز الوجبات 
+// const MealPreparation =  errorHandling.asyncHandler(async(req, res, next) => {
+
+//     const {meal,day,AcademicYear}= req.body
+//     const meals = await mealsModel.find({})
+//     const{isPrepared}=meals
+//         // Validate if the required fields are present
+//         if (!meal || !day || !AcademicYear) {
+//             return res.status(400).json({ status: 'error', message: 'Missing required fields' });
+//           }
+//           const mealsArray = [];
+//           if (isPrepared==true){
+//                 // Assuming mealsArray is an array where you want to store the meal information
+//                 mealsArray.push({ meal, day, AcademicYear });
+//                 return res.status(201).json({
+//                     status: 'success',
+//                     data: { MealPreparation: mealsArray },
+//                   });    
+//           }
+         
+//           return res.status(201).json({message:"sorry no meals prepared" })
+//           });
+       
 
 
 const getAllMeals = errorHandling.asyncHandler(async (req, res, next) => {
@@ -88,8 +116,12 @@ const updateMeals = errorHandling.asyncHandler(async(req,res,next)=>
 )
 
 
+  
+  
+  
+  
 
 
-module.exports = {addMeals,getAllMeals,getOneMeal,updateMeals }
+module.exports = {addMeals,getAllMeals,getOneMeal,updateMeals}
 
     

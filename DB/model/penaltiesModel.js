@@ -9,7 +9,11 @@ const penaltySchema = new mongoose.Schema({
   enum:[ 'جزاء اداري' , 'جزاء سلوكي']},
   cancellation:{type:String},
   createdBy: { type: mongoose.ObjectId, ref: 'Admin' },
-  createdAt:{type: Date, default: Date.now()}
+  createdAt:{type: Date, default: Date.now()},
+  academicYear:{type: String},
+  college:{type: String},
+  typeOfPenalty: {type:String},
+  dateOfPenalty: { type: Date, default: Date.now }
 }, {
   timestamps: true,
 })

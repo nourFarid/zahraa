@@ -30,6 +30,9 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
   if (student.expulsionStudent == true){
     return next (new Error (`this student is blocked from housing`,{cause:400}))
   }
+  if (student.transferred == true){
+    return next (new Error (`this student transferred can't housing`,{cause:400}))
+  }
 
   // to check that building gender is same as student gender
   if (building.Gender == student.gender){
@@ -118,4 +121,7 @@ const updateHousedFemale = errorHandling.asyncHandler(async(req,res,next)=>
     
 )
 
-module.exports = {updateStudent ,getStudentFemale , getStudentMale , updateHousedMale,updateHousedFemale}
+
+
+module.exports = {updateStudent ,getStudentFemale 
+  , getStudentMale , updateHousedMale,updateHousedFemale}

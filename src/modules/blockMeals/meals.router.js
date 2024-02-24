@@ -7,6 +7,11 @@ router.post('/:studentId',
   //auth.auth([auth.roles.admin]),
   mealsController.blockedMeals)
 
+  router.get('/depriveStudentOfMeals',
+  //auth.auth([auth.roles.admin]),
+  mealsController.depriveStudentOfMeals)
+
+
 router.put('/:studentId',
   // auth.auth([auth.roles.admin]),
   mealsController.cancel)

@@ -15,4 +15,11 @@ router.post('/male/:studentId',
 router.post('/:studentId',
     // auth.auth([auth.roles.admin]),
     expulsion.cancel)
+
+    router.post('/',
+    // auth.auth([auth.roles.admin]),
+    expulsion.expelStudents)
+
+
+
 module.exports = router

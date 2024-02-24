@@ -177,6 +177,15 @@ const userSchema = new mongoose.Schema(
     grade: {
       type: Number,
     },
+    evictionReason:{
+      type: String,
+    },
+    isEvacuated:{
+      type: Boolean,
+    },
+    universityName:{
+      type: String,
+    },
     //طلاب قدامي سواء مصرين او وافدين
     gradeOfLastYear: {
       type: String,
@@ -261,6 +270,10 @@ const userSchema = new mongoose.Schema(
     blocked: {
       type: Boolean,
       default: false,
+    },
+    transferred:{
+      type:Boolean,
+      default:false
     },
       buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
