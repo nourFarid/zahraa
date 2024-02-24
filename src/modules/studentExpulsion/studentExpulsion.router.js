@@ -16,5 +16,14 @@ router.post('/:studentId',
     // auth.auth([auth.roles.admin]),
     expulsion.cancel)
 
+router.get('/',
+  //    auth.auth([auth.roles.admin]),
+    expulsion.getAllStudentsNotPaid)
     
+    
+router.put('/',
+    //    auth.auth([auth.roles.admin]),
+    expulsion.expulsionAllStudents)
+
+      
 module.exports = router

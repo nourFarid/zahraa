@@ -5,6 +5,13 @@ const httpStatusText = require('../../../utils/httpStatusText.js');
 const evacuation = require('../../../../DB/model/evacuation/evacuationModel.js');
 
 
+const dotenv = require('dotenv');
+
+dotenv.config();
+const collegesString = process.env.COLLEGES;
+const colleges = collegesString.split(',');
+
+
 const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
   const { evacuationReason, evacuationType, evacuationDate, roomId } = req.body;
   const { studentId } = req.params;
@@ -60,22 +67,41 @@ const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
 
 // get all housedStudents
 const getAllHousedStudents = errorHandling.asyncHandler(async (req, res, next) => {
-  const { ofYear, College ,evacuationDate} = req.body;
+  const { ofYear, College, evacuationDate } = req.query;
 
-  // Build the filter criteria
-  const filterCriteria = {
-    ofYear: ofYear,
-    College: College,
-    evacuationDate: evacuationDate,
+  var query = {
+    ofYear,
+    role: 'User',
     isHoused: true,
-    isEvacuated:false
+    isEvacuated: false
   };
 
-    const students = await userModel.find(filterCriteria).select('studentName');
+  if (College) {
+    query.College = College;
+  }
+  if (evacuationDate) {
+    query.evacuationDate = evacuationDate;
+  }
 
-    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+  // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (query[key] === undefined) {
+        query[key] = false;
+      }
+    }
+  }
 
+  const users = await userModel.find(query);
+
+  console.log('====================================');
+  console.log(query);
+  console.log('====================================');
+
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
 });
+
 
 //إخلاء جماعي
 const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) => {

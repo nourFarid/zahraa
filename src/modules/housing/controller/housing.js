@@ -33,10 +33,11 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
     return next(new Error(`This student is already housed`, { cause: 400 }));
   }
 
+
   const { statusOfOnlineRequests } = student;
 
   if (statusOfOnlineRequests == 'accepted') {
-    // to check that building gender is the same as student gender
+
     if (building.Gender == student.gender) {
       
       // to check that student is not in the room
@@ -134,16 +135,19 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
 // });
 
 
-const getStudentMale = errorHandling.asyncHandler( async(req,res,next)=>{
-  const males = await userModel.find({gender:'ذكر'}, {"__v":false})
-  if(!males){
-    return next (new Error (`no males found! please try again later`,{cause:404}))
+const getStudentMale = errorHandling.asyncHandler(async (req, res, next) => {
+  const males = await userModel.find({ gender: 'ذكر' }).select('studentName');
+
+  if (!males) {
+    return next(new Error(`No males found! Please try again later`, { cause: 404 }));
   }
-  return res.status(200).json({status : httpStatusText.SUCCESS , data : {males}})
-})
+
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { males } });
+});
+
 
 const getStudentFemale = errorHandling.asyncHandler( async(req,res,next)=>{
-  const females = await userModel.find({gender:'انثي'}, {"__v":false})
+  const females = await userModel.find({gender:'انثي'}).select('studentName')
   if(!females){
     return next (new Error (`no females found! please try again later`,{cause:404}))
   }

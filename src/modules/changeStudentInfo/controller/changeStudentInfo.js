@@ -129,11 +129,46 @@ const changeStudentPassword = errorHandling.asyncHandler(async (req, res, next) 
 });
 
 
+//تغيير نوع السكن
+const changeHousingType = errorHandling.asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const { newHousingType } = req.body;
+
+  const user = await UserModel.findById(userId);
+
+  if (!user) {
+    return next(new Error(`No user found with that ID`, { cause: 400 }));
+  }
+
+  const currentHousingType = user.HousingType;
+
+
+  // Check if the current housing type is different from the new housing type
+  if (currentHousingType !== newHousingType) {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { $set: { HousingType: newHousingType, isHoused: true } },
+      { new: true, lean: true }
+    );
+
+    if (!updatedUser) {
+      return next(new Error(`No user found with that ID`, { cause: 400 }));
+    }
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { user: updatedUser } });
+  } else {
+    // If the user is not housed, return the success message
+    return res.status(200).json({ status: httpStatusText.SUCCESS, message: 'User is not housed. Additional logic for not housed.' });
+  }});
+
+
+
 module.exports = {
       getStudentByNationalId,
       correctNationalID,
       updateStudentCode ,
       changeStudentName, 
-      changeStudentPassword
+      changeStudentPassword,
+      changeHousingType
 }
 

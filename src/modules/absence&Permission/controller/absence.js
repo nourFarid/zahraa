@@ -126,6 +126,70 @@ const allAbsencePermissions = errorHandling.asyncHandler(async (req, res, next) 
 });
 
 
+const AbsenceAndPermissionsReport = errorHandling.asyncHandler(async (req, res, next) => {
+  const { ofYear, College, oldStudent, newStudent, dateFrom, dateTo } = req.query;
+
+  var years = [];
+
+  if (ofYear) {
+    years.push(ofYear);
+  }
+
+  var query = {
+    gender: "ذكر",
+    role: 'User'
+  };
+
+  if (College) {
+    query.College = College;
+  }
+  if (oldStudent) {
+    query.oldStudent = oldStudent;
+  }
+  if (newStudent) {
+    query.newStudent = newStudent;
+  }
+
+  // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (query[key] === undefined) {
+        query[key] = false;
+      }
+    }
+  }
+
+  const users = await userModel.find(query);
+
+  // Map over the users array and retrieve corresponding data from Absence&Permissions
+  const usersWithAbsences = await Promise.all(users.map(async (user) => {
+    const absences = await abse.find({
+      StudentId: user._id,
+      dateFrom: { $gte: new Date(dateFrom) },
+      dateTo: { $lte: new Date(dateTo) },
+    });
+
+    return {
+      _id: user._id,
+      studentName: user.studentName,
+      // Add other fields from the User model that you want to include in the result
+      absences,
+    };
+  }));
+
+  const count = usersWithAbsences.length;
+
+  console.log('====================================');
+  console.log(usersWithAbsences);
+  console.log(count);
+  console.log('====================================');
+
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users: usersWithAbsences, count } });
+});
 
 
-module.exports = { absencePermissions , getPermissions,allAbsencePermissions};
+
+
+module.exports = { absencePermissions , getPermissions,allAbsencePermissions
+,AbsenceAndPermissionsReport};
