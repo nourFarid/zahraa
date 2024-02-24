@@ -45,6 +45,9 @@ const updateStudent = errorHandling.asyncHandler(async(req,res,next)=>{
 }}, {studentId,buildingId, gender,userName,
         floorId,housingDate, evacuationDate, evacuationType,evacuationReason },{new:true})
 
+        console.log('====================================');
+        console.log(updatedRoom);
+        console.log('====================================');
         await userModel.findByIdAndUpdate(studentId, { isHoused: true });
 
   

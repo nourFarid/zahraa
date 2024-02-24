@@ -167,10 +167,16 @@ const feeStatement = errorHandling.asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new Error(`User not found`, { cause: 400 }));
   }
+  console.log('====================================');
+  console.log(user);
+  console.log('====================================');
 
   const {studentName,nationalID,PassportNumber,College,year,detailedAddress,phoneNumber,HousingType}=user
   const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber, };
  const fees = await  FeesForStudents.find({id:id})
+ console.log('========================%%%%%%%5============');
+ console.log(fees);
+ console.log('====================%%%%%%%%555================');
 
  if (!fees) {
     return next(new Error(`fees not found`, { cause: 400 }));
@@ -185,7 +191,7 @@ const feeStatement = errorHandling.asyncHandler(async (req, res, next) => {
 try {
   const feesData = fees.map(({ kind, paymentDate, PaymentValueNumber, paymentValue, payment }) => {
     const monthPayment= paymentDate
-    const [day, month, year] = monthPayment.split('/'||'-');
+    const [day, month, year] = paymentDate.split('/') || paymentDate.split('-');
     const payDate = new Date(`${year}-${month}-${day}`);
     
     if (isNaN(payDate.getTime())) {
@@ -199,7 +205,8 @@ try {
       paymentDate,
       PaymentValueNumber,
       paymentValue,
-      payment,monthPayment: formattedDate,
+      payment,
+      monthPayment: formattedDate,
     };
   });
 
