@@ -36,9 +36,9 @@ const feesForStudents = new mongoose.Schema(
     payment: {
       type: String,
     },
-    ePay: {
-      type: Boolean,
-    },
+    // ePay: {
+    //   type: Boolean,
+    // },
   },
   {
     timestamps: true,
