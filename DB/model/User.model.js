@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
     //2023-2024
     ofYear:{
       type:String,
-      
     },
 
 
@@ -265,8 +264,10 @@ const userSchema = new mongoose.Schema(
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       housingDate :{type: Date},
+      evacuationDate:{type: Date},
       expulsionStudent:{ type: Boolean,default:false}, //فصل
       penalty:{type: Boolean,default:false}, //جزاء
+      
       isEvacuated:{type: Boolean,default:false}, //إخلاء
          
     isHoused:{
@@ -279,22 +280,22 @@ const userSchema = new mongoose.Schema(
     },
     image: String,
     DOB: String,
+
     statusOfOnlineRequests:{
       type: String,
       default: "pending",
-
     },
     waitingForClassification:{
     type: Boolean,
     default: false,
 
-    }
-
+  //   }
 
   },
+},
   {
     timestamps: true,
   }
-);
+)
 
 module.exports = mongoose.model("User", userSchema);

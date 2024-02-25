@@ -17,8 +17,6 @@ const registration = require("./modules/registration/registration.router");
 const classifyStudents = require("./modules/classificationOfStudents/classification.router.js");
 const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAboutAdmissionRouter.js");
 const fees = require("./modules/fees/fees.router");
-const correctNationalId = require("./modules/correctNationalId/correctNationalId.router.js");
-const updateStudentCode = require("./modules/updateStudentCode/updateStudentCode.router.js")
 const blockMeals= require("./modules/blockMeals/meals.router.js")
 const absence = require("./modules/absence&Permission/absence.router.js")
 const typeOfSpecialHousing= require("./modules/typeOfHousing/typeOfSpecialHousing.router.js")
@@ -39,6 +37,8 @@ const evacuation = require("./modules/evacuation/evacuated.router.js")
 const universityPhotos = require("./modules/universityPhotos/universityPhotos.router.js")
 const excludedCountries= require("./modules/excludedCountries/excludedCountries.router.js")
 const path= require("path")
+
+const changeStudentInfo = require("./modules/changeStudentInfo/changeStudentInfo.router.js")
 
 const initApp = (app, express) => {
   //convert Buffer Data
@@ -62,8 +62,6 @@ const initApp = (app, express) => {
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
-  app.use(`/correctNationalId`, correctNationalId);
-  app.use(`/updateStudentCode` , updateStudentCode)
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
@@ -78,6 +76,8 @@ const initApp = (app, express) => {
   app.use("/universityPhotos" , universityPhotos)
   app.use('/uploads',express.static(path.join(__dirname,'../uploads') ))
   app.use("/excludedCountries",excludedCountries)
+
+  app.use("/changeInfo",changeStudentInfo)
 
 
   app.all("*", (req, res, next) => {

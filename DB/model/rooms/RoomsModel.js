@@ -1,17 +1,10 @@
 const mongoose = require('mongoose')
 
 const roomsSchema = new mongoose.Schema({
-  roomNumber : {type: Number , required: true},
+  roomNumber : {type: Number},
   studentId : {type: mongoose.ObjectId, ref: 'User'},
   roomType: {type: String , enum: ['مميز', 'عادي'] },
   occupants :[{type:String}], // room feha kam hd 
-  // occupants: [
-  //   {
-  //     studentId: { type: mongoose.ObjectId, ref: 'User' },
-  //     userName: { type: String },
-  //     gender: { type: String },
-  //   },
-  // ]
   Type : {type: String },
   numOfBeds : {type : Number},
   Capacity : {type: String },

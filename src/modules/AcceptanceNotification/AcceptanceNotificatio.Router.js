@@ -4,8 +4,9 @@ const AcceptanceNotificationController = require('./controller/AcceptanceNotific
 //const auth = require('../../middleware/auth.js')
 
 
-router.get('/:studentId', AcceptanceNotificationController.AcceptanceNotification)
+router.get('/', AcceptanceNotificationController.AcceptanceNotification)
 
+router.get('/print', AcceptanceNotificationController.PrintAcceptanceNotification)
 
 
 module.exports = router

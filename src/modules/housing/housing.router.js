@@ -5,7 +5,7 @@ const housingController = require('./controller/housing')
 
 router.put('/',
   //  auth.auth([auth.roles.admin]),
-     housingController.updateStudent)
+     housingController.houseStudents)
 
 router.put('/update/male/:userId',
   //  auth.auth([auth.roles.admin]),
