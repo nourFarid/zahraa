@@ -53,6 +53,7 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
               { new: true ,select: 'studentName buildingId floorId roomId housingDate evacuationDate' }
             );
 
+
             return res.status(201).json({ status: httpStatusText.SUCCESS, data: { updatedStudent } });
           } else {
             return next(new Error(`Housing date must be before evacuation date`, { cause: 400 }));
@@ -66,6 +67,7 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
   }
   return next(new Error(`Request for this request doesn't accept`, { cause: 400 }));
 });
+
 
 // const updateStudent = errorHandling.asyncHandler(async (req, res, next) => {
 //   const { studentId, buildingId, floorId, roomId, housingDate, evacuationDate } = req.body;
