@@ -106,5 +106,46 @@ const allAbsencePermissions = errorHandling.asyncHandler(async (req, res, next) 
   return res.status(201).json({ status: httpStatusText.SUCCESS, data: { AllabsencePermission: absencePermissionsArray } });
 });
 
+const ooooo = errorHandling.asyncHandler(async (req, res, next) => {
+  try {
+    const usersWithAbsencePermissions = await userModel.aggregate([
+      {
+        $lookup: {
+          from: 'Absence&Permissions',
+          localField: '_id',
+          foreignField: 'StudentId',
+          as: 'absencePermissions',
+        },
+      },
+      {
+        $match: {
+          $and: [
+            { absencePermissions: { $exists: true, $not: { $size: 0 } } },
+            { 'absencePermissions.StudentId': { $exists: true } },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          absencePermissions: 1,
+          // Add other fields as needed
+        },
+      },
+    ]);
 
-module.exports = { absencePermissions , getPermissions,allAbsencePermissions};
+    console.log(usersWithAbsencePermissions); // Log the result to check
+
+    return res.status(200).json({ status: 'success', data: usersWithAbsencePermissions });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+
+
+
+
+module.exports = { absencePermissions , getPermissions,allAbsencePermissions,ooooo};

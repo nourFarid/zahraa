@@ -123,8 +123,8 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
 
 
 const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, next) => {
-  const { penaltyKind, reason, cancellation, createdAt } = req.body;
-  const { studentIds, academicYear, college, typeOfPenalty, dateOfPenalty } = req.body;
+  const {ofYear,  reason, cancellationDate } = req.body;
+  const { studentIds, penaltyKind, PenaltyDate } = req.body;
 
   if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
     return next(new Error(`Invalid student IDs provided`, { cause: 400 }));
@@ -145,12 +145,10 @@ const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, n
       studentName,
       penaltyKind,
       reason,
-      cancellation,
-      createdAt,
-      academicYear, // Add academic year to penalty model
-      college, // Add college to penalty model
-      typeOfPenalty, // Add type of penalty to penalty model
-      dateOfPenalty, // Add date of penalty to penalty model
+      ofYear,
+      cancellationDate, //
+      penaltyKind, // Add type of penalty to penalty model
+      PenaltyDate, // Add date of penalty to penalty model
     });
 
     await userModel.updateOne(

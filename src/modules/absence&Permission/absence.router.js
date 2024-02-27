@@ -15,4 +15,5 @@ router.get('/',
   // auth.auth([auth.roles.admin]),
   absenceController.getPermissions)
 
+  router.get('/users', absenceController.ooooo)
 module.exports = router
