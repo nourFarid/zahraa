@@ -60,6 +60,9 @@ const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
     roomId: null,
     floorId: null,
     buildingId: null,
+    roomName:null,
+    floorName:null,
+    buildingName:null
   });
 
   return res.status(201).json({ status: httpStatusText.SUCCESS, data: { evacuated } });
@@ -143,7 +146,10 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
     // Clear housed information for evacuated students
     await userModel.updateMany(
       { _id: { $in: studentIdsArray } },
-      { $set: { isHoused: false, roomId: null, floorId: null, buildingId: null } }
+      { $set: { isHoused: false, roomId: null, floorId: null, buildingId: null,
+        roomName:null,
+      floorName:null,
+      buildingName:null } }
     );
 
     return res.status(201).json({ status: httpStatusText.SUCCESS, data: { evacuationRecords } });

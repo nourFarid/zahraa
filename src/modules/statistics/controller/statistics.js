@@ -136,8 +136,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 });
 
 
-
-
 //اعداد المقيمين
 const getNumberOfResidents = errorHandling.asyncHandler(async(req, res, next) => {
   // Extract query parameter

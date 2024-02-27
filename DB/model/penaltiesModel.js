@@ -2,14 +2,16 @@ const mongoose = require('mongoose')
 
 const penaltySchema = new mongoose.Schema({
   studentId : {type: mongoose.ObjectId, ref: 'User'},
+  ofYear:{type:String},
   studentName:{type:String},
-  penaltyKind:{type:String},
-  reason:{
+  reason:{type:String},
+  penaltyKind:{
   type:String,
   enum:[ 'جزاء اداري' , 'جزاء سلوكي']},
-  cancellation:{type:String},
+  cancellationDate:{type:Date},
   createdBy: { type: mongoose.ObjectId, ref: 'Admin' },
-  createdAt:{type: Date, default: Date.now()}
+  createdAt:{type: Date, default: Date.now()},
+  PenaltyDate:{type:Date}
 }, {
   timestamps: true,
 })
