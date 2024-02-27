@@ -8,18 +8,18 @@ const diskStorage = multer.diskStorage(
         filename: function (req, file, cb) {
             // const fileName = file.originalname
             cb(null, file.originalname )
+            // cb(null,'uploads'  )
         },
 
     }
 )
 
 const fileFilter = (req, file, cb) => {
-    const jpgType = file.mimetype.split("/")[1];
-    if ( jpgType === 'pdf') {
+    const type = file.mimetype.split("/")[1];
+    if ( type === 'pdf' || type === 'png' || type === 'jpg' || type === 'jpeg') {
         return cb(null, true)
     }
-    else
-        return cb('file must be pdf ',false)
+    
 }
 
 const upload = multer({ storage: diskStorage, fileFilter })

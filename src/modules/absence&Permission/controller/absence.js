@@ -52,6 +52,7 @@ const absencePermissions = errorHandling.asyncHandler(async (req, res, next) => 
   
 }});
 
+
 const getPermissions = errorHandling.asyncHandler( async(req,res,next)=>{
   
   const permission = await absencesPermissionModel.find({}, {"__v":false , "isCancelled":false ,
@@ -64,4 +65,46 @@ const getPermissions = errorHandling.asyncHandler( async(req,res,next)=>{
   return res.status(200).json({status : httpStatusText.SUCCESS , data : {permission}})
 })
 
-module.exports = { absencePermissions , getPermissions};
+
+//تصريح جماعي
+const allAbsencePermissions = errorHandling.asyncHandler(async (req, res, next) => {
+  const { dateFrom, dateTo, TakeMeal, notes, TypeOfAbsence } = req.body;
+
+  // Get all students
+  const students = await userModel.find();
+
+  // Check if there are students
+  if (students.length === 0) {
+    return next(new Error('No students found', { cause: 404 }));
+  }
+
+  const absencePermissionsArray = [];
+
+  // Iterate through each student
+  for (const student of students) {
+    const { _id, studentName } = student;
+
+    // Use the studentId in the findOneAndUpdate query
+    const AllabsencePermission = await absencesPermissionModel.findOneAndUpdate(
+      { StudentId: _id }, // <-- Corrected here
+      {
+        $set: {
+          dateFrom,
+          dateTo,
+          TakeMeal,
+          notes,
+          TypeOfAbsence,
+          studentName,
+        },
+      },
+      { upsert: true, new: true }
+    );
+
+    absencePermissionsArray.push(AllabsencePermission);
+  }
+
+  return res.status(201).json({ status: httpStatusText.SUCCESS, data: { AllabsencePermission: absencePermissionsArray } });
+});
+
+
+module.exports = { absencePermissions , getPermissions,allAbsencePermissions};

@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
     nationalID: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
       match: /^\d{14}$/,
     },
     studentCode: {
@@ -84,11 +84,7 @@ const userSchema = new mongoose.Schema(
     religion: {
       type: String,
     },
-    
-    isHoused:{
-      type: Boolean,
-      default: false
-    },
+ 
 
     residence: {
       //محل الاقامه
@@ -186,13 +182,14 @@ const userSchema = new mongoose.Schema(
     universityName:{
       type: String,
     },
+    gradePercentage: {
+      type: Number,
+    },
     //طلاب قدامي سواء مصرين او وافدين
     gradeOfLastYear: {
       type: String,
     },
-    gradePercentage: {
-      type: Number,
-    },
+    
     housingInLastYears: {
       type: String,
     },
@@ -221,9 +218,11 @@ const userSchema = new mongoose.Schema(
     },
     withSpecialNeeds: {
       type: Boolean,
+      default: false,
     },
     ThefamilyIsOutside: {
       type: Boolean,
+      default: false,
     },
     password: {
       type: String,
@@ -239,7 +238,7 @@ const userSchema = new mongoose.Schema(
     PassportNumber: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
     },
     IssuingAuthority: {
       // جهه الصدور
@@ -279,24 +278,31 @@ const userSchema = new mongoose.Schema(
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       housingDate :{type: Date},
-      evacuationDate :{type: Date}, // إخلاء السكن
-      evacuationType : {type : String, enum:['نصف العام الدراسي' , 'نهاية العام الدراسي']},
-      evacuationReason :{type: String, enum :['إخلاء اجازات' , 'إخلاء انتقالات']},
-      expulsionStudent:{ type: Boolean,default:false},
-      penalty:{type: Boolean,default:false},
-
+      expulsionStudent:{ type: Boolean,default:false}, //فصل
+      penalty:{type: Boolean,default:false}, //جزاء
+      isEvacuated:{type: Boolean,default:false}, //إخلاء
+         
+    isHoused:{
+      type: Boolean,
+      default: false
+    },
+    isHousingFeePaied:{
+      type: Boolean,
+      default: false
+    },
     image: String,
     DOB: String,
     statusOfOnlineRequests:{
       type: String,
-      default: "bending",
+      default: "pending",
 
     },
-  //  acceptedOnlineRequests:{
-  //   type: Boolean,
-  //   default: false,
+    waitingForClassification:{
+    type: Boolean,
+    default: false,
 
-  //   }
+    }
+
 
   },
   {
