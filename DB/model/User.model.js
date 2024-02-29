@@ -9,24 +9,6 @@ const userSchema = new mongoose.Schema(
     ofYear:{
       type:String,
     },
-
-
-    // newEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // newExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     newStudent: {
       type: Boolean,
       default: false,
@@ -288,9 +270,10 @@ const userSchema = new mongoose.Schema(
     waitingForClassification:{
     type: Boolean,
     default: false,
-
-  //   }
-
+  },
+    isClassified:{
+    type: Boolean,
+    default: false,
   },
 },
   {

@@ -29,7 +29,7 @@ rejectOnlineRequests)
 //________________________________________________________________   
 //حالات البحث الاجتماعي
 const {socialResearchcases}= require("./socialResearchcases/socialResearchcases.js")    
-router.put("/socialResearchcases",socialResearchcases)
+router.get("/socialResearchcases",socialResearchcases)
 
 //________________________________________________________________
 //قبول الحالات الخاصة
