@@ -71,7 +71,7 @@ console.log(permission);
           durationWithoutFriday
       };
   });
-  return res.status(200).json({status : httpStatusText.SUCCESS , data:{student,permissionsWithDuration,}
+  return res.status(200).json({status : httpStatusText.SUCCESS , data:{student,building,permissionsWithDuration,}
     });
       } )
     

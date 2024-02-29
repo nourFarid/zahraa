@@ -22,7 +22,7 @@ const reviewOnlineRequestsFemales= errorHandling.asyncHandler(async(req, res, ne
     let statusOfOnlineRequests;
 
 if (newApplications === 'true') {
-    statusOfOnlineRequests = 'bending';
+    statusOfOnlineRequests = 'pending';
 } 
 if(rejectedApplications === 'true') {
     statusOfOnlineRequests = 'rejected';
@@ -136,6 +136,9 @@ if(rejectedApplications === 'true') {
   
   });
   
+
+
+
 
 
 const acceptOnlineRequests =errorHandling.asyncHandler(async(req, res,next)=>{

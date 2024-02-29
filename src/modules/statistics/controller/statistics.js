@@ -1,6 +1,7 @@
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 const User = require('../../../../DB/model/User.model.js')
+
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -12,7 +13,7 @@ const colleges = collegesString.split(',');
 const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
 
     var { ofYear,College,
-         pending, rejected,waitingForClassification,accepted 
+         underReview, rejected,waitingForClassification,accepted 
          ,egyptions,expartriates,
         muslim , christian,
          normalHousing, specialHousing,
@@ -24,8 +25,8 @@ var onlineRequests = [];
 var years=[]
 
 
-if (pending==='true'){
-    onlineRequests.push("pending")
+if (underReview==='true'){
+    onlineRequests.push("underReview")
     
 }
 if (rejected==='true'){
@@ -138,8 +139,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 //اعداد المقيمين
-
-
 const getNumberOfResidents = errorHandling.asyncHandler(async(req, res, next) => {
   // Extract query parameter
   var { ofYear, 
@@ -282,7 +281,7 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
         if (colleges.includes(student.College)) {
             if (!collegeCounts[student.College]) {
                 collegeCounts[student.College] = {
-                    pending: 0,
+                    underReview: 0,
                     accepted: 0,
                     rejected: 0,
                     isHoused: 0,
@@ -291,8 +290,8 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
             }
 
             switch (student.statusOfOnlineRequests) {
-                case "pending":
-                    collegeCounts[student.College].pending++;
+                case "underReview":
+                    collegeCounts[student.College].underReview++;
                     break;
                 case "accepted":
                     collegeCounts[student.College].accepted++;
@@ -320,8 +319,84 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
 
 //احصائيات استلام الوجبات
 
+//اعداد الطلاب حسب نوع السكن
+const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req, res, next) => {
+  const { ofYear, egyptions, expartriates, oldStudent, newStudent } = req.query;
+
+  var query = {
+    ofYear,
+    role: 'User',
+  };
+
+  if (egyptions) {
+    query.egyptions = egyptions;
+  }
+  if (expartriates) {
+    query.expartriates = expartriates;
+  }
+  if (oldStudent) {
+    query.oldStudent = oldStudent;
+  }
+  if (newStudent) {
+    query.newStudent = newStudent;
+  }
+
+  const students = await User.find(query);
+
+  // Object to store counts for each HousingType
+  const countsByHousingType = {};
+
+  students.forEach(student => {
+    // Count statuses for each HousingType
+    if (student.HousingType) {
+      if (!countsByHousingType[student.HousingType]) {
+        countsByHousingType[student.HousingType] = {
+          underReview: 0,
+          rejected: 0,
+          isHoused: 0,
+          isEvacuated: 0,
+          waitingForClassification: 0,
+          waitingForHousing: 0
+        };
+      }
+
+      switch (student.statusOfOnlineRequests) {
+        case "underReview":
+          countsByHousingType[student.HousingType].underReview++;
+          break;
+        case "rejected":
+          countsByHousingType[student.HousingType].rejected++;
+          break;
+      }
+
+      // Count housing status
+      if (student.isHoused) {
+        countsByHousingType[student.HousingType].isHoused++;
+      }
+      if (student.isEvacuated) {
+        countsByHousingType[student.HousingType].isEvacuated++;
+      }
+
+      // Count waitingForClassification
+      if (!student.waitingForClassification) {
+        countsByHousingType[student.HousingType].waitingForClassification++;
+      }
+
+      // Count cases where statusOfOnlineRequests is true but isHoused is false
+      if (student.statusOfOnlineRequests && !student.isHoused) {
+        countsByHousingType[student.HousingType].waitingForHousing++;
+      }
+    }
+  });
+
+  // Return the counts along with the student data
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: countsByHousingType });
+});
+
+
 
 module.exports = {getNumberOfResidents,
-    getNumberOfAllStudents,getNumberOfAppliers
+    getNumberOfAllStudents,getNumberOfAppliers,
+    NumberOfStudentsBasedOnHousingType
 };
 

@@ -15,4 +15,8 @@ router.get('/',
   // auth.auth([auth.roles.admin]),
   absenceController.getPermissions)
 
+router.get('/report',
+  // auth.auth([auth.roles.admin]),
+  absenceController.AbsenceAndPermissionsReport)
+
 module.exports = router

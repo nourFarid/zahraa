@@ -46,13 +46,14 @@ async function getCoordinatesAndCalculateDistance(place) {
 
     // Calculate the distance between the two places
     const distance = calculateDistance(helwanCoordinates, placeCoordinates);
+    
     console.log(
       `Distance between Helwan University and ${place}: ${distance.toFixed(
         2
       )} km \n`
     );
 
-    return "done";
+    return     distance.toFixed(2);
   } catch (error) {
     console.error("Error:", error.message);
   }

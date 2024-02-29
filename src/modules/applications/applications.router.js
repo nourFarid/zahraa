@@ -11,6 +11,7 @@ const{ reviewOnlineRequestsMales,
     acceptOnlineRequests,
     rejectOnlineRequests,
     }=require('./reviewOnlineRequests/controller/reviewOnlineRequests.js')
+    
 
 router.post('/reviewOnlineRequestsMales',
 //auth.auth([auth.roles.admin]),
@@ -28,7 +29,7 @@ rejectOnlineRequests)
 //________________________________________________________________   
 //حالات البحث الاجتماعي
 const {socialResearchcases}= require("./socialResearchcases/socialResearchcases.js")    
-router.put("/socialResearchcases",socialResearchcases)
+router.get("/socialResearchcases",socialResearchcases)
 
 //________________________________________________________________
 //قبول الحالات الخاصة
