@@ -207,12 +207,12 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     //معلومات زياده عن الطلاب الوافدين
-    PassportNumber: {
+    passportNumber: {
       type: String,
       //required: true,
       // unique: true,
     },
-    IssuingAuthority: {
+    issuingAuthority: {
       // جهه الصدور
       type: String,
     },
@@ -275,6 +275,14 @@ const userSchema = new mongoose.Schema(
     type: Boolean,
     default: false,
   },
+  //تخص طباعه البطاقات
+  printedCard: {
+    type: Boolean,
+    default: false,
+  },
+  dateOfPrinting: {
+    type: Date 
+  }
 },
   {
     timestamps: true,

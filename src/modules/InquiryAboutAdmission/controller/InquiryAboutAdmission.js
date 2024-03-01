@@ -3,56 +3,11 @@ const errorHandling = require("../../../utils/errorHandling.js");
 const httpStatusText = require("../../../utils/httpStatusText.js");
 const mongoose = require("mongoose");
 
-// const addResult = errorHandling.asyncHandler(async(req,res,next)=>
-//     {
-//         const {NationalId} = req.params.NationalId
-//         const {contextOfInquiry}=req.body
-//         console.log({contextOfInquiry,NationalId});
-//         const nationalIdObjectId =new mongoose.Types.ObjectId(NationalId);
-
-//         const updatedUser = await User.findByIdAndUpdate({NationalId:nationalIdObjectId},{contextOfInquiry})
-//         if(!updatedUser){
-//           res.status(400).json({status: httpStatusText.ERROR , message : 'No updatedUser found with that ID'})
-//         }
-//         return res.status(200).json({status : httpStatusText.SUCCESS , data : {updatedUser}})
-
-//     }
-// )
-
-// const addResult = errorHandling.asyncHandler(async (req, res, next) => {
-//   try {
-//     const ID = req.params.id;
-//     const contextOfInquiry = req.body;
-//    // const nationalIdObjectId = new mongoose.Types.ObjectId(NationalId);
-
-//     // Use findByIdAndUpdate directly
-//     const updatedUser = await User.replaceOne({_id:ID}, req.body, { new: true });
-
-//     if (updatedUser) {
-//       // Send the updated user in the response
-//       return res.status(200).json({ data: updatedUser });
-//     } else {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// });
-//add Result for admin
 const addResult = errorHandling.asyncHandler(async (req, res, next) => {
   try {
     const { nationalID } = req.params;
     const contextOfInquiry = req.body.contextOfInquiry;
     const result = await User.findOne({ nationalID });
-    // if (result) {
-    // res.status(200).json({ message: 'Admission inquiry successful', data: result });
-    // } else {
-    // res.status(404).json({ message: 'No admission record found for the provided national ID' });
-    // }
-
-    // const updatedUser = await User.findOneAndUpdate({NationalId}, {contextOfInquiry:contextOfInquiry}, { new: true });
-    // const updatedUser = await User.findByIdAndUpdate(String(NationalId), {contextOfInquiry}, { new: true });
     const updatedUser = await User.findOneAndUpdate(
       { nationalID },
       { $set: { contextOfInquiry: contextOfInquiry } },
@@ -96,6 +51,18 @@ const getResultOfInquiry = errorHandling.asyncHandler(
 
 module.exports = { addResult, getResultOfInquiry };
 
+
+
+
+
+
+
+
+
+
+
+
+
 //update the field in database and give it the result
 // const updateResult =errorHandling.asyncHandler(async(req,res,next)=>{
 
@@ -131,3 +98,59 @@ module.exports = { addResult, getResultOfInquiry };
 //       res.status(500).json({ message: 'Internal Server Error' });
 //     }
 //   });
+
+
+// const addResult = errorHandling.asyncHandler(async(req,res,next)=>
+//     {
+//         const {NationalId} = req.params.NationalId
+//         const {contextOfInquiry}=req.body
+//         console.log({contextOfInquiry,NationalId});
+//         const nationalIdObjectId =new mongoose.Types.ObjectId(NationalId);
+
+//         const updatedUser = await User.findByIdAndUpdate({NationalId:nationalIdObjectId},{contextOfInquiry})
+//         if(!updatedUser){
+//           res.status(400).json({status: httpStatusText.ERROR , message : 'No updatedUser found with that ID'})
+//         }
+//         return res.status(200).json({status : httpStatusText.SUCCESS , data : {updatedUser}})
+
+//     }
+// )
+
+// const addResult = errorHandling.asyncHandler(async (req, res, next) => {
+//   try {
+//     const ID = req.params.id;
+//     const contextOfInquiry = req.body;
+//    // const nationalIdObjectId = new mongoose.Types.ObjectId(NationalId);
+
+//     // Use findByIdAndUpdate directly
+//     const updatedUser = await User.replaceOne({_id:ID}, req.body, { new: true });
+
+//     if (updatedUser) {
+//       // Send the updated user in the response
+//       return res.status(200).json({ data: updatedUser });
+//     } else {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
+//add Result for admin
+
+
+
+
+
+
+
+
+
+    // if (result) {
+    // res.status(200).json({ message: 'Admission inquiry successful', data: result });
+    // } else {
+    // res.status(404).json({ message: 'No admission record found for the provided national ID' });
+    // }
+
+    // const updatedUser = await User.findOneAndUpdate({NationalId}, {contextOfInquiry:contextOfInquiry}, { new: true });
+    // const updatedUser = await User.findByIdAndUpdate(String(NationalId), {contextOfInquiry}, { new: true });

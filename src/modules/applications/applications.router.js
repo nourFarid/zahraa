@@ -37,4 +37,10 @@ const{getRejectedStudents,acceptRejectedStudents}= require("./acceptSpecialCases
 router.get("/getRejectedStudents",getRejectedStudents)
 router.put("/acceptRejectedStudents/:id",acceptRejectedStudents)
 
+//________________________________________________________________
+// طباعه البطاقات
+const {unprintedCards,updateCards} = require("./cardprinting/cardprinting.js");
+router.get("/unprintedCards",unprintedCards)
+router.put("/updateCards/:id",updateCards)
+
 module.exports=router;
