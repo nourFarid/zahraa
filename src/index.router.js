@@ -33,7 +33,7 @@ const excludedCountries= require("./modules/excludedCountries/excludedCountries.
 const path= require("path")
 const changeStudentInfo = require("./modules/changeStudentInfo/changeStudentInfo.router.js")
 const logs= require("./modules/logs/logs.router.js")
-
+const reports = require("./modules/reports/report.router.js")
 
 
 const initApp = (app, express) => {
@@ -74,6 +74,7 @@ const initApp = (app, express) => {
   app.use("/excludedCountries",excludedCountries)
   app.use("/changeInfo",changeStudentInfo)
   app.use("/logs",logs)
+  app.use(`/reports`,reports)
 
 
   app.all("*", (req, res, next) => {
