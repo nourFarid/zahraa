@@ -65,7 +65,7 @@ const Logs= require("../../../../DB/model/logs.js")
     })
   
     const token = GenerateAndVerifyToken.generateToken({payload})
-    return res.status(200).json ({message :"done",token,log})
+    return res.status(200).json ({message :"done",data:{token,log}})
     //ana bhtag mn el sign in el token
 });
 

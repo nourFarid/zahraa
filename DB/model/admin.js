@@ -26,6 +26,18 @@ name:{
   },
   accountEndDate:{
     type:Date,
+  },
+  getAction:{
+    type:Number,
+    default: 0,
+  },
+  addAction:{
+    type:Number,
+    default: 0,
+  },
+  updateAction:{
+    type:Number,
+    default: 0,
   }
 
 }
