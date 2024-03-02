@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const BuildingSchema = new mongoose.Schema({
-  Name : {type: String , required : true},
+  Name : {type: String , unique:true,required : true},
   Gender : { type: String , enum: ['انثي', 'ذكر']  , required : true ,lowercase: true },
   UniversityCityId:{ type: mongoose.ObjectId, ref: 'UniversityCity' , required : true},
   sportsHall:{ type: Number,default:1 },

@@ -28,7 +28,10 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
   );
     await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
 
-   await userModel.findByIdAndUpdate(studentId, { isHoused: false , roomId: null, floorId: null, buildingId: null});
+   await userModel.findByIdAndUpdate(studentId, { isHoused: false , roomId: null, floorId: null, buildingId: null,
+    roomName:null,
+    floorName:null,
+    buildingName:null});
 
    return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion}})
 }   return next (new Error (`gender doesn't match`,{cause:400}))
@@ -60,7 +63,9 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
   );
   await roomsModel.findByIdAndUpdate(roomId,{$pull:{occupants:studentId}} ,{new:true})
 
-  await userModel.findByIdAndUpdate(studentId, { isHoused: false, roomId: null, floorId: null, buildingId: null });
+  await userModel.findByIdAndUpdate(studentId, { isHoused: false, roomId: null, floorId: null, buildingId: null,  roomName:null,
+    floorName:null,
+    buildingName:null });
 
  return res.status(201).json({status : httpStatusText.SUCCESS , data : {expulsion}})
 }    return next (new Error (`gender doesn't match`,{cause:400}))
@@ -137,7 +142,9 @@ const expulsionAllStudents = errorHandling.asyncHandler(async (req, res, next) =
   // Clear housed information for evacuated students
   await userModel.updateMany(
     { _id: { $in: studentIdsArray } },
-    { $set: { isHoused: false, roomId: null, floorId: null, buildingId: null } }
+    { $set: { isHoused: false, roomId: null, floorId: null, buildingId: null,  roomName:null,
+      floorName:null,
+      buildingName:null } }
   );
 
   return res.status(201).json({ status: httpStatusText.SUCCESS, data: { expulsionRecord } });

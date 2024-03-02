@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const roomsSchema = new mongoose.Schema({
-  roomNumber : {type: Number},
+  roomNumber : {type: Number,unique:true,required : true},
   studentId : {type: mongoose.ObjectId, ref: 'User'},
   roomType: {type: String , enum: ['مميز', 'عادي'] },
   occupants :[{type:String}], // room feha kam hd 
