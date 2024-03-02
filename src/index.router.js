@@ -17,8 +17,6 @@ const registration = require("./modules/registration/registration.router");
 const classifyStudents = require("./modules/classificationOfStudents/classification.router.js");
 const InquiryAboutAdmission = require("./modules/InquiryAboutAdmission/InquiryAboutAdmissionRouter.js");
 const fees = require("./modules/fees/fees.router");
-const correctNationalId = require("./modules/correctNationalId/correctNationalId.router.js");
-const updateStudentCode = require("./modules/updateStudentCode/updateStudentCode.router.js")
 const blockMeals= require("./modules/blockMeals/meals.router.js")
 const absence = require("./modules/absence&Permission/absence.router.js")
 const typeOfSpecialHousing= require("./modules/typeOfHousing/typeOfSpecialHousing.router.js")
@@ -34,17 +32,17 @@ const transferStudent=require("./modules/transferStudentFromCollege/transfer.rou
 
 
 const StatementOfTheSituation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
-
-
-
-
-
 const AcceptanceNotification= require("./modules/AcceptanceNotification/AcceptanceNotificatio.Router.js")
 const evacuation = require("./modules/evacuation/evacuated.router.js")
-
 const universityPhotos = require("./modules/universityPhotos/universityPhotos.router.js")
 const excludedCountries= require("./modules/excludedCountries/excludedCountries.router.js")
+const reports= require("./modules/Reports/reports.router.js")
+
 const path= require("path")
+const changeStudentInfo = require("./modules/changeStudentInfo/changeStudentInfo.router.js")
+const logs= require("./modules/logs/logs.router.js")
+const reports = require("./modules/reports/report.router.js")
+
 
 const initApp = (app, express) => {
   //convert Buffer Data
@@ -69,17 +67,26 @@ const initApp = (app, express) => {
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
 
-  app.use(`/correctNationalId`, correctNationalId);
-  app.use(`/updateStudentCode` , updateStudentCode)
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
   app.use("/cityStructure" , cityStructure)
 
+
 app.use("/statistics",statistics)
 app.use("/applications",applications)
 app.use("/basicData", basicData);
+
+
+
+
+
+  app.use("/changeInfo",changeStudentInfo)
+  app.use("/logs",logs)
+  app.use(`/reports`,reports)
+
+
 
   app.all("*", (req, res, next) => {
     console.log(`Invalid request: ${req.method} ${req.url}`);

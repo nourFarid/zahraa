@@ -11,6 +11,7 @@ const{ reviewOnlineRequestsMales,
     acceptOnlineRequests,
     rejectOnlineRequests,
     }=require('./reviewOnlineRequests/controller/reviewOnlineRequests.js')
+    
 
 router.post('/reviewOnlineRequestsMales',
 //auth.auth([auth.roles.admin]),
@@ -28,12 +29,18 @@ rejectOnlineRequests)
 //________________________________________________________________   
 //حالات البحث الاجتماعي
 const {socialResearchcases}= require("./socialResearchcases/socialResearchcases.js")    
-router.put("/socialResearchcases",socialResearchcases)
+router.get("/socialResearchcases",socialResearchcases)
 
 //________________________________________________________________
 //قبول الحالات الخاصة
 const{getRejectedStudents,acceptRejectedStudents}= require("./acceptSpecialCases/acceptSpecialCases.js")
 router.get("/getRejectedStudents",getRejectedStudents)
 router.put("/acceptRejectedStudents/:id",acceptRejectedStudents)
+
+//________________________________________________________________
+// طباعه البطاقات
+const {unprintedCards,updateCards} = require("./cardprinting/cardprinting.js");
+router.get("/unprintedCards",unprintedCards)
+router.put("/updateCards/:id",updateCards)
 
 module.exports=router;

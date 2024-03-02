@@ -1,6 +1,6 @@
 const express = require ('express')
 const router = express.Router()
-const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfAppliers}= require("./controller/statistics")
+const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfPrintedCards,getNumberOfAppliers,NumberOfStudentsBasedOnHousingType}= require("./controller/statistics")
 //اعداد المتقدمين
 
 router.get('/getNumberOfappliers',getNumberOfAppliers)
@@ -9,6 +9,7 @@ router.get('/getNumberOfappliers',getNumberOfAppliers)
 router.get('/getNumberOfResidents',getNumberOfResidents)
 
 //احصائيات البطاقات المطبوعة
+router.get('/getNumberOfPrintedCards',getNumberOfPrintedCards)
 
 //اعداد جميع الطلاب
 router.get('/getNumberOfAllStudents',getNumberOfAllStudents)
@@ -17,4 +18,10 @@ router.get('/getNumberOfAllStudents',getNumberOfAllStudents)
 
 //احصائيات استلام الوجبات
 
+//اعداد جميع الطلاب حسب نوع السكن
+router.get('/allStudents',NumberOfStudentsBasedOnHousingType)
+
+
 module.exports= router
+
+getNumberOfPrintedCards

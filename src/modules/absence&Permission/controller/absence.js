@@ -3,54 +3,68 @@ const errorHandling = require('../../../utils/errorHandling.js');
 const userModel = require('../../../../DB/model/User.model.js');
 const feesModel = require('../../../../DB/model/fees/feesForStudents.js');
 const absencesPermissionModel = require('../../../../DB/model/absencesAndPermissions/absencesAndPermissions.js');
+// const { ObjectId } = require('mongoose').Types;
+
 
 const absencePermissions = errorHandling.asyncHandler(async (req, res, next) => {
-  const { dateFrom, dateTo ,TakeMeal,notes, TypeOfAbsence } = req.body;
+  const {dateFrom, dateTo, TakeMeal, notes, TypeOfAbsence } = req.body;
   const { studentId } = req.params;
 
   const student = await userModel.findById(studentId);
+
   if (!student) {
-    return next(new Error(`In-valid student Id`, { cause: 400 }));
+    return res.status(400).json({ status: httpStatusText.ERROR, message: "In-valid student Id" });
   }
 
-  const {studentName} = student
-  const [feePayment] = await feesModel.find({ id: studentId });
-  const paymentDate = feePayment.paymentDate;
-  const PaymentValueNumber = feePayment.PaymentValueNumber;
+  // Check if the student is housed
+  if (!student.isHoused) {
+    return res.status(400).json({ status: httpStatusText.ERROR, message: "This student is not currently housed. Cannot grant absence permission" });
+  }
 
-  const absence = await absencesPermissionModel.find({StudentId:studentId})
-  if(absence.length === 0){
+  // Check if dateFrom is before dateTo
+  if (new Date(dateFrom) >= new Date(dateTo)) {
+    return res.status(400).json({ status: httpStatusText.ERROR, message: "The start date must be before the end date" });
+  }
+
+  // Check if there is a feePayment for the student
+  const feePayment = await feesModel.findOne({ id: studentId });
+  if (!feePayment || !feePayment.paymentDate || !feePayment.PaymentValueNumber) {
+    return res.status(400).json({ status: httpStatusText.ERROR, message: "This student didn't pay his fees" });
+  }
+
+  const absence = await absencesPermissionModel.find({ StudentId: studentId });
+
+  if (absence.length === 0) {
     const absencePermission = await absencesPermissionModel.create({
       StudentId: studentId,
-      studentName: studentName,
+      studentName: student.studentName,
+      ofYear: student.ofYear,
       dateFrom,
       dateTo,
       TakeMeal,
       notes,
-      paymentDate: paymentDate,
-      PaymentValueNumber: PaymentValueNumber,
-      TypeOfAbsence 
+      paymentDate: feePayment.paymentDate,
+      PaymentValueNumber: feePayment.PaymentValueNumber,
+      TypeOfAbsence,
     });
-    return res.status(201).json({ status: httpStatusText.SUCCESS,data : {absencePermission }})
+    return res.status(201).json({ status: httpStatusText.SUCCESS, data: { absencePermission } });
+  } else {
+    const absencePermission = await absencesPermissionModel.findOneAndUpdate(
+      { StudentId: studentId },
+      {
+        $set: {
+          dateFrom,
+          dateTo,
+          TakeMeal,
+          notes,
+          TypeOfAbsence,
+        },
+      },
+      { upsert: true, new: true }
+    );
+    return res.status(201).json({ status: httpStatusText.SUCCESS, data: { absencePermission } });
   }
-    else{
-        const absencePermission = await absencesPermissionModel.findOneAndUpdate(
-          { StudentId: studentId },
-          {
-            $set: {
-              dateFrom,
-              dateTo,
-              TakeMeal,
-              notes,
-              TypeOfAbsence 
-            }
-          },
-          { upsert: true, new: true }
-        );
-        return res.status(201).json({ status: httpStatusText.SUCCESS , data :{absencePermission}})
-    
-  
-}});
+});
 
 
 const getPermissions = errorHandling.asyncHandler( async(req,res,next)=>{
@@ -68,25 +82,32 @@ const getPermissions = errorHandling.asyncHandler( async(req,res,next)=>{
 
 //تصريح جماعي
 const allAbsencePermissions = errorHandling.asyncHandler(async (req, res, next) => {
-  const { dateFrom, dateTo, TakeMeal, notes, TypeOfAbsence } = req.body;
+  const { dateFrom, dateTo, TakeMeal, notes, TypeOfAbsence, studentIds } = req.body;
 
-  // Get all students
-  const students = await userModel.find();
+  // Convert studentIds to an array
+  const studentIdsArray = studentIds.split(',');
 
-  // Check if there are students
-  if (students.length === 0) {
-    return next(new Error('No students found', { cause: 404 }));
+  const housedStudents = await userModel.find({ _id: { $in: studentIdsArray }, isHoused: true });
+
+  // Check if there are housed students
+  if (housedStudents.length === 0) {
+    return res.status(404).json({ status: httpStatusText.FAIL, message: "No valid housed students found" });
   }
 
   const absencePermissionsArray = [];
 
-  // Iterate through each student
-  for (const student of students) {
+  // Iterate through each housed student
+  for (const student of housedStudents) {
     const { _id, studentName } = student;
+
+    // Check if dateFrom is before dateTo
+    if (new Date(dateFrom) >= new Date(dateTo)) {
+      return res.status(400).json({ status: httpStatusText.ERROR, message: "The start date must be before the end date" });
+    }
 
     // Use the studentId in the findOneAndUpdate query
     const AllabsencePermission = await absencesPermissionModel.findOneAndUpdate(
-      { StudentId: _id }, // <-- Corrected here
+      { StudentId: _id },
       {
         $set: {
           dateFrom,
@@ -106,46 +127,49 @@ const allAbsencePermissions = errorHandling.asyncHandler(async (req, res, next) 
   return res.status(201).json({ status: httpStatusText.SUCCESS, data: { AllabsencePermission: absencePermissionsArray } });
 });
 
-const ooooo = errorHandling.asyncHandler(async (req, res, next) => {
-  try {
-    const usersWithAbsencePermissions = await userModel.aggregate([
-      {
-        $lookup: {
-          from: 'Absence&Permissions',
-          localField: '_id',
-          foreignField: 'StudentId',
-          as: 'absencePermissions',
-        },
-      },
-      {
-        $match: {
-          $and: [
-            { absencePermissions: { $exists: true, $not: { $size: 0 } } },
-            { 'absencePermissions.StudentId': { $exists: true } },
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          username: 1,
-          absencePermissions: 1,
-          // Add other fields as needed
-        },
-      },
-    ]);
+// const ooooo = errorHandling.asyncHandler(async (req, res, next) => {
+//   try {
+//     const usersWithAbsencePermissions = await userModel.aggregate([
+//       {
+//         $lookup: {
+//           from: 'Absence&Permissions',
+//           localField: '_id',
+//           foreignField: 'StudentId',
+//           as: 'absencePermissions',
+//         },
+//       },
+//       {
+//         $match: {
+//           $and: [
+//             { absencePermissions: { $exists: true, $not: { $size: 0 } } },
+//             { 'absencePermissions.StudentId': { $exists: true } },
+//           ],
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 1,
+//           username: 1,
+//           absencePermissions: 1,
+//           // Add other fields as needed
+//         },
+//       },
+//     ]);
 
-    console.log(usersWithAbsencePermissions); // Log the result to check
+//     console.log(usersWithAbsencePermissions); // Log the result to check
 
-    return res.status(200).json({ status: 'success', data: usersWithAbsencePermissions });
-  } catch (error) {
-    return next(error);
-  }
-});
-
-
+//     return res.status(200).json({ status: 'success', data: usersWithAbsencePermissions });
+//   } catch (error) {
+//     return next(error);
+//   }
+// });
 
 
 
 
-module.exports = { absencePermissions , getPermissions,allAbsencePermissions,ooooo};
+
+module.exports = { absencePermissions , 
+  getPermissions,
+  allAbsencePermissions,
+};
+

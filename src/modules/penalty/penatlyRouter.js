@@ -5,12 +5,12 @@ const pentaly = require('./controller/penatly.js')
 
 router.post('/female/:studentId',
     // auth.auth([auth.roles.admin]),
-    pentaly.pentalyFemale)
+    pentaly.penaltyFemale)
 
 
     router.post('/male/:studentId',
     // auth.auth([auth.roles.admin]),
-    pentaly.pentalyMale)
+    pentaly.penaltyMale)
 
     router.post('/:studentId',
     // auth.auth([auth.roles.admin]),

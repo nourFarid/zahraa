@@ -8,26 +8,7 @@ const userSchema = new mongoose.Schema(
     //2023-2024
     ofYear:{
       type:String,
-      
     },
-
-
-    // newEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // newExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     newStudent: {
       type: Boolean,
       default: false,
@@ -235,12 +216,12 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     //معلومات زياده عن الطلاب الوافدين
-    PassportNumber: {
+    passportNumber: {
       type: String,
       //required: true,
       // unique: true,
     },
-    IssuingAuthority: {
+    issuingAuthority: {
       // جهه الصدور
       type: String,
     },
@@ -277,9 +258,19 @@ const userSchema = new mongoose.Schema(
       buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
+
+      // buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
+      buildingName:{type:String},
+      // floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
+      floorName:{type:String},
+      // roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
+      roomName:{type:String},
+
       housingDate :{type: Date},
+      evacuationDate:{type: Date},
       expulsionStudent:{ type: Boolean,default:false}, //فصل
       penalty:{type: Boolean,default:false}, //جزاء
+      
       isEvacuated:{type: Boolean,default:false}, //إخلاء
          
     isHoused:{
@@ -292,22 +283,31 @@ const userSchema = new mongoose.Schema(
     },
     image: String,
     DOB: String,
+
     statusOfOnlineRequests:{
       type: String,
       default: "pending",
-
     },
     waitingForClassification:{
     type: Boolean,
     default: false,
-
-    }
-
-
   },
+    isClassified:{
+    type: Boolean,
+    default: false,
+  },
+  //تخص طباعه البطاقات
+  printedCard: {
+    type: Boolean,
+    default: false,
+  },
+  dateOfPrinting: {
+    type: Date 
+  }
+},
   {
     timestamps: true,
   }
-);
+)
 
 module.exports = mongoose.model("User", userSchema);

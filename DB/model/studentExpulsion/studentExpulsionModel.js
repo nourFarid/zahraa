@@ -7,7 +7,8 @@ const studentExpulsionSchema = new mongoose.Schema({
   penaltyKind:{type:String},
   reason:{
   type:String,
-  enum:[ 'اخلاء مؤقت' , 'اخلاء نهائي']},
+  // enum:[ 'اخلاء مؤقت' , 'اخلاء نهائي']
+},
   cancellation:{type:String},
   expulsionDate: {
     type: Date,

@@ -80,24 +80,24 @@ const getCityStructure = errorHandling.asyncHandler( async(req,res,next)=>{
           if (room.roomType) {
             if (!roomTypeCounts[room.roomType]) {
               roomTypeCounts[room.roomType] = {
-                roomsWithZeroOccupants: 0,
-                roomsWithOneOrMoreOccupants: 0,
+                EmptyRooms: 0,
+                FilledRooms: 0,
               };
             }
 
             if (room.occupants && room.occupants.length === 0) {
-              roomTypeCounts[room.roomType].roomsWithZeroOccupants++;
+              roomTypeCounts[room.roomType].EmptyRooms++;
             } else if (room.occupants && room.occupants.length > 0) {
-              roomTypeCounts[room.roomType].roomsWithOneOrMoreOccupants++;
+              roomTypeCounts[room.roomType].FilledRooms++;
             }
           }
         });
       });
 
-      // Calculate totalNumOfOccupants for each room type
+      // Calculate totalRooms for each room type
       Object.keys(roomTypeCounts).forEach(roomType => {
-        roomTypeCounts[roomType].totalNumOfOccupants =
-          roomTypeCounts[roomType].roomsWithZeroOccupants + roomTypeCounts[roomType].roomsWithOneOrMoreOccupants;
+        roomTypeCounts[roomType].totalRooms =
+          roomTypeCounts[roomType].EmptyRooms + roomTypeCounts[roomType].FilledRooms;
       });
 
       return {

@@ -172,7 +172,7 @@ const feeStatement = errorHandling.asyncHandler(async (req, res, next) => {
   console.log('====================================');
 
   const {studentName,nationalID,PassportNumber,College,year,detailedAddress,phoneNumber,HousingType}=user
-  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber, };
+  const userData = { studentName, nationalID, PassportNumber, College, year, detailedAddress, phoneNumber, HousingType};
  const fees = await  FeesForStudents.find({id:id})
  console.log('========================%%%%%%%5============');
  console.log(fees);
