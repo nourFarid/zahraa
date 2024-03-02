@@ -41,7 +41,7 @@ const reports= require("./modules/Reports/reports.router.js")
 const path= require("path")
 const changeStudentInfo = require("./modules/changeStudentInfo/changeStudentInfo.router.js")
 const logs= require("./modules/logs/logs.router.js")
-const reports = require("./modules/reports/report.router.js")
+
 
 
 const initApp = (app, express) => {

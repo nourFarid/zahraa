@@ -205,4 +205,4 @@ const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, n
  
 
 
-module.exports = {pentalyFemale,pentalyMale,cancel,penaltyForMultipleStudents,}
+module.exports = {penaltyFemale,penaltyMale,cancel,penaltyForMultipleStudents,}

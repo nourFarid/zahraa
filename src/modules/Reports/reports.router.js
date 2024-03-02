@@ -16,5 +16,5 @@ router.get('/list',
   // auth.auth([auth.roles.admin]),
   reports.penaltiesReport)
 
-
+  router.get("/printedCardsReport",reports.printedCardsReport)
 module.exports = router
