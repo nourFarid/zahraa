@@ -9,24 +9,6 @@ const userSchema = new mongoose.Schema(
     ofYear:{
       type:String,
     },
-
-
-    // newEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldEgyption: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // newExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // oldExpartriates: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     newStudent: {
       type: Boolean,
       default: false,
@@ -225,12 +207,12 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     //معلومات زياده عن الطلاب الوافدين
-    PassportNumber: {
+    passportNumber: {
       type: String,
       //required: true,
       // unique: true,
     },
-    IssuingAuthority: {
+    issuingAuthority: {
       // جهه الصدور
       type: String,
     },
@@ -291,10 +273,19 @@ const userSchema = new mongoose.Schema(
     waitingForClassification:{
     type: Boolean,
     default: false,
-
-  //   }
-
   },
+    isClassified:{
+    type: Boolean,
+    default: false,
+  },
+  //تخص طباعه البطاقات
+  printedCard: {
+    type: Boolean,
+    default: false,
+  },
+  dateOfPrinting: {
+    type: Date 
+  }
 },
   {
     timestamps: true,

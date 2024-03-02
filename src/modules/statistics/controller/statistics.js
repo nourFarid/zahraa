@@ -216,7 +216,56 @@ if(transformed){
 
 
 //احصائيات البطاقات المطبوعة
-
+const getNumberOfPrintedCards = errorHandling.asyncHandler(async(req, res, next) => {
+    // Extract query parameter
+    var { ofYear,
+        isEvacuated,
+        isHoused,
+        dateOfPrinting} = req.query;
+    var query = {};
+    query = {
+      role:"User",
+      //gender:"ذكر"
+   };
+   
+   if(ofYear)
+    {
+        query.ofYear = ofYear
+    }
+    if(isEvacuated)
+    {
+        query.isEvacuated = isEvacuated
+    }
+    if(isHoused)
+    {
+        query.isHoused = isHoused
+    }
+    if(dateOfPrinting)
+    {
+        query.dateOfPrinting = dateOfPrinting
+    }
+    // Loop over each key-value pair in the query object
+    for (const key in query) {
+        if (query.hasOwnProperty(key)) {
+            // If the value is undefined, set it to false
+            if (query[key] === undefined) {
+                query[key] = false;
+            }
+        }
+    }
+  
+    const users = await User.find(query);
+    const count = users.length;
+  
+    console.log('====================================');
+    console.log(query);
+    console.log(count);
+    console.log('====================================');
+  
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+  
+  });
+  
 //اعداد جميع الطلاب
 const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) => {
     const { ofYear,
@@ -395,6 +444,7 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
 
 module.exports = {getNumberOfResidents,
     getNumberOfAllStudents,getNumberOfAppliers,
-    NumberOfStudentsBasedOnHousingType
+    NumberOfStudentsBasedOnHousingType,
+    getNumberOfPrintedCards
 };
 

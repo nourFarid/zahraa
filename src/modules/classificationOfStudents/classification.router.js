@@ -1,16 +1,29 @@
 const express = require("express");
 const router = express.Router();
+
+//_____________________________________________
+//OLD//
 const {
-  classifyOldMaleStudents,
-  classifyOldFemaleStudents,
+  classifyOldEgyptionMaleStudents,
+  classifyOldEgyptionFemaleStudents,
+  classifyOldEgyptionSpecialHousingMaleStudents,
+  classifyOldEgyptionSpecialHousingFemaleStudents
 } = require("./controller/classificationOfOld");
-const {
-  classifyNewMaleStudents,
-  classifyNewFemaleStudents,
-} = require("./controller/classificationOfNew");
-router.get("/classifyOldMale", classifyOldMaleStudents);
-router.get("/classifyOldFemale", classifyOldFemaleStudents);
-router.get("/classifyNewMale", classifyNewMaleStudents);
-router.get("/classifyNewFemale", classifyNewFemaleStudents);
+
+router.get("/classifyOldEgyptionMaleStudents", classifyOldEgyptionMaleStudents);
+router.get("/classifyOldEgyptionFemaleStudents", classifyOldEgyptionFemaleStudents);
+router.get("/classifyOldEgyptionSpecialHousingMaleStudents", classifyOldEgyptionSpecialHousingMaleStudents);
+router.get("/classifyOldEgyptionSpecialHousingFemaleStudents", classifyOldEgyptionSpecialHousingFemaleStudents);
+//____________________________________________________________
+//new//
+const { classifyNewEgyptionMaleStudents,classifyNewEgyptionFemaleStudents,
+   classifyNewEgyptionSpecialHousingMaleStudents,classifyNewEgyptionSpecialHousingFemaleStudents }
+  
+= require("./controller/classificationOfNew")
+
+router.get("/classifyNewEgyptionMaleStudents", classifyNewEgyptionMaleStudents);
+router.get("/classifyNewEgyptionFemaleStudents", classifyNewEgyptionFemaleStudents);
+router.get("/classifyNewEgyptionSpecialHousingMaleStudents", classifyNewEgyptionSpecialHousingMaleStudents);
+router.get("/classifyNewEgyptionSpecialHousingFemaleStudents", classifyNewEgyptionSpecialHousingFemaleStudents);
 
 module.exports = router;
