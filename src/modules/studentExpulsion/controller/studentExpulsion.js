@@ -153,10 +153,75 @@ const expulsionAllStudents = errorHandling.asyncHandler(async (req, res, next) =
 
 
 
+
+
+const expelStudents = errorHandling.asyncHandler(async (req, res, next) => {
+  const { penaltyKind, reason, roomId, expulsionDate } = req.body;
+  const { studentIds } = req.body;
+
+  // Check if room with specified roomId exists
+  const room = await roomsModel.findById(roomId);
+  if (!room) {
+      return next(new Error(`Room with ID ${roomId} not found`, { cause: 404 }));
+  }
+
+  if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
+      return next(new Error(`Invalid student IDs provided`, { cause: 400 }));
+  }
+
+  const expelledStudents = [];
+
+  for (const studentId of studentIds) {
+      const student = await userModel.findById(studentId);
+
+      if (!student) {
+          return next(new Error(`Invalid student ID: ${studentId}`, { cause: 400 }));
+      }
+
+      const nameOfStudent = student.studentName;
+
+      const expelled = await studentExpulsion.create({
+          nameOfStudent,
+          penaltyKind,
+          reason,
+          expulsionDate,
+      });
+
+      // Check if the student is in the room before attempting to remove
+      if (!room.occupants.includes(studentId)) {
+          return next(new Error(`This student is not in the room`, { cause: 400 }));
+      }
+
+      const user = await userModel.updateOne(
+          { _id: studentId },
+          { $set: { expulsionStudent: true } }
+      );
+
+      const updatedRoom = await roomsModel.findByIdAndUpdate(roomId, { $pull: { occupants: studentId } }, { new: true });
+
+      await userModel.findByIdAndUpdate(studentId, { isHoused: false });
+
+      expelledStudents.push({
+          studentId,
+          expelled,
+      });
+      return res.status(201).json({ status: httpStatusText.SUCCESS, data: { expelledStudents, updatedRoom } });
+
+  }
+
+});
+
+
+
+
+
+
 module.exports = {
   createExpulsionfemale,
   createExpulsionMale,
+
   cancel,
   getAllStudentsNotPaid,
   expulsionAllStudents
+
 }

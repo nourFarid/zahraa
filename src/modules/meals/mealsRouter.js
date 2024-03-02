@@ -8,6 +8,10 @@ router.post('/',
     meals.addMeals)
 
 
+    // router.post('/mealsPreparation',
+    // // auth.auth([auth.roles.admin]),
+    // meals.MealPreparation)
+
     router.get('/',meals.getAllMeals);
 
     router.get('/:mealId', meals.getOneMeal);

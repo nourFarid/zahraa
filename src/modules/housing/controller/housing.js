@@ -96,6 +96,9 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
   if (student.isHoused == true) {
     return next(new Error(`This student is already housed`, { cause: 400 }));
   }
+  if (student.transferred == true){
+    return next (new Error (`this student transferred can't housing`,{cause:400}))
+  }
 
   if ( student.statusOfOnlineRequests == 'accepted') {
 
@@ -206,3 +209,4 @@ module.exports = {houseStudents ,
   updateHousedMale,
   updateHousedFemale
 }
+

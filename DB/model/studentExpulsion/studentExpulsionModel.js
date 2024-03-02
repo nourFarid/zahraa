@@ -10,6 +10,10 @@ const studentExpulsionSchema = new mongoose.Schema({
   // enum:[ 'اخلاء مؤقت' , 'اخلاء نهائي']
 },
   cancellation:{type:String},
+  expulsionDate: {
+    type: Date,
+    default: Date.now,
+  },
   createdBy: { type: mongoose.ObjectId, ref: 'Admin' },
   createdAt:{type: Date, default: Date.now()}
 }, {

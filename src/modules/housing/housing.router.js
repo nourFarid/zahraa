@@ -20,8 +20,6 @@ router.get('/female',housingController.getStudentFemale)
 router.get('/male',housingController.getStudentMale)
 
 
-
-
 module.exports = router
 
 

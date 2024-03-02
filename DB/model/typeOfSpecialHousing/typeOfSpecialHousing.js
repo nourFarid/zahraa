@@ -7,9 +7,6 @@ const typeOfSpecialHousing = new mongoose.Schema({
         type:String,
     }
 
-
-
-
 }, {
     timestamps: true
 })

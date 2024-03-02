@@ -23,8 +23,14 @@ const typeOfSpecialHousing= require("./modules/typeOfHousing/typeOfSpecialHousin
 const detailsAboutTypeOfSpecialHousing=require("./modules/typeOfHousing/detailsAboutTypeOfSpecialHousing.router.js")
 const cityStructure = require ('./modules/CityStructure/cityStructure.router.js')
 const statistics=require("./modules/statistics/statistics.router")
+
+
 const applications= require("./modules/applications/applications.router.js")
 const basicData=require("./modules/basicData/basicData.router.js");
+const transferStudent=require("./modules/transferStudentFromCollege/transfer.router.js");
+
+
+
 const StatementOfTheSituation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
 const AcceptanceNotification= require("./modules/AcceptanceNotification/AcceptanceNotificatio.Router.js")
 const evacuation = require("./modules/evacuation/evacuated.router.js")
@@ -60,28 +66,26 @@ const initApp = (app, express) => {
   app.use("/classifyStudents", classifyStudents);
   app.use(`/inquiry`, InquiryAboutAdmission);
   app.use("/fees", fees);
+
   app.use(`/blockMeals` , blockMeals)
   app.use(`/absence` , absence)
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
   app.use("/cityStructure" , cityStructure)
-  app.use(`/StatementOfTheSituation`,StatementOfTheSituation);
-  app.use("/statistics",statistics)
-  app.use("/applications",applications)
-  app.use("/basicData", basicData);
-  app.use(`/AcceptanceNotification`, AcceptanceNotification);
-  app.use("/evacuation" , evacuation)
-  app.use("/universityPhotos" , universityPhotos)
-  app.use('/uploads',express.static(path.join(__dirname,'../uploads') ))
-  app.use("/excludedCountries",excludedCountries)
 
-  app.use("/reports",reports)
+
+app.use("/statistics",statistics)
+app.use("/applications",applications)
+app.use("/basicData", basicData);
+
+
 
 
 
   app.use("/changeInfo",changeStudentInfo)
   app.use("/logs",logs)
   app.use(`/reports`,reports)
+
 
 
   app.all("*", (req, res, next) => {

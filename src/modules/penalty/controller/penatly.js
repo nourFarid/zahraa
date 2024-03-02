@@ -112,7 +112,97 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
 
   return res.status(200).json({status : httpStatusText.SUCCESS , message:`penalty has been removed`})
  })
- 
+
+// const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, next) => {
+//   const { penaltyKind, reason, cancellation, createdAt } = req.body;
+//   const { studentIds } = req.body;
+
+//   if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
+//     return next(new Error(`Invalid student IDs provided`, { cause: 400 }));
+//   }
+
+//   const penaltiesApplied = [];
+
+//   for (const studentId of studentIds) {
+//     const student = await userModel.findById(studentId);
+
+//     if (!student) {
+//       return next(new Error(`Invalid student ID: ${studentId}`, { cause: 400 }));
+//     }
+
+   
+//     const studentName = student.studentName;
+
+   
+//       const penalty = await penatlyModel.create({
+//         studentName,
+//         penaltyKind,
+//         reason,
+//         cancellation,
+//         createdAt,
+//       });
+
+//       await userModel.updateOne(
+//         { _id: studentId },
+//         { $set: { penalty: true } }
+//       );
+
+//       penaltiesApplied.push({
+//         studentId,
+//         penalty,
+//       });
+    
+//   }
+
+//   return res.status(201).json({ status: httpStatusText.SUCCESS, data: { penaltiesApplied } });
+// });
+
+
+
+const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, next) => {
+  const {ofYear,  reason, cancellationDate } = req.body;
+  const { studentIds, penaltyKind, PenaltyDate } = req.body;
+
+  if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
+    return next(new Error(`Invalid student IDs provided`, { cause: 400 }));
+  }
+
+  const penaltiesApplied = [];
+
+  for (const studentId of studentIds) {
+    const student = await userModel.findById(studentId);
+
+    if (!student) {
+      return next(new Error(`Invalid student ID: ${studentId}`, { cause: 400 }));
+    }
+
+    const studentName = student.studentName;
+    
+    const penalty = await penatlyModel.create({
+      studentName,
+      penaltyKind,
+      reason,
+      ofYear,
+      cancellationDate, //
+      penaltyKind, // Add type of penalty to penalty model
+      PenaltyDate, // Add date of penalty to penalty model
+    });
+
+    await userModel.updateOne(
+      { _id: studentId },
+      { $set: { penalty: true } }
+    );
+
+    penaltiesApplied.push({
+      studentId,
+      penalty,
+    });
+  }
+
+  return res.status(201).json({ status: httpStatusText.SUCCESS, data: { penaltiesApplied } });
+});
+
  
 
-module.exports = {penaltyFemale,penaltyMale,cancel}
+
+module.exports = {pentalyFemale,pentalyMale,cancel,penaltyForMultipleStudents,}

@@ -154,6 +154,15 @@ const userSchema = new mongoose.Schema(
     grade: {
       type: Number,
     },
+    evictionReason:{
+      type: String,
+    },
+    isEvacuated:{
+      type: Boolean,
+    },
+    universityName:{
+      type: String,
+    },
     gradePercentage: {
       type: Number,
     },
@@ -242,12 +251,21 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    transferred:{
+      type:Boolean,
+      default:false
+    },
+      buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
+      floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
+      roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
+
       // buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       buildingName:{type:String},
       // floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       floorName:{type:String},
       // roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       roomName:{type:String},
+
       housingDate :{type: Date},
       evacuationDate:{type: Date},
       expulsionStudent:{ type: Boolean,default:false}, //فصل

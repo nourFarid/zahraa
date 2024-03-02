@@ -11,11 +11,16 @@ const mealsSchema = new mongoose.Schema({
   RamadanMeal:{type:Boolean},
   mealReligion:{type:String, enum:[ "مسلم","مسيحي"]},
   studentReligion:{type:String, enum:[ "مسلم","مسيحي"]},
-  mealAfterSubsidy:{type:String},
-  mealBeforeSubsidy:{type:String},
+  mealAfterSubsidy:{type: Date},
+  mealBeforeSubsidy:{type: Date},
   editAndAdd:{type: mongoose.ObjectId, ref: 'Admin'},
   createdAt:{type: Date, default: Date.now()},
-  RamadanMeal:{type: Boolean}
+  RamadanMeal:{type: Boolean},
+  AcademicYear:{type:String},
+  day:{type:String},
+  meal:{type:String},
+  isPrepared:{type:Boolean,default:false},
+  academicYear:{type:String}
 
 }, {
   timestamps: true,

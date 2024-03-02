@@ -16,4 +16,10 @@ router.post('/female/:studentId',
     // auth.auth([auth.roles.admin]),
     pentaly.cancel)
     
+
+    router.post('/',
+    // auth.auth([auth.roles.admin]),
+    pentaly.penaltyForMultipleStudents)
+
+    
 module.exports = router
