@@ -9,7 +9,7 @@ const Logs= require("../../../../DB/model/logs.js")
  const signUp = errorHandling.asyncHandler(async(req,res,next)=>{
   
     //check el email mawgood wla la2
-    const isNationalIdExist = await userModel.findOne({email:req.body.nationalID})
+    const isNationalIdExist = await userModel.findOne({nationalID:req.body.nationalID})
     if (isNationalIdExist){
         return next (new Error ("this NationalId is already Exist"))
     }
@@ -19,16 +19,24 @@ const Logs= require("../../../../DB/model/logs.js")
 }   
  )
 
- const signUpAdmin = errorHandling.asyncHandler(async(req,res,next)=>{
-  
-    //check el email mawgood wla la
-    const isNationalIdExist = await AdminModel.findOne({email:req.body.nationalID})
+ //to create a new employee
+ //must be a super admin to perform this type of request, which means that your athurity must be الكل
+const signUpAdmin = errorHandling.asyncHandler(async(req,res,next)=>{
+    const superAdminNationalId= req.body.superAdminNationalId
+    const superAdmin = await AdminModel.findOne({nationalID:superAdminNationalId})
+    if(superAdmin.athurity=="الكل"){
+    const isNationalIdExist = await AdminModel.findOne({nationalID:req.body.nationalID})
     if (isNationalIdExist){
         return next (new Error ("user is already exist"))
     }
     req.body.password = hashAndCompare.hash(req.body.password)
     const admin = await AdminModel.create(req.body)
     return res.status(201).json ({message :"done",admin})
+    }
+    //forbidden status code 403
+    return res.status(403).json ({message :"SORRY BUT YOU ARE NOT ALLOWED TO PERFORM THIS ACTION"})
+  
+   
 }   
  )
 
@@ -71,5 +79,3 @@ const Logs= require("../../../../DB/model/logs.js")
 
 
 module.exports = {signIn , signUp,signUpAdmin}
-
-//authorization de y3ny salahyt el d5oll da elly hwa el role

@@ -38,7 +38,12 @@ name:{
   updateAction:{
     type:Number,
     default: 0,
+  },
+  athurity:{
+    type:String,
+    enum:['عرض','ادخال','تعديل','الكل']
   }
+
 
 }
 
