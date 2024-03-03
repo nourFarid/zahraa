@@ -9,9 +9,41 @@ const getAdmins= errorHandling.asyncHandler(async(req,res,next)=>{
     return res
     .status(200)
     .json({ status: httpStatusText.SUCCESS, data: { admins } });
+})
 
+
+const updateAdmin= errorHandling.asyncHandler(async(req,res,next)=>{
+    const nationalID= req.params.nationalID;
+    const updateData= req.body; 
+    const admin= await AdminModel.findOneAndUpdate(
+        {nationalID:nationalID},
+        {$set:updateData},
+        {new:true}
+        )
+        if(!admin)
+        return next (new Error ("no admins found",{cause:404}))
+        return res
+    .status(200)
+    .json({ status: httpStatusText.SUCCESS, data: { admin } });
+        
 
 })
+
+const deleteAdmin= errorHandling.asyncHandler(async(req,res,next)=>{
+    const nationalID= req.params.nationalID;
+    const admin= await AdminModel.findOneAndDelete({ nationalID: nationalID})
+        if(!admin)
+        return next (new Error ("no admins found",{cause:404}))
+        return res
+    .status(200)
+    .json({ status: httpStatusText.SUCCESS, data: { admin } });
+        
+
+})
+
+
 module.exports ={
-    getAdmins
+    getAdmins,
+    updateAdmin,
+    deleteAdmin
 }
