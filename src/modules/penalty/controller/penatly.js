@@ -26,6 +26,7 @@ const penaltyFemale = errorHandling.asyncHandler(async (req, res, next) => {
           if (PenaltyDate < cancellationDate) {
               // Create penalty record
               const penalty = await penatlyModel.create({
+                  studentId: studentId,
                   studentName,
                   ofYear: student.ofYear,
                   penaltyKind,
@@ -71,6 +72,7 @@ const penaltyMale = errorHandling.asyncHandler(async (req, res, next) => {
           if (PenaltyDate < cancellationDate) {
               // Create penalty record
               const penalty = await penatlyModel.create({
+                  studentId: studentId,
                   studentName,
                   ofYear: student.ofYear,
                   penaltyKind,
@@ -97,7 +99,7 @@ const penaltyMale = errorHandling.asyncHandler(async (req, res, next) => {
 const getPenalty = errorHandling.asyncHandler(async (req, res, next) => {
   const { studentId } = req.params;
 
-  const student = await penatlyModel.findById(studentId).select('penaltyKind reason PenaltyDate')
+  const student = await penatlyModel.find({studentId}).select('penaltyKind reason PenaltyDate')
 
   if (!student) {
     return next(new Error(`No student found with that ID`, { cause: 400 }));
@@ -143,16 +145,17 @@ const penaltyForMultipleStudents = errorHandling.asyncHandler(async (req, res, n
       return next(new Error(`Invalid student ID: ${studentId}`, { cause: 400 }));
     }
 
-    const studentName = student.studentName;
+    // const studentName = student.studentName;
     
     const penalty = await penatlyModel.create({
-      studentName,
+      studentId :studentId,
+      studentName: student.studentName,
       penaltyKind,
       reason,
       ofYear,
-      cancellationDate, //
-      penaltyKind, // Add type of penalty to penalty model
-      PenaltyDate, // Add date of penalty to penalty model
+      cancellationDate, 
+      penaltyKind,
+      PenaltyDate, 
     });
 
     await userModel.updateOne(
