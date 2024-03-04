@@ -36,7 +36,8 @@ const correctNationalID = errorHandling.asyncHandler(async (req, res, next) => {
 
   };
 
-  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });});;
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
+});;
 
 //تغيير رقم الطالب
 const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
@@ -62,7 +63,8 @@ const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
 
   };
 
-  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });});
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
+});
 
 // تغيير اسم الطالب
 const changeStudentName = errorHandling.asyncHandler(async (req, res, next) => {
