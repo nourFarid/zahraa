@@ -21,5 +21,8 @@ router.post('/female/:studentId',
     // auth.auth([auth.roles.admin]),
     pentaly.penaltyForMultipleStudents)
 
-    
+    router.get('/:studentId',
+    // auth.auth([auth.roles.admin]),
+    pentaly.getPenalty)
+  
 module.exports = router
