@@ -23,7 +23,7 @@ deleteFeeType);
 router.post("/addFeeOptions",
 //  auth.auth([auth.roles.admin]),
 addFeeOptions )
-router.get("/getFeeOptions",
+router.get("/getFeeOptions/:id",
 //  auth.auth([auth.roles.admin]),
 getFeeOptions )
 router.put("/updateFeeOptions/:id",
