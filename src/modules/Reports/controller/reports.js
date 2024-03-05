@@ -238,7 +238,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 
 //البطاقات المطبوعة
-
 const printedCardsReport = errorHandling.asyncHandler(async (req, res, next) => {
   const {ofYear}= req.query
   var query={
