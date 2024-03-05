@@ -1,13 +1,17 @@
 const express = require ('express')
 const router = express.Router()
-const cityController = require('./controller/cityStructure')
+const StructureController = require('./controller/cityStructure')
 //const auth = require('../../middleware/auth.js')
 
 
-router.get('/', cityController.getCityStructure)
+router.get('/', StructureController.getCityStructure)
 
 //حالة الغرف
-router.get('/status', cityController.RoomsStatus)
+router.get('/RoomsStatus', StructureController.RoomsStatus)
+
+router.get('/univeristyStructure',
+//    auth.auth([auth.roles.admin]),
+     StructureController.universityStructure)
 
 
 

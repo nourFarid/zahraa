@@ -255,9 +255,6 @@ const userSchema = new mongoose.Schema(
       type:Boolean,
       default:false
     },
-      buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
-      floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
-      roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
 
       // buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       buildingName:{type:String},

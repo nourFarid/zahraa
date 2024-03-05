@@ -3,6 +3,15 @@ const httpStatusText = require('../../../utils/httpStatusText.js')
 const UniversityCity = require('../../../../DB/model/rooms/UniversityCityModel.js')
 const buildingModel = require('../../../../DB/model/rooms/BuildingsModel.js')
 const floorModel = require('../../../../DB/model/rooms/FloorModel.js')
+const fs = require('fs').promises;
+
+
+const dotenv = require('dotenv');
+
+dotenv.config();
+const collegesString = process.env.COLLEGES;
+const colleges = collegesString.split(',');
+
 
 //هيكل المدن
 const getCityStructure = errorHandling.asyncHandler( async(req,res,next)=>{
@@ -126,6 +135,56 @@ const getCityStructure = errorHandling.asyncHandler( async(req,res,next)=>{
   
 });
 
+//هيكل الجامعه
+const universityStructure = errorHandling.asyncHandler(async (req, res, next) => {
+
+    const { college } = req.query;
+
+    const jsonData = await fs.readFile('colleges.json', 'utf-8');
+    const collegesData = JSON.parse(jsonData);
+
+    // Filter data based on the chosen college
+    const filteredColleges = collegesData.filter(col => !college || col.college === college);
+
+    if (filteredColleges.length === 0) {
+      return res.status(404).json({ status: httpStatusText.ERROR, message: 'College not found' });
+    }
+
+    // Assuming the data structure inside colleges.json is the same as provided
+    const departmentsAndPrograms = getDepartmentsAndPrograms(filteredColleges[0].departments);
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: departmentsAndPrograms });
+  
+});
+
+// The getDepartmentsAndPrograms function remains the same as before
+function getDepartmentsAndPrograms(departments) {
+  const result = [];
+
+  departments.forEach((department) => {
+    const departmentInfo = {
+      departmentName: department.name,
+      departmentType: department.type,
+      programs: [],
+    };
+
+    department.programs.forEach((program) => {
+      const programInfo = {
+        programName: program.name,
+        levels: program.levels,
+      };
+
+      departmentInfo.programs.push(programInfo);
+    });
+
+    result.push(departmentInfo);
+  });
+
+  return result;
+}
 
 
-module.exports = { getCityStructure , RoomsStatus}
+
+
+
+module.exports = { getCityStructure , RoomsStatus , universityStructure}
