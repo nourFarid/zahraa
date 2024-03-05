@@ -96,6 +96,21 @@ const updateFeeType = errorHandling.asyncHandler(async (req, res, next) => {
 });
 
 
+const getFeeOptions = errorHandling.asyncHandler(async (req, res, next) => {
+  // const id = req.params.id; 
+
+  
+    const feesOptions = await FeeOptions.find();
+
+    if (!feesOptions) {
+      // If no documents were deleted, it means the record with the given ID was not found
+      return res.status(404).json({ status: httpStatusText.NOT_FOUND, message: 'Fees not found.' });
+    }
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data:{feesOptiond}});
+
+});
+
 const getFeeType = errorHandling.asyncHandler(async (req, res, next) => {
   // const id = req.params.id; 
 
@@ -227,5 +242,6 @@ module.exports = {
   deleteFeeType,
   addFeeOptions,
   updateFeeOptions,
+  getFeeOptions,
   feeStatement
 };
