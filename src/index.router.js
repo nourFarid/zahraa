@@ -70,7 +70,7 @@ const initApp = (app, express) => {
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
   app.use("/Structure" , cityStructure)
-
+app.use('/StatementOfTheSituation',StatementOfTheSituation)
 
 app.use("/statistics",statistics)
 app.use("/applications",applications)
