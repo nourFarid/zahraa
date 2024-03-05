@@ -83,6 +83,9 @@ const penaltyMale = errorHandling.asyncHandler(async (req, res, next) => {
 
               // Update student to mark as penalized
               await userModel.updateOne({ _id: studentId }, { $set: { penalty: true } });
+              console.log('====================================');
+              console.log(penalty);
+              console.log('====================================');
 
               return res.status(201).json({ status: httpStatusText.SUCCESS, data: { penalty } });
           } else {
