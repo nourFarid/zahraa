@@ -20,6 +20,9 @@ router.get('/list',
 
   router.get("/printedFemalesCardsReport",reports.printedFemalesCardsReport)
 
+
+  router.get("/socialResearchcasesReportMale",reports.socialResearchcasesReportMale)
+  router.get("/socialResearchcasesReportfemale",reports.socialResearchcasesReportfemale)
 module.exports = router
 
 
