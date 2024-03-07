@@ -278,6 +278,47 @@ return res
 });
 
 
+//البطاقات المطبوعه ذكر
+
+const printedMalesCardsReport = errorHandling.asyncHandler(async (req, res, next) => {
+  const {ofYear}= req.query
+  var query={
+      role:"User",
+      gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+      printedCard: true
+  }
+  if(ofYear)
+  {
+      query.ofYear=ofYear
+  }
+  for (const key in query) {
+      if (query.hasOwnProperty(key)) {
+          // If the value is 0, remove the key-value pair from the object
+          if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
+              delete query[key];
+          }
+      }
+  }
+  console.log('====================================');
+  console.log(query);
+  console.log('====================================');
+
+  const student = await UserModel.find(query);
+  const count = student.length;
+
+  console.log('====================================');
+  console.log(student.length);
+  console.log('====================================');
+  // const usersWith’Males = await UserModel.find({ printedCard: true });
+  if(!student||student.length==0)
+  return next (new Error (`NO USERS`,{cause:400}))
+
+return res
+  .status(200)
+  .json({ status: httpStatusText.SUCCESS, data: { student,count } });
+});
+
+
  module.exports = {studentLists,AbsenceAndPermissionsReport,
   penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport}
 
@@ -285,4 +326,3 @@ return res
 
 
 
-  
