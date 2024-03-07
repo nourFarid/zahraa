@@ -256,3 +256,4 @@ module.exports = {
   getFeeOptions,
   feeStatement
 };
+
