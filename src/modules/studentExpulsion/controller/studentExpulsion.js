@@ -15,7 +15,8 @@ const createExpulsionfemale = errorHandling.asyncHandler(async(req,res,next)=>{
   }
   if (student.gender == 'انثي'){
   const expulsion = await studentExpulsion.create({
-    nameOfStudent: student.studentName,
+    studentId:studentId,
+    studentName: student.studentName,
     penaltyKind,reason , cancellation
   //  ,createdBy:userId
    })
@@ -50,7 +51,8 @@ const createExpulsionMale = errorHandling.asyncHandler(async(req,res,next)=>{
  
   if (student.gender == 'ذكر'){
   const expulsion = await studentExpulsion.create({
-    nameOfStudent: student.studentName,
+    studentId:studentId,
+    studentName: student.studentName,
     penaltyKind,reason , cancellation
   //  ,createdBy:userId
    })
@@ -121,7 +123,7 @@ const expulsionAllStudents = errorHandling.asyncHandler(async (req, res, next) =
 
       if (!student.isHousingFeePaid && student.isHoused) {
         const expulsioned = await studentExpulsion.create({
-          nameOfStudent: student.studentName,
+          studentName: student.studentName,
           reason,
         });
 
@@ -178,10 +180,10 @@ const expelStudents = errorHandling.asyncHandler(async (req, res, next) => {
           return next(new Error(`Invalid student ID: ${studentId}`, { cause: 400 }));
       }
 
-      const nameOfStudent = student.studentName;
+      const studentName = student.studentName;
 
       const expelled = await studentExpulsion.create({
-          nameOfStudent,
+          studentName,
           penaltyKind,
           reason,
           expulsionDate,
