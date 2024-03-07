@@ -1,23 +1,14 @@
 const mongoose = require('mongoose')
 
 const mealSchema = new mongoose.Schema({
-  studentIds: {
-    type: mongoose.ObjectId , required: true, ref: 'User'},
+  studentId : {type: mongoose.ObjectId , required: true, ref: 'User'},
   studentName:{type:String},
   dateFrom:{type: Date},
   dateTo:{type: Date},
-  meals: {
-    type: {
-      type: String,
-      enum: ["عشاء", "غداء"],
-    },
-    default: [],
-  },
+  meals:{type: String,enum: ["عشاء", "غداء"]},
   reason:{type:String},
-  day:{type:String},
   hasBlocked:{type:Boolean,default:false},
-}, 
-{
+}, {
     timestamps: true
 })
 
