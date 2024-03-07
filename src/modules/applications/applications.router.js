@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth.js");
+const uploadFile = require('../../middleware/upload.js')
 
 
 
@@ -39,8 +40,15 @@ router.put("/acceptRejectedStudents/:id",acceptRejectedStudents)
 
 //________________________________________________________________
 // طباعه البطاقات
-const {unprintedCards,updateCards} = require("./cardprinting/cardprinting.js");
-router.get("/unprintedCards",unprintedCards)
+const {unprintedCardsForMales,unprintedCardsForFemales,updateCards} = require("./cardprinting/cardprinting.js");
+router.get("/unprintedCardsForMales",unprintedCardsForMales)
+router.get("/unprintedCardsForFemales",unprintedCardsForFemales)
 router.put("/updateCards/:id",updateCards)
 
+//________________________________________________________________
+// حجز الوجبات اكسل
+const {bookMealExcel}=require("./bookMealExcel/bookMealExcel.js")
+router.post("/bookMealExcel",uploadFile.upload.single('avatar'),bookMealExcel)
+
+//________________________________________________________________
 module.exports=router;

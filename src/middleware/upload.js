@@ -13,16 +13,22 @@ const diskStorage = multer.diskStorage(
 
     }
 )
-
 const fileFilter = (req, file, cb) => {
-    const type = file.mimetype.split("/")[1];
-    if ( type === 'pdf' || type === 'png' || type === 'jpg' || type === 'jpeg') {
-        return cb(null, true)
+    const allowedTypes = ['pdf', 'png', 'jpg', 'jpeg', 'xlsx'];
+    const fileType = file.mimetype.split("/")[1];
+
+    if (allowedTypes.includes(fileType) || file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only PDF, PNG, JPG, JPEG, and XLSX files are allowed.'), false);
     }
-    
 }
 
-const upload = multer({ storage: diskStorage, fileFilter })
+
+
+const upload = multer({ storage: diskStorage, 
+    fileFilter 
+})
 
 module.exports = {
     upload,

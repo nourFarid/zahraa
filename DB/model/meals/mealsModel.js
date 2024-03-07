@@ -20,7 +20,16 @@ const mealsSchema = new mongoose.Schema({
   day:{type:String},
   meal:{type:String},
   isPrepared:{type:Boolean,default:false},
-  academicYear:{type:String}
+  academicYear:{type:String},
+  //حجز الوجبات اكسيل
+  file:{type: String},
+  data:{type: Buffer},
+  ofYear:{type:String},
+  ofWhichMeal:{type:String},
+  dateOfBookingMeals:{type:String},
+
+  
+  
 
 }, {
   timestamps: true,
