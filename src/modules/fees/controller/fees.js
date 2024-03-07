@@ -96,6 +96,21 @@ const updateFeeType = errorHandling.asyncHandler(async (req, res, next) => {
 });
 
 
+const getFeeOptions = errorHandling.asyncHandler(async (req, res, next) => {
+  const feeTypeId = req.params.id; 
+
+  
+    const feesOptions = await FeeOptions.find({feeTypeId});
+
+    if (!feesOptions) {
+      // If no documents were deleted, it means the record with the given ID was not found
+      return res.status(404).json({ status: httpStatusText.NOT_FOUND, message: 'Fees not found.' });
+    }
+
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data:{feesOptions}});
+
+});
+
 const getFeeType = errorHandling.asyncHandler(async (req, res, next) => {
   // const id = req.params.id; 
 
@@ -130,6 +145,12 @@ const deleteFeeType = errorHandling.asyncHandler(async (req, res, next) => {
 
 const addFeeOptions= errorHandling.asyncHandler(async (req, res, next) => {
   const feeOptions=req.body
+  const id = req.body.feeTypeId;
+  const feeType= await FeeTypes.findById(id);
+  if (!feeType) {
+    return next(new Error(`FeeType not found`, { cause: 400 }));
+  }
+  
   const addedFeeOptions=new FeeOptions(
     feeOptions
   )
@@ -139,12 +160,17 @@ const addFeeOptions= errorHandling.asyncHandler(async (req, res, next) => {
  
    return res
      .status(201)
-     .json({ status: httpStatusText.SUCCESS, data: { addedFeeOptions } });
+     .json({ status: httpStatusText.SUCCESS, data: { feeType,addedFeeOptions } });
  });
 
 
  const updateFeeOptions = errorHandling.asyncHandler(async (req, res, next) => {
   const id = req.params.id; 
+  const feeTypeId = req.body.feeTypeId;
+  const feeType= await FeeTypes.findById(feeTypeId);
+  if (!feeType) {
+    return next(new Error(`FeeType not found`, { cause: 400 }));
+  }
   const updateData = req.body;
 
   
@@ -155,7 +181,7 @@ const addFeeOptions= errorHandling.asyncHandler(async (req, res, next) => {
       return res.status(404).json({ status: httpStatusText.NOT_FOUND, message: 'FeeOptions not found.' });
     }
 
-    return res.status(200).json({ status: httpStatusText.SUCCESS, data: {updateData}});
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: {feeType,updateData}});
  
 });
 
@@ -227,5 +253,6 @@ module.exports = {
   deleteFeeType,
   addFeeOptions,
   updateFeeOptions,
+  getFeeOptions,
   feeStatement
 };
