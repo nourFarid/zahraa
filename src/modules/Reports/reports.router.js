@@ -21,3 +21,5 @@ router.get('/list',
   router.get("/printedFemalesCardsReport",reports.printedFemalesCardsReport)
 
 module.exports = router
+
+

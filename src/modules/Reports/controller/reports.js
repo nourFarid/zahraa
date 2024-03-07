@@ -322,3 +322,5 @@ return res
   penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport}
 
         
+
+  

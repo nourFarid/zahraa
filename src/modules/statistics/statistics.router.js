@@ -17,6 +17,7 @@ router.get('/getNumberOfPrintedCardsForFemales',getNumberOfPrintedCardsForFemale
 
 
 
+
 //اعداد جميع الطلاب
 router.get('/getNumberOfAllStudents',getNumberOfAllStudents)
 

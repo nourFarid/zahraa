@@ -19,6 +19,7 @@ const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
          normalHousing, specialHousing,
           oldStudent, newStudent,
            grade,gradePercentage,
+  
            residentsOfTheYreviousYear, } = req.query;
 
 var onlineRequests = [];
