@@ -37,6 +37,7 @@ const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
   }
 
   const evacuated = await evacuation.create({
+    studentId: studentId,
     studentName: student.studentName,
     College: student.College,
     evacuationReason,
@@ -57,9 +58,9 @@ const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
 
   await userModel.findByIdAndUpdate(studentId, {
     isHoused: false,
-    roomId: null,
-    floorId: null,
-    buildingId: null,
+    // roomId: null,
+    // floorId: null,
+    // buildingId: null,
     roomName:null,
     floorName:null,
     buildingName:null
@@ -114,9 +115,18 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
   const studentIdsArray = studentIds.split(',');
 
 
-    const students = await userModel.find({ _id: { $in: studentIdsArray } });
+    const students = await userModel.find({ _id: { $in: studentIdsArray },isHoused: true , isEvacuated:false });
 
-    if (students.length !== studentIdsArray.length) {
+      if (students.length !== studentIdsArray.length) {
+        // Check for students with isHoused false
+        const notHousedStudents = studentIdsArray.filter(id => !students.find(student => student._id.toString() === id && student.isHoused));
+        
+        if (notHousedStudents.length > 0) {
+          return res.status(400).json({
+            status: httpStatusText.FAILURE,
+            message: `One or more students are not housed: ${notHousedStudents.join(', ')}`,
+          });
+        }
       return next(new Error(`One or more invalid student Ids`, { cause: 400 }));
     }
 
@@ -124,6 +134,7 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
     const evacuationRecords = await Promise.all(
       students.map(async (student) => {
         const evacuated = await evacuation.create({
+          studentId: student._id,
           studentName: student.studentName,
           College: student.College,
           evacuationDate: student.evacuationDate,
@@ -146,10 +157,9 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
     // Clear housed information for evacuated students
     await userModel.updateMany(
       { _id: { $in: studentIdsArray } },
-      { $set: { isHoused: false, roomId: null, floorId: null, buildingId: null,
-        roomName:null,
-      floorName:null,
-      buildingName:null } }
+      { $set: { isHoused: false,
+        //  roomId: null, floorId: null, buildingId: null,
+        roomName:null,  floorName:null,  buildingName:null } }
     );
 
     return res.status(201).json({ status: httpStatusText.SUCCESS, data: { evacuationRecords } });

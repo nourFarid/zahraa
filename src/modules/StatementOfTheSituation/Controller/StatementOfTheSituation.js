@@ -13,17 +13,17 @@ var building
       if (!student) {
         return next (new Error (`user not found`,{cause:400}))
       }
-      const {buildingId}= student
-      console.log(buildingId);
-      if (buildingId) {
-           building = await Buildings.find({_id:buildingId});
-          console.log(building);
+      // const {buildingId}= student
+      // console.log(buildingId);
+      // if (buildingId) {
+      //      building = await Buildings.find({_id:buildingId});
+      //     console.log(building);
         
-        }
+      //   }
          
-        else {
-          console.log('No buildingId found for this student');
-      } 
+      //   else {
+      //     console.log('No buildingId found for this student');
+      // } 
 
       const permission = await absencesPermissionModel.find({StudentId:id}, {"__v":false , "isCancelled":false ,
     "TakeMeal":false , "notes":false , "_id":false  , "paymentDate":false , "PaymentValueNumber":false});
@@ -71,7 +71,7 @@ console.log(permission);
           durationWithoutFriday
       };
   });
-  return res.status(200).json({status : httpStatusText.SUCCESS , data:{student,building,permissionsWithDuration,}
+  return res.status(200).json({status : httpStatusText.SUCCESS , data:{student,permissionsWithDuration,}
     });
       } )
     

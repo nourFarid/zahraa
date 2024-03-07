@@ -29,8 +29,6 @@ const applications= require("./modules/applications/applications.router.js")
 const basicData=require("./modules/basicData/basicData.router.js");
 const transferStudent=require("./modules/transferStudentFromCollege/transfer.router.js");
 
-
-
 const StatementOfTheSituation=require("./modules/StatementOfTheSituation/StatementOfTheSituation.router.js")
 const AcceptanceNotification= require("./modules/AcceptanceNotification/AcceptanceNotificatio.Router.js")
 const evacuation = require("./modules/evacuation/evacuated.router.js")
@@ -71,8 +69,8 @@ const initApp = (app, express) => {
   app.use(`/absence` , absence)
   app.use("/typeOfSpecialHousing", typeOfSpecialHousing);
   app.use("/detailsAboutTypeOfSpecialHousing", detailsAboutTypeOfSpecialHousing);
-  app.use("/cityStructure" , cityStructure)
-
+  app.use("/Structure" , cityStructure)
+app.use('/StatementOfTheSituation',StatementOfTheSituation)
 
 app.use("/statistics",statistics)
 app.use("/applications",applications)
@@ -85,8 +83,8 @@ app.use("/basicData", basicData);
   app.use("/changeInfo",changeStudentInfo)
   app.use("/logs",logs)
   app.use(`/reports`,reports)
-
-
+  app.use('/AcceptanceNotification',AcceptanceNotification)
+  app.use('/evacuation',evacuation)
 
   app.all("*", (req, res, next) => {
     console.log(`Invalid request: ${req.method} ${req.url}`);

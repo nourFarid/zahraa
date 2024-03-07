@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 const feeOptions = new mongoose.Schema(
   {
-    
+    feeTypeId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FeeTypes",
+    }
+    ,
     startingDay:{
         type:String,
     },
