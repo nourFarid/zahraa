@@ -85,6 +85,8 @@ app.use("/basicData", basicData);
   app.use(`/reports`,reports)
   app.use('/AcceptanceNotification',AcceptanceNotification)
   app.use('/evacuation',evacuation)
+  app.use('/universityPhotos',universityPhotos)
+  app.use('/excludedCountries',excludedCountries)
 
   app.all("*", (req, res, next) => {
     console.log(`Invalid request: ${req.method} ${req.url}`);
