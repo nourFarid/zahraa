@@ -215,8 +215,8 @@ if(transformed){
 });
 
 
-//احصائيات البطاقات المطبوعة
-const getNumberOfPrintedCards = errorHandling.asyncHandler(async(req, res, next) => {
+//احصائيات البطاقات المطبوعة للذكر
+const getNumberOfPrintedCardsForMales = errorHandling.asyncHandler(async(req, res, next) => {
     // Extract query parameter
     var { ofYear,
         isEvacuated,
@@ -225,7 +225,7 @@ const getNumberOfPrintedCards = errorHandling.asyncHandler(async(req, res, next)
     var query = {};
     query = {
       role:"User",
-      //gender:"ذكر"
+      gender:"ذكر"
    };
    
    if(ofYear)
@@ -256,16 +256,96 @@ const getNumberOfPrintedCards = errorHandling.asyncHandler(async(req, res, next)
   
     const users = await User.find(query);
     const count = users.length;
-  
+    const collegeCounts = {};
+    users.forEach(student => {
+       // Count statuses for each college
+       if (colleges.includes(student.College)) {
+           if (!collegeCounts[student.College]) {
+               collegeCounts[student.College] = {
+                   printedCard:0
+               };
+           }
+           // Count housing status
+           if (student.printedCard) {
+               collegeCounts[student.College].printedCard++;
+           }
+       }
+   });
+
+ 
     console.log('====================================');
     console.log(query);
     console.log(count);
     console.log('====================================');
   
-    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
-  
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: collegeCounts });
   });
+
+//احصائيات الطلاب المطبوعة انثي
+const getNumberOfPrintedCardsForFemales = errorHandling.asyncHandler(async(req, res, next) => {
+    // Extract query parameter
+    var { ofYear,
+        isEvacuated,
+        isHoused,
+        dateOfPrinting} = req.query;
+    var query = {};
+    query = {
+      role:"User",
+      gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+   };
+   
+   if(ofYear)
+    {
+        query.ofYear = ofYear
+    }
+    if(isEvacuated)
+    {
+        query.isEvacuated = isEvacuated
+    }
+    if(isHoused)
+    {
+        query.isHoused = isHoused
+    }
+    if(dateOfPrinting)
+    {
+        query.dateOfPrinting = dateOfPrinting
+    }
+    // Loop over each key-value pair in the query object
+    for (const key in query) {
+        if (query.hasOwnProperty(key)) {
+            // If the value is undefined, set it to false
+            if (query[key] === undefined) {
+                query[key] = false;
+            }
+        }
+    }
   
+    const users = await User.find(query);
+    const count = users.length;
+    const collegeCounts = {};
+    users.forEach(student => {
+       // Count statuses for each college
+       if (colleges.includes(student.College)) {
+           if (!collegeCounts[student.College]) {
+               collegeCounts[student.College] = {
+                   printedCard:0
+               };
+           }
+           // Count housing status
+           if (student.printedCard) {
+               collegeCounts[student.College].printedCard++;
+           }
+       }
+   });
+
+ 
+    console.log('====================================');
+    console.log(query);
+    console.log(count);
+    console.log('====================================');
+  
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: collegeCounts });
+  });
 //اعداد جميع الطلاب
 const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) => {
     const { ofYear,
@@ -445,6 +525,6 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
 module.exports = {getNumberOfResidents,
     getNumberOfAllStudents,getNumberOfAppliers,
     NumberOfStudentsBasedOnHousingType,
-    getNumberOfPrintedCards
+    getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales
 };
 
