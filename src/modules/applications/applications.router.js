@@ -51,4 +51,7 @@ const {bookMealExcel}=require("./bookMealExcel/bookMealExcel.js")
 router.post("/bookMealExcel",uploadFile.upload.single('avatar'),bookMealExcel)
 
 //________________________________________________________________
+//رفع الصور
+const {uploadStudentPhoto}= require("./uploadPhotos/uploadPhotos.js")
+router.put("/uploadStudentPhoto",uploadFile.upload.single('avatar'),uploadStudentPhoto)
 module.exports=router;
