@@ -3,6 +3,13 @@ const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 const bcrypt = require('bcrypt');
 
+const absencesPermissionModel = require('../../../../DB/model/absencesAndPermissions/absencesAndPermissions.js');
+const mealsModel = require('../../../../DB/model/BlockMeals/Meals.js');
+const evacuation = require('../../../../DB/model/evacuation/evacuationModel.js');
+const penatlyModel = require('../../../../DB/model/penaltiesModel.js') 
+const studentExpulsion = require('../../../../DB/model/studentExpulsion/studentExpulsionModel.js') // فصل الطلاب
+const FeesForStudents = require("../../../../DB/model/fees/feesForStudents.js");
+
 
 const getStudentByNationalId = errorHandling.asyncHandler( async(req,res,next)=>{
   const student = await UserModel.findOne({ nationalID: req.params.nationalID}, 'nationalID studentName studentCode College year residence')
@@ -66,32 +73,6 @@ const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
 });
 
-// تغيير اسم الطالب
-const changeStudentName = errorHandling.asyncHandler(async (req, res, next) => {
-  const {ofYear, studentName } = req.body;
-
-  const student = await UserModel.findOneAndUpdate(
-      { nationalID: req.params.nationalID, ofYear:ofYear },
-      { studentName: studentName },
-      { new: true } )
-
-  if (!student) {
-    return res.status(404).json({status : httpStatusText.FAIL , data : {data : "no student found with that ID"}});
-  }
-        
-  const changedData = {
-    nationalID: student.nationalID,
-    studentCode: student.studentCode,
-    studentName: student.studentName,
-    residence: student.residence,
-    College: student.College,
-    year: student.year,
-    updatedAt: student.updatedAt,
-
-  };
-
-  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
-});
 
 // change password
 const changeStudentPassword = errorHandling.asyncHandler(async (req, res, next) => {
@@ -164,6 +145,46 @@ const changeHousingType = errorHandling.asyncHandler(async (req, res, next) => {
   }});
 
 
+// تغيير اسم الطالب
+const changeStudentName = errorHandling.asyncHandler(async (req, res, next) => {
+    const { studentId } = req.params;
+    const { ofYear, studentName } = req.body;
+  
+    // Update student name in UserModel
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      { _id: studentId },
+      { ofYear:ofYear, studentName },
+      { new: true }
+    );
+  
+    if (!updatedUser) {
+      return res.status(400).json({
+        status: httpStatusText.ERROR,
+        message: 'No student found with that ID'
+      });
+    }
+  
+    await studentExpulsion.updateMany({ studentId }, { studentName });
+    await FeesForStudents.updateMany({ id: studentId }, { studentName });
+    await penatlyModel.updateMany({ studentId }, { studentName });
+    await evacuation.updateMany({ studentId }, { studentName });
+    await mealsModel.updateMany({ studentId }, { studentName });
+    await absencesPermissionModel.updateMany({ StudentId: studentId }, { studentName });
+
+    const changedData = {
+      nationalID: updatedUser.nationalID,
+      studentCode: updatedUser.studentCode,
+      studentName: updatedUser.studentName,
+      residence: updatedUser.residence,
+      College: updatedUser.College,
+      year: updatedUser.year,
+      updatedAt: updatedUser.updatedAt
+    };
+  
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: { changedData } });
+  });
+  
+  
 
 module.exports = {
       getStudentByNationalId,

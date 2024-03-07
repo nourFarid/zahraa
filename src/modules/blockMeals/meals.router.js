@@ -11,8 +11,12 @@ router.post('/:studentId',
   //auth.auth([auth.roles.admin]),
   mealsController.depriveStudentOfMeals)
 
-
 router.put('/:studentId',
   // auth.auth([auth.roles.admin]),
   mealsController.cancel)
+
+  router.get('/:studentId',
+  // auth.auth([auth.roles.admin]),
+  mealsController.getBlockedMeals)
+
 module.exports = router

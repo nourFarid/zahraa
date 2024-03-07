@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const studentExpulsionSchema = new mongoose.Schema({
   studentId : {type: mongoose.ObjectId, ref: 'User'},
-  nameOfStudent:{type:String},
+  studentName:{type:String},
   roomId:{type: mongoose.ObjectId, ref: 'Rooms'},
   penaltyKind:{type:String},
   reason:{

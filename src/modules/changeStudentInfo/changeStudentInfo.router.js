@@ -18,7 +18,7 @@ router.put('/code/:nationalID',
   changeStudentInfoController.updateStudentCode)
 
 // تغيير اسم الطالب
-router.put('/name/:nationalID', 
+router.put('/name/:studentId', 
   //    auth.auth([auth.roles.admin]),
   changeStudentInfoController.changeStudentName)
 
