@@ -27,7 +27,7 @@ const mealsSchema = new mongoose.Schema({
   ofYear:{type:String},
   ofWhichMeal:{type:String},
   dateOfBookingMeals:{type:String},
-
+  dateOfReceivingMeals: {type:String},
   
   
 
