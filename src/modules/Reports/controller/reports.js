@@ -318,9 +318,129 @@ return res
   .json({ status: httpStatusText.SUCCESS, data: { student,count } });
 });
 
+//قوائم البحث الاجتماعى
+
+const socialResearchcasesReportMale= errorHandling.asyncHandler(async(req,res,next)=>{
+  const {ofYear,oldStudent,newStudent,statusOfOnlineRequests,divorce,deathFather,deathParents}= req.query
+
+var query={}
+const cases = [];
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+if (oldStudent) {
+  query.oldStudent = oldStudent;
+}
+if (newStudent) {
+  query.newStudent = newStudent;
+}
+if (statusOfOnlineRequests) {
+  query.statusOfOnlineRequests = statusOfOnlineRequests;
+}
+
+  
+if (divorce === 'true') {
+  cases.push("انفصال");
+}
+if (deathFather === 'true') {
+  cases.push("وفاة الوالد");
+}
+if (deathParents === 'true') {
+  cases.push("وفاة الوالدين");
+}
+if(cases.length > 0) {
+  query.AsituationRelatedToTheParents={ $in: cases }
+  query.gender="ذكر",
+  query.role="User"
+}
+
+   // Loop over each key-value pair in the query object
+   for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (
+           query[key] =="undefined"
+          ||query[key] == undefined
+          ||query[key] == false
+          ||query[key] == "false") {
+            delete query[key] ;
+        }
+    }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+const users= await UserModel.find(query)
+const count= users.length
+if(!users)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+
+
+})
+const socialResearchcasesReportfemale= errorHandling.asyncHandler(async(req,res,next)=>{
+  const {ofYear,oldStudent,newStudent,statusOfOnlineRequests,divorce,deathFather,deathParents}= req.query
+
+var query={}
+const cases = [];
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+if (oldStudent) {
+  query.oldStudent = oldStudent;
+}
+if (newStudent) {
+  query.newStudent = newStudent;
+}
+if (statusOfOnlineRequests) {
+  query.statusOfOnlineRequests = statusOfOnlineRequests;
+}
+
+  
+if (divorce === 'true') {
+  cases.push("انفصال");
+}
+if (deathFather === 'true') {
+  cases.push("وفاة الوالد");
+}
+if (deathParents === 'true') {
+  cases.push("وفاة الوالدين");
+}
+if(cases.length > 0) {
+  query.AsituationRelatedToTheParents={ $in: cases }
+  query.gender= { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+  query.role="User"
+}
+
+   // Loop over each key-value pair in the query object
+   for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (
+           query[key] =="undefined"
+          ||query[key] == undefined
+          ||query[key] == false
+          ||query[key] == "false") {
+            delete query[key] ;
+        }
+    }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+const users= await UserModel.find(query)
+const count= users.length
+if(!users)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+
+
+})
 
  module.exports = {studentLists,AbsenceAndPermissionsReport,
-  penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport}
+  penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport,socialResearchcasesReportMale,socialResearchcasesReportfemale}
 
         
 

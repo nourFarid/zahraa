@@ -1,7 +1,4 @@
 const mealsModel = require('../../../../DB/model/meals/mealsModel.js')
-const mealsModelBlocked = require('../../../../DB/model/BlockMeals/Meals.js')
-
-const userModel = require('../../../../DB/model/User.model.js')
 const errorHandling = require ('../../../utils/errorHandling.js')
 const httpStatusText = require('../../../utils/httpStatusText.js')
 
@@ -9,7 +6,7 @@ const httpStatusText = require('../../../utils/httpStatusText.js')
 const addMeals = errorHandling.asyncHandler(async(req, res, next) => {
     const {
         mealsName, mealsKind, mealStartTime, mealEndTime, RamadanMeal,
-        mealReligion, studentReligion, mealAfterSubsidy, mealBeforeSubsidy, editAndAdd, createdAt,isPrepared,
+        mealReligion, studentReligion, mealAfterSubsidy, mealBeforeSubsidy, editAndAdd, createdAt,
         // dateTo, dateFrom, academicYear, day,
     } = req.body;
 
@@ -45,7 +42,6 @@ const addMeals = errorHandling.asyncHandler(async(req, res, next) => {
         mealBeforeSubsidy,
         editAndAdd,
         createdAt,
-        isPrepared,
         // dateTo, dateFrom, academicYear, day
         // createdBy: userId,
     });
