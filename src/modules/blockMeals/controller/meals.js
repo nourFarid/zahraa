@@ -1,23 +1,28 @@
 const httpStatusText = require('../../../utils/httpStatusText.js');
 const errorHandling = require('../../../utils/errorHandling.js');
-const mealsModel = require('../../../../DB/model/BlockMeals/Meals.js');
+const BlockMealsModel = require('../../../../DB/model/BlockMeals/Meals.js');
 const userModel = require('../../../../DB/model/User.model.js');
 const feesModel = require('../../../../DB/model/fees/feesForStudents.js');
 
+//حجب الوجبات
 const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
-  const { dateFrom, dateTo, reason, meals ,day,academicYear} = req.body;
+  const { dateFrom, dateTo, reason, meals ,day, academicYear} = req.body;
   const { studentId } = req.params;
 
   const student = await userModel.findById(studentId);
+
   const feePayment = await feesModel.find({id:studentId});
-  // console.log(feePayment.PaymentValueNumber);
+
   const {PaymentValueNumber}=feePayment[0]
+
   if (!student) {
     return next(new Error(`In-valid student Id`, { cause: 400 }));
   }
+
   const {studentName} = student
-  const studentMeals = await mealsModel.find({StudentId:studentId})
+  const studentMeals = await BlockMealsModel.find({studentId:studentId})
   if (meals === "عشاء" || meals === "غداء" ) {
+
     if (!feePayment) {
       return next (new Error (`No fee Payment found`,{cause:404}))
     }
@@ -26,8 +31,8 @@ const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
       return res.status(200).json({status : httpStatusText.SUCCESS , message:`meals has been blocked successfully`})
     }
     // Create meals if all conditions are met
-    const mealsEntry = await mealsModel.create({
-      StudentId: studentId,
+    const mealsEntry = await BlockMealsModel.create({
+      studentId: studentId,
       studentName: studentName,
       dateFrom,
       dateTo,
@@ -42,8 +47,8 @@ const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
     else{
 
       if (!studentMeals.hasBlocked) {
-        const mealsEntry = await mealsModel.findOneAndUpdate(
-          { StudentId: studentId },
+        const mealsEntry = await BlockMealsModel.findOneAndUpdate(
+          { studentId: studentId },
           {
             $set: {
               dateFrom,
@@ -61,93 +66,6 @@ const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
   
 }}});
 
-// const blockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
-//   const { dateFrom, dateTo, reason, meals, day, academicYear } = req.body;
-//   const { studentId } = req.params;
-
-//   const student = await userModel.findById(studentId);
-
-//   if (!student) {
-//     return next(new Error(`In-valid student Id`, { cause: 400 }));
-//   }
-
-//   const { studentName } = student;
-
-// // ...
-
-// const feePayment = await feesModel.find({ id: studentId });
-
-// if (!feePayment || feePayment.length === 0) {
-//   // Handle the case where fee payment information is not found or not required
-//   return res.status(200).json({
-//     status: httpStatusText.SUCCESS,
-//     message: `No fee Payment found or not required. Meals have been blocked successfully.`
-//   });
-// }
-
-// const { PaymentValueNumber } = feePayment[0];
-
-// // Continue with the rest of your code...
-
-// // ...
-
-
-//   const { PaymentValueNumber } = feePayment[0];
-
-//   const studentMeals = await mealsModel.find({ StudentId: studentId });
-
-//   if (meals === "عشاء" || meals === "غداء") {
-//     if (studentMeals.length === 0) {
-//       if (!PaymentValueNumber) {
-//         return res
-//           .status(200)
-//           .json({
-//             status: httpStatusText.SUCCESS,
-//             message: `meals has been blocked successfully`
-//           });
-//       }
-
-//       // Create meals if all conditions are met
-//       const mealsEntry = await mealsModel.create({
-//         StudentId: studentId,
-//         studentName: studentName,
-//         dateFrom,
-//         dateTo,
-//         reason,
-//         meals,
-//         hasBlocked: true,
-//         day,
-//         academicYear
-//       });
-
-//       return res
-//         .status(201)
-//         .json({ status: httpStatusText.SUCCESS, data: { mealsEntry } });
-//     } else {
-//       if (!studentMeals.hasBlocked) {
-//         const mealsEntry = await mealsModel.findOneAndUpdate(
-//           { StudentId: studentId },
-//           {
-//             $set: {
-//               dateFrom,
-//               dateTo,
-//               meals,
-//               reason,
-//               hasBlocked: true,
-//               day,
-//               academicYear
-//             }
-//           },
-//           { upsert: true, new: true }
-//         );
-
-//         return res
-//           .status(201)
-//           .json({ status: httpStatusText.SUCCESS, data: { mealsEntry } });
-//       }
-//     }
-//   }
-// });
 
 const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   const {studentId} = req.params
@@ -156,10 +74,10 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
    return next (new Error (`In-valid student Id `,{cause:400}))
  }
 
- const meal = await mealsModel.findOne({ StudentId: studentId });
+ const meal = await BlockMealsModel.findOne({ StudentId: studentId });
 
  if(meal && meal.hasBlocked === true){
- await mealsModel.updateOne(
+ await BlockMealsModel.updateOne(
     { _id: meal._id },
     { $set: { hasBlocked: false } }
   )} else{
@@ -168,22 +86,18 @@ const cancel = errorHandling.asyncHandler(async(req,res,next)=>{
   return res.status(200).json({status : httpStatusText.SUCCESS , message:`unblocked done`})
  })
 
+ const getBlockedMeals = errorHandling.asyncHandler(async (req, res, next) => {
+  const { studentId } = req.params;
 
-// const depriveStudentOfMeals = errorHandling.asyncHandler(async (req, res, next) => {
-//   const { dateTo, dateFrom, academicYear, day, meals } = req.body;
-     
-//   const users = await mealsModel.find({
-//     hasBlocked: true,
-//     dateTo,
-//     dateFrom,
-//     academicYear,
-//     day,
-//     meals,
-//   });
+  const student = await BlockMealsModel.find({studentId}).select('dateFrom dateTo meals')
 
-//   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
+  if (!student) {
+    return next(new Error(`No student found with that ID`, { cause: 400 }));
+  }
+    // If the student is not housed, return the success message
+    return res.status(200).json({ status: httpStatusText.SUCCESS, data: student });
+  });
 
-// });
 
 const depriveStudentOfMeals = errorHandling.asyncHandler(async (req, res, next) => { 
   const { dateTo, dateFrom, meals, ofYear } = req.query;
@@ -210,7 +124,7 @@ const depriveStudentOfMeals = errorHandling.asyncHandler(async (req, res, next) 
     query.ofYear = ofYear;
   }
 
-  const users = await mealsModel.find(query);
+  const users = await BlockMealsModel.find(query);
 
   console.log('====================================');
   console.log(query);
@@ -221,4 +135,4 @@ const depriveStudentOfMeals = errorHandling.asyncHandler(async (req, res, next) 
 
 
 
-module.exports = { blockedMeals ,cancel,depriveStudentOfMeals};
+module.exports = { blockedMeals ,cancel,depriveStudentOfMeals,getBlockedMeals};
