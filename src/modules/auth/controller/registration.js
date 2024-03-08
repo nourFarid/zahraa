@@ -68,7 +68,9 @@ const signUpAdmin = errorHandling.asyncHandler(async(req,res,next)=>{
     //log the login 
   const log= await Logs.create({
     action:`${user[0].userName} logged into the system`,
-     adminID:user[0]._id
+     adminID:user[0]._id,
+  adminUserName:user[0].userName
+
     
     })
   
