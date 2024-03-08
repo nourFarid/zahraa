@@ -16,6 +16,11 @@ router.get('/list',
   // auth.auth([auth.roles.admin]),
   reports.penaltiesReport)
 
+  router.get('/noImage',
+  // auth.auth([auth.roles.admin]),
+  reports.StudentsWhithoutImageReport)
+
+
   router.get("/printedMalesCardsReport",reports.printedMalesCardsReport)
 
   router.get("/printedFemalesCardsReport",reports.printedFemalesCardsReport)
@@ -23,6 +28,9 @@ router.get('/list',
 
   router.get("/socialResearchcasesReportMale",reports.socialResearchcasesReportMale)
   router.get("/socialResearchcasesReportfemale",reports.socialResearchcasesReportfemale)
+
+
+
 module.exports = router
 
 

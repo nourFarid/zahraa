@@ -238,7 +238,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 
 //البطاقات المطبوعه للانثي
-
 const printedFemalesCardsReport = errorHandling.asyncHandler(async (req, res, next) => {
   const {ofYear}= req.query
   var query={
@@ -279,7 +278,6 @@ return res
 
 
 //البطاقات المطبوعه ذكر
-
 const printedMalesCardsReport = errorHandling.asyncHandler(async (req, res, next) => {
   const {ofYear}= req.query
   var query={
@@ -319,7 +317,6 @@ return res
 });
 
 //قوائم البحث الاجتماعى
-
 const socialResearchcasesReportMale= errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent,statusOfOnlineRequests,divorce,deathFather,deathParents}= req.query
 
@@ -379,6 +376,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+
 const socialResearchcasesReportfemale= errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent,statusOfOnlineRequests,divorce,deathFather,deathParents}= req.query
 
@@ -439,8 +437,54 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 })
 
+//طلاب بدون صور
+const StudentsWhithoutImageReport = errorHandling.asyncHandler(async(req,res,next)=>{
+
+  var { newStudent , oldStudent } = req.query;
+
+var  query={
+  role:"User",
+  image: { $exists: false }
+}
+
+if(newStudent)
+{
+    query.newStudent = newStudent
+}
+
+if(oldStudent)
+{
+    query.oldStudent = oldStudent
+}
+
+
+// Loop over each key-value pair in the query object
+for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (query[key] === undefined) {
+          query[key] = false;
+      }
+  }
+
+const users = await UserModel.find(query).select('studentName studentCode nationalID PassportNumber College').sort({ studentName: 1 })
+
+
+
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
+
+
+}});
+
+
  module.exports = {studentLists,AbsenceAndPermissionsReport,
-  penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport,socialResearchcasesReportMale,socialResearchcasesReportfemale}
+  penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport,socialResearchcasesReportMale,socialResearchcasesReportfemale,
+  StudentsWhithoutImageReport}
 
         
 
