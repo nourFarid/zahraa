@@ -114,7 +114,7 @@ if (year) {
       'fatherJop',
       'fatherPhone'
   ];
-  const users = await UserModel.find(query).select(selectFields.join(' '));
+  const users = await UserModel.find(query).select(selectFields.join(' ')).sort({College:1});
 
 
 
@@ -168,7 +168,7 @@ for (const key in query) {
       }
   }
 
-const users = await absencesPermissionModel.find(query)
+const users = await absencesPermissionModel.find(query).sort({College:1})
 
 
 
@@ -222,7 +222,7 @@ for (const key in query) {
       }
   }
 
-const users = await penatlyModel.find(query)
+const users = await penatlyModel.find(query).sort({College:1})
 
 
 
@@ -261,7 +261,7 @@ const printedFemalesCardsReport = errorHandling.asyncHandler(async (req, res, ne
   console.log(query);
   console.log('====================================');
 
-  const student = await UserModel.find(query);
+  const student = await UserModel.find(query).sort({College:1});
   const count = student.length;
 
   console.log('====================================');
@@ -301,7 +301,7 @@ const printedMalesCardsReport = errorHandling.asyncHandler(async (req, res, next
   console.log(query);
   console.log('====================================');
 
-  const student = await UserModel.find(query);
+  const student = await UserModel.find(query).sort({College:1});
   const count = student.length;
 
   console.log('====================================');
@@ -368,7 +368,7 @@ console.log('====================================');
 console.log(query);
 console.log('====================================');
 
-const users= await UserModel.find(query)
+const users= await UserModel.find(query).sort({College:1})
 const count= users.length
 if(!users)
 return next (new Error ("NO USERS FOUND",{cause:404}))
@@ -428,7 +428,7 @@ console.log('====================================');
 console.log(query);
 console.log('====================================');
 
-const users= await UserModel.find(query)
+const users= await UserModel.find(query).sort({College:1})
 const count= users.length
 if(!users)
 return next (new Error ("NO USERS FOUND",{cause:404}))
@@ -436,6 +436,113 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+//الطلبة المحولين
+
+
+const transferredStudents=errorHandling.asyncHandler(async(req,res,next)=>{
+  const {ofYear,oldStudent,newStudent}= req.query
+var query={transferred:true}
+
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+if (oldStudent) {
+  query.oldStudent = oldStudent;
+}
+if (newStudent) {
+  query.newStudent = newStudent;
+}
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (
+         query[key] =="undefined"
+        ||query[key] == undefined
+        ||query[key] == false
+        ||query[key] == "false") {
+          delete query[key] ;
+      }
+  }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+const users= await UserModel.find(query).sort({College:1})
+const count= users.length
+if(!users)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+
+
+})
+//الطلبة المفصولين
+
+const expulsionStudentsMale=errorHandling.asyncHandler(async(req,res,next)=>{
+  const {ofYear,oldStudent,newStudent}= req.query
+var query={expulsionStudent:true,gender:ذكر}
+
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+if (oldStudent) {
+  query.oldStudent = oldStudent;
+}
+if (newStudent) {
+  query.newStudent = newStudent;
+}
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (
+         query[key] =="undefined"
+        ||query[key] == undefined
+        ||query[key] == false
+        ||query[key] == "false") {
+          delete query[key] ;
+      }
+  }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+const users= await UserModel.find(query).sort({College:1})
+const count= users.length
+if(!users)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+
+
+})
+const expulsionStudentsFemale=errorHandling.asyncHandler(async(req,res,next)=>{
+  const {ofYear,oldStudent,newStudent}= req.query
+var query={expulsionStudent:true, gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,}
+
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+if (oldStudent) {
+  query.oldStudent = oldStudent;
+}
+if (newStudent) {
+  query.newStudent = newStudent;
+}
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (
+         query[key] =="undefined"
+        ||query[key] == undefined
+        ||query[key] == false
+        ||query[key] == "false") {
+          delete query[key] ;
+      }
+  }
+}
 
 //طلاب بدون صور
 const StudentsWhithoutImageReport = errorHandling.asyncHandler(async(req,res,next)=>{
@@ -481,12 +588,20 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 }});
 
+ module.exports = 
+ {studentLists,
+  AbsenceAndPermissionsReport,
+  transferredStudents,
+  expulsionStudentsMale,expulsionStudentsFemale,
+ penaltiesReport,
+  printedMalesCardsReport,printedFemalesCardsReport,
+ socialResearchcasesReportMale,socialResearchcasesReportfemale,  StudentsWhithoutImageReport}
 
- module.exports = {studentLists,AbsenceAndPermissionsReport,
-  penaltiesReport,printedMalesCardsReport,printedFemalesCardsReport,socialResearchcasesReportMale,socialResearchcasesReportfemale,
-  StudentsWhithoutImageReport}
+
+
 
         
 
+ 
 
 
