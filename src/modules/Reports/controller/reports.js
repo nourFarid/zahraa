@@ -517,9 +517,10 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+
 const expulsionStudentsFemale=errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent}= req.query
-var query={expulsionStudent:true, gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,}
+var query={expulsionStudent:true, gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,}
 
 if (ofYear) {
   query.ofYear = ofYear;
@@ -543,6 +544,19 @@ if (newStudent) {
       }
   }
 }
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+
+const users= await UserModel.find(query).sort({College:1})
+const count= users.length
+if(!users)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+
+
+})
+
 
 //طلاب بدون صور
 const StudentsWhithoutImageReport = errorHandling.asyncHandler(async(req,res,next)=>{
