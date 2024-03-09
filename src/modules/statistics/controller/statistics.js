@@ -120,7 +120,7 @@ if(waitingForClassification){
   for (const key in query) {
     if (query.hasOwnProperty(key)) {
         // If the value is undefined, set it to false
-        if (query[key] === undefined) {
+        if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false") {
             query[key] = false;
         }
     }
@@ -244,7 +244,7 @@ if(transformed){
   for (const key in query) {
       if (query.hasOwnProperty(key)) {
           // If the value is undefined, set it to false
-          if (query[key] === undefined) {
+          if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false") {
               query[key] = false;
           }
       }
@@ -341,7 +341,7 @@ const getNumberOfPrintedCardsForMales = errorHandling.asyncHandler(async(req, re
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is undefined, set it to false
-            if (query[key] === undefined) {
+            if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false") {
                 query[key] = false;
             }
         }
@@ -407,7 +407,7 @@ const getNumberOfPrintedCardsForFemales = errorHandling.asyncHandler(async(req, 
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is undefined, set it to false
-            if (query[key] === undefined) {
+            if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false") {
                 query[key] = false;
             }
         }
@@ -485,7 +485,7 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
       for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is undefined, set it to false
-            if (query[key] === undefined) {
+            if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false"){
                 query[key] = false;
             }
         }
@@ -567,6 +567,15 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
   if (newStudent) {
     query.newStudent = newStudent;
   }
+    // Loop over each key-value pair in the query object
+    for (const key in query) {
+        if (query.hasOwnProperty(key)) {
+            // If the value is undefined, set it to false
+            if (query[key] ==undefined||query[key] ==false||query[key] =="undefined"||query[key] =="false"){
+                query[key] = false;
+            }
+        }
+    }
 
   const students = await User.find(query);
 
