@@ -159,8 +159,8 @@ const count = students.length;
                     break;
             }
 
-            // Count housing status
-            if (student.waitingForClassification&& !student.isClassified) {
+        
+            if (student.waitingForClassification&& !student.isClassified&& !student.isHoused) {
                 collegeCounts[student.College].waitingForClassification++;
             }
             if (student.isClassified) {
@@ -514,13 +514,13 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
             }
 
             // Count housing status
-            if (student.waitingForClassification&& !student.isClassified && !student.isHoused) {
+            if (student.statusOfOnlineRequests=="accepted"&& student.waitingForClassification&& !student.isClassified && !student.isHoused) {
                 collegeCounts[student.College].waitingForClassification++;
             }
             if (student.isClassified&& !student.isHoused) {
                 collegeCounts[student.College].isClassified++;
             }
-            if (student.isHoused &&student.isClassified &&student.waitingForClassification) {
+            if (student.statusOfOnlineRequests=="accepted"&&student.isHoused &&student.isClassified &&student.waitingForClassification) {
                 collegeCounts[student.College].isHoused++;
             }
             if (student.isEvacuated) {
