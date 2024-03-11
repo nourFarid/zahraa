@@ -49,6 +49,16 @@ router.put("/updateCards/:id",updateCards)
 // حجز الوجبات اكسل
 const {bookMealExcel}=require("./bookMealExcel/bookMealExcel.js")
 router.post("/bookMealExcel",uploadFile.upload.single('avatar'),bookMealExcel)
-
 //________________________________________________________________
+//استلام الوجبات اكسل
+const {receiveMealExcel}=require("./receivingMeals/receivingMeals.js")
+router.post("/receiveMealExcel",uploadFile.upload.single('avatar'),receiveMealExcel)
+
+
+//رفع الصور
+const {uploadStudentPhoto}= require("./uploadPhotos/uploadPhotos.js")
+router.put("/uploadStudentPhoto",uploadFile.upload.single('avatar'),uploadStudentPhoto)
+
+
+
 module.exports=router;

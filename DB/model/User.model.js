@@ -279,7 +279,7 @@ const userSchema = new mongoose.Schema(
       default: false
     },
     image: String,
-    DOB: String,
+  
 
     statusOfOnlineRequests:{
       type: String,

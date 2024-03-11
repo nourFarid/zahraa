@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 
 const mealsSchema = new mongoose.Schema({
-  studentName: { type: String },
-  studentId : {type: mongoose.ObjectId, ref: 'User'},
   mealsName:{type:String},
   mealsKind:{type:String},
   cancellation:{type:String},
@@ -16,18 +14,13 @@ const mealsSchema = new mongoose.Schema({
   editAndAdd:{type: mongoose.ObjectId, ref: 'Admin'},
   createdAt:{type: Date, default: Date.now()},
   RamadanMeal:{type: Boolean},
-  AcademicYear:{type:String},
-  day:{type:String},
-  meal:{type:String},
-  isPrepared:{type:Boolean,default:false},
-  academicYear:{type:String},
   //حجز الوجبات اكسيل
   file:{type: String},
   data:{type: Buffer},
   ofYear:{type:String},
   ofWhichMeal:{type:String},
   dateOfBookingMeals:{type:String},
-
+  dateOfReceivingMeals: {type:String},
   
   
 
