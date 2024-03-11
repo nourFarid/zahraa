@@ -57,7 +57,7 @@ router.post("/receiveMealExcel",uploadFile.upload.single('avatar'),receiveMealEx
 
 //رفع الصور
 const {uploadStudentPhoto}= require("./uploadPhotos/uploadPhotos.js")
-router.put("/uploadStudentPhoto",uploadFile.upload.single('avatar'),uploadStudentPhoto)
+router.put("/uploadStudentPhoto",uploadFile.upload.array('avatar',1000),uploadStudentPhoto)
 
 
 
