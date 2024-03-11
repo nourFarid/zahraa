@@ -95,8 +95,13 @@ if (year) {
   for (const key in query) {
     if (query.hasOwnProperty(key)) {
         // If the value is undefined, set it to false
-        if (query[key] === undefined) {
-            query[key] = false;
+        if (
+          query[key] == "false" ||
+          query[key] === "undefined"||
+          query[key] == false ||
+          query[key] == undefined
+        ) {
+          delete query[key];
         }
     }
     const selectFields = [
@@ -163,8 +168,13 @@ if(TypeOfAbsence)
 for (const key in query) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
-      if (query[key] === undefined) {
-          query[key] = false;
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 
@@ -217,8 +227,13 @@ if(penaltyKind)
 for (const key in query) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
-      if (query[key] === undefined) {
-          query[key] = false;
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 
@@ -252,8 +267,13 @@ const printedFemalesCardsReport = errorHandling.asyncHandler(async (req, res, ne
   for (const key in query) {
       if (query.hasOwnProperty(key)) {
           // If the value is 0, remove the key-value pair from the object
-          if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
-              delete query[key];
+          if (
+            query[key] == "false" ||
+            query[key] === "undefined"||
+            query[key] == false ||
+            query[key] == undefined
+          ) {
+            delete query[key];
           }
       }
   }
@@ -292,8 +312,13 @@ const printedMalesCardsReport = errorHandling.asyncHandler(async (req, res, next
   for (const key in query) {
       if (query.hasOwnProperty(key)) {
           // If the value is 0, remove the key-value pair from the object
-          if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
-              delete query[key];
+          if (
+            query[key] == "false" ||
+            query[key] === "undefined"||
+            query[key] == false ||
+            query[key] == undefined
+          ) {
+            delete query[key];
           }
       }
   }
@@ -356,11 +381,12 @@ if(cases.length > 0) {
     if (query.hasOwnProperty(key)) {
         // If the value is undefined, set it to false
         if (
-           query[key] =="undefined"
-          ||query[key] == undefined
-          ||query[key] == false
-          ||query[key] == "false") {
-            delete query[key] ;
+          query[key] == "false" ||
+          query[key] === "undefined"||
+          query[key] == false ||
+          query[key] == undefined
+        ) {
+          delete query[key];
         }
     }
 }
@@ -416,11 +442,12 @@ if(cases.length > 0) {
     if (query.hasOwnProperty(key)) {
         // If the value is undefined, set it to false
         if (
-           query[key] =="undefined"
-          ||query[key] == undefined
-          ||query[key] == false
-          ||query[key] == "false") {
-            delete query[key] ;
+          query[key] == "false" ||
+          query[key] === "undefined"||
+          query[key] == false ||
+          query[key] == undefined
+        ) {
+          delete query[key];
         }
     }
 }
@@ -457,11 +484,12 @@ if (newStudent) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
       if (
-         query[key] =="undefined"
-        ||query[key] == undefined
-        ||query[key] == false
-        ||query[key] == "false") {
-          delete query[key] ;
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 }
@@ -481,7 +509,10 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 const expulsionStudentsMale=errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent}= req.query
-var query={expulsionStudent:true,gender:ذكر}
+var query={expulsionStudent:true,
+  
+  gender:"ذكر"
+}
 
 if (ofYear) {
   query.ofYear = ofYear;
@@ -497,11 +528,12 @@ if (newStudent) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
       if (
-         query[key] =="undefined"
-        ||query[key] == undefined
-        ||query[key] == false
-        ||query[key] == "false") {
-          delete query[key] ;
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 }
@@ -536,11 +568,12 @@ if (newStudent) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
       if (
-         query[key] =="undefined"
-        ||query[key] == undefined
-        ||query[key] == false
-        ||query[key] == "false") {
-          delete query[key] ;
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 }
@@ -556,6 +589,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+
 
 
 //طلاب بدون صور
@@ -583,8 +617,13 @@ if(oldStudent)
 for (const key in query) {
   if (query.hasOwnProperty(key)) {
       // If the value is undefined, set it to false
-      if (query[key] === undefined) {
-          query[key] = false;
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
   }
 
@@ -602,6 +641,48 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 }});
 
+
+// تقرير الرسوم ذكر
+
+const feesReportMales= errorHandling.asyncHandler(async(req,res,next)=>{
+
+const {ofYear}= req.query
+var query={
+  gender:"ذكر"
+,isHousingFeePaied:true}
+
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+  // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (
+          query[key] == "false" ||
+          query[key] === "undefined"||
+          query[key] == false ||
+          query[key] == undefined
+        ) {
+          delete query[key];
+        }
+    }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+const students= await UserModel.find(query).sort({College:1});
+if(!students)
+{
+  return next (new Error ("NO USERS FOUND",{cause:404}))
+}
+
+
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+
+}); 
+
  module.exports = 
  {studentLists,
   AbsenceAndPermissionsReport,
@@ -609,7 +690,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
   expulsionStudentsMale,expulsionStudentsFemale,
  penaltiesReport,
   printedMalesCardsReport,printedFemalesCardsReport,
- socialResearchcasesReportMale,socialResearchcasesReportfemale,  StudentsWhithoutImageReport}
+ socialResearchcasesReportMale,socialResearchcasesReportfemale,  StudentsWhithoutImageReport,feesReportMales}
 
 
 

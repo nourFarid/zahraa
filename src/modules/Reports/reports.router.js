@@ -32,6 +32,7 @@ router.get('/list',
   router.get("/transferredStudents",reports.transferredStudents)
   router.get("/expulsionStudentsMale",reports.expulsionStudentsMale)
   router.get("/expulsionStudentsFemale",reports.expulsionStudentsFemale)
+  router.get("/feesReportMales",reports.feesReportMales)
 
 
 
