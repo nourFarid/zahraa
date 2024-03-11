@@ -82,9 +82,9 @@ const getBasicDataMales = errorHandling.asyncHandler(async (req, res, next) => {
       // If the value is 0, remove the key-value pair from the object
       if (
         query[key] == "false" ||
-        query[key] === "false" ||
+        query[key] === "undefined"||
         query[key] == false ||
-        query[key] == "undefined"
+        query[key] == undefined
       ) {
         delete query[key];
       }
