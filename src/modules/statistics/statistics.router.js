@@ -1,6 +1,7 @@
 const express = require ('express')
 const router = express.Router()
-const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfPrintedCards,getNumberOfAppliers,NumberOfStudentsBasedOnHousingType,getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales}= require("./controller/statistics")
+const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfPrintedCards,getNumberOfAppliers,NumberOfStudentsBasedOnHousingType,getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales, MealPreparation
+  , MealTakingStatisticsMale, MealTakingStatisticsFemale, numberOfReceivedMeals}= require("./controller/statistics")
 //اعداد المتقدمين
 
 router.get('/getNumberOfappliers',getNumberOfAppliers)
@@ -22,8 +23,16 @@ router.get('/getNumberOfPrintedCardsForFemales',getNumberOfPrintedCardsForFemale
 router.get('/getNumberOfAllStudents',getNumberOfAllStudents)
 
 //تجهيز الوجبات
+router.get('/mealPreparation',MealPreparation)
 
 //احصائيات استلام الوجبات
+router.get('/MealTakingMale',MealTakingStatisticsMale)
+router.get('/MealTakingFemale',MealTakingStatisticsFemale)
+
+//عدد الوجبات المستلمة
+router.get('/numberOfReceivedMeals',numberOfReceivedMeals)
+
+
 
 //اعداد جميع الطلاب حسب نوع السكن
 router.get('/allStudents',NumberOfStudentsBasedOnHousingType)
