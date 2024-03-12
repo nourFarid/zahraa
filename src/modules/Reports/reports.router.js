@@ -29,10 +29,17 @@ router.get('/list',
   router.get("/socialResearchcasesReportMale",reports.socialResearchcasesReportMale)
   router.get("/socialResearchcasesReportfemale",reports.socialResearchcasesReportfemale)
 
+  router.get("/transferredStudents",reports.transferredStudents)
+  router.get("/expulsionStudentsMale",reports.expulsionStudentsMale)
+  router.get("/expulsionStudentsFemale",reports.expulsionStudentsFemale)
+  router.get("/feesReportMales",reports.feesReportMales)
 
 
-module.exports = router
+
+
+  module.exports = router
 
 
 
 
+  

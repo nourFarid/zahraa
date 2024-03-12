@@ -5,6 +5,7 @@ const mealsModel = require('../../../../DB/model/meals/mealsModel.js')
 const xlsx = require('xlsx');
 
 const dotenv = require('dotenv');
+const { compare } = require('../../../utils/HashAndCompare.js');
 
 dotenv.config();
 const collegesString = process.env.COLLEGES;
@@ -15,7 +16,7 @@ const colleges = collegesString.split(',');
 const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
 
     var { ofYear,College,
-         underReview, rejected,waitingForClassification,accepted 
+         pending, rejected,waitingForClassification,accepted 
          ,egyptions,expartriates,
         muslim , christian,
          normalHousing, specialHousing,
@@ -28,8 +29,8 @@ var onlineRequests = [];
 var years=[]
 
 
-if (underReview==='true'){
-    onlineRequests.push("underReview")
+if (pending==='true'){
+    onlineRequests.push("pending")
     
 }
 if (rejected==='true'){
@@ -117,23 +118,67 @@ if(waitingForClassification){
 
 
 
-  // Loop over each key-value pair in the query object
-  for (const key in query) {
+// Loop over each key-value pair in the query object
+for (const key in query) {
     if (query.hasOwnProperty(key)) {
-        // If the value is undefined, set it to false
-        if (query[key] === undefined) {
-            query[key] = false;
-        }
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
     }
-}
-const users = await User.find(query);
-const count = users.length;
+  }
+
+const students = await User.find(query);
+const count = students.length;
+
+     
+     // Object to store counts for each college
+     const collegeCounts = {};
+     students.forEach(student => {
+        // Count statuses for each college
+        if (colleges.includes(student.College)) {
+            if (!collegeCounts[student.College]) {
+                collegeCounts[student.College] = {
+                    rejected: 0,
+                    pending: 0,
+                    waitingForClassification:0,
+                    isClassified:0, //فى انتظار السكن
+                    all:0
+                };
+            }
+
+            switch (student.statusOfOnlineRequests) {
+                case "rejected":
+                    collegeCounts[student.College].rejected++;
+                    break;
+                case "pending":
+                    collegeCounts[student.College].pending++;
+                    break;
+            }
+
+        
+            if (student.waitingForClassification&& !student.isClassified&& !student.isHoused) {
+                collegeCounts[student.College].waitingForClassification++;
+            }
+            if (student.isClassified) {
+                collegeCounts[student.College].isClassified++;
+            }
+
+            collegeCounts[student.College].all=collegeCounts[student.College].rejected+collegeCounts[student.College].pending+collegeCounts[student.College].waitingForClassification+collegeCounts[student.College].isClassified;
+        }
+    });
+
 console.log('====================================');
 console.log(query);
 console.log(count);
 console.log('====================================');
 
-return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { collegeCounts } });
 
 
 });
@@ -195,25 +240,51 @@ if(isHoused)
 if(transformed){
     query.transformed = transformed
 }
-  // Loop over each key-value pair in the query object
-  for (const key in query) {
-      if (query.hasOwnProperty(key)) {
-          // If the value is undefined, set it to false
-          if (query[key] === undefined) {
-              query[key] = false;
-          }
+// Loop over each key-value pair in the query object
+for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
       }
+    }
   }
+  const students = await User.find(query);
+  const count = students.length;
+   
+     // Object to store counts for each college
+     const collegeCounts = {};
+     students.forEach(student => {
+        // Count statuses for each college
+        if (colleges.includes(student.College)) {
+            if (!collegeCounts[student.College]) {
+                collegeCounts[student.College] = {
+                    isHoused:0
+                };
+            }
 
-  const users = await User.find(query);
-  const count = users.length;
+
+            
+            if (student.isHoused) {
+                collegeCounts[student.College].isHoused++;
+            }
+          
+
+        }
+    });
+
 
   console.log('====================================');
   console.log(query);
   console.log(count);
   console.log('====================================');
 
-  return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,count } });
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: {collegeCounts } });
 
 });
 
@@ -247,16 +318,20 @@ const getNumberOfPrintedCardsForMales = errorHandling.asyncHandler(async(req, re
     {
         query.dateOfPrinting = dateOfPrinting
     }
-    // Loop over each key-value pair in the query object
-    for (const key in query) {
-        if (query.hasOwnProperty(key)) {
-            // If the value is undefined, set it to false
-            if (query[key] === undefined) {
-                query[key] = false;
-            }
-        }
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
     }
-  
+  }
     const users = await User.find(query);
     const count = users.length;
     const collegeCounts = {};
@@ -313,15 +388,20 @@ const getNumberOfPrintedCardsForFemales = errorHandling.asyncHandler(async(req, 
     {
         query.dateOfPrinting = dateOfPrinting
     }
-    // Loop over each key-value pair in the query object
-    for (const key in query) {
-        if (query.hasOwnProperty(key)) {
-            // If the value is undefined, set it to false
-            if (query[key] === undefined) {
-                query[key] = false;
-            }
-        }
+   // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
     }
+  }
   
     const users = await User.find(query);
     const count = users.length;
@@ -392,15 +472,20 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
     if (withSpecialNeeds) {
         query.withSpecialNeeds = withSpecialNeeds;
     }
-        // Loop over each key-value pair in the query object
-      for (const key in query) {
-        if (query.hasOwnProperty(key)) {
-            // If the value is undefined, set it to false
-            if (query[key] === undefined) {
-                query[key] = false;
-            }
-        }
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
     }
+  }
 
     students = await User.find(query);
 
@@ -412,33 +497,40 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
         if (colleges.includes(student.College)) {
             if (!collegeCounts[student.College]) {
                 collegeCounts[student.College] = {
-                    underReview: 0,
-                    accepted: 0,
                     rejected: 0,
+                    pending: 0,
+                    waitingForClassification:0,
+                    isClassified:0, //فى انتظار السكن
                     isHoused: 0,
-                    isEvacuated: 0
+                    isEvacuated: 0,
+                    all:0
                 };
             }
 
             switch (student.statusOfOnlineRequests) {
-                case "underReview":
-                    collegeCounts[student.College].underReview++;
-                    break;
-                case "accepted":
-                    collegeCounts[student.College].accepted++;
-                    break;
                 case "rejected":
                     collegeCounts[student.College].rejected++;
+                    break;
+                case "pending":
+                    collegeCounts[student.College].pending++;
                     break;
             }
 
             // Count housing status
-            if (student.isHoused) {
+            if (student.statusOfOnlineRequests=="accepted"&& student.waitingForClassification&& !student.isClassified && !student.isHoused) {
+                collegeCounts[student.College].waitingForClassification++;
+            }
+            if (student.isClassified&& !student.isHoused) {
+                collegeCounts[student.College].isClassified++;
+            }
+            if (student.statusOfOnlineRequests=="accepted"&&student.isHoused &&student.isClassified &&student.waitingForClassification) {
                 collegeCounts[student.College].isHoused++;
             }
             if (student.isEvacuated) {
                 collegeCounts[student.College].isEvacuated++;
             }
+
+            collegeCounts[student.College].all=collegeCounts[student.College].rejected+collegeCounts[student.College].pending+collegeCounts[student.College].waitingForClassification+collegeCounts[student.College].isClassified+collegeCounts[student.College].isHoused+collegeCounts[student.College].isEvacuated;
         }
     });
 
@@ -673,6 +765,20 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
   if (newStudent) {
     query.newStudent = newStudent;
   }
+    // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
+    }
+  }
 
   const students = await User.find(query);
 
@@ -684,7 +790,7 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
     if (student.HousingType) {
       if (!countsByHousingType[student.HousingType]) {
         countsByHousingType[student.HousingType] = {
-          underReview: 0,
+          pending: 0,
           rejected: 0,
           isHoused: 0,
           isEvacuated: 0,
@@ -694,8 +800,8 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
       }
 
       switch (student.statusOfOnlineRequests) {
-        case "underReview":
-          countsByHousingType[student.HousingType].underReview++;
+        case "pending":
+          countsByHousingType[student.HousingType].pending++;
           break;
         case "rejected":
           countsByHousingType[student.HousingType].rejected++;
