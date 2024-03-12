@@ -119,6 +119,9 @@ const houseStudents = errorHandling.asyncHandler(async (req, res, next) => {
                 buildingName: building.Name,  
                 floorName: floor.Name,        
                 roomName : room.roomNumber,
+                roomId,
+                floorId,
+                buildingId,
                 housingDate, 
                 evacuationDate ,
                 
@@ -161,52 +164,113 @@ const getStudentFemale = errorHandling.asyncHandler( async(req,res,next)=>{
 })
 
 //تعديل بيانات الطالب الساكن
-const updateHousedMale = errorHandling.asyncHandler(async(req,res,next)=>
-    {
-        const {userId} = req.params
-        const {buildingId, floorId,housingDate, evacuationDate, 
-          roomId}=req.body
-        const user = await userModel.findById(userId)
-        const male = user.gender
-          if (male == 'ذكر'){
-            const student = await userModel.findByIdAndUpdate({ _id:userId},{buildingId, floorId,
-              housingDate, evacuationDate,roomId},{new:true})
-            if(!student){
-              return res.status(400).json({status: httpStatusText.ERROR , message : 'No student found with that ID'})
-            }
-          return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
-        }
-        return res.status(400).json({message:"gender doesn't match"})
-      
-    } 
-    
-)
+const updateHousedMale = errorHandling.asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const { buildingId, floorId, housingDate, evacuationDate, roomId } = req.body;
 
-const updateHousedFemale = errorHandling.asyncHandler(async(req,res,next)=>
-    {
-        const {userId} = req.params
-        const {buildingId, floorId, housingDate, evacuationDate, 
-          roomId}=req.body
-        const user = await userModel.findById(userId)
-        const female = user.gender
-          if (female == 'انثي'){
-            const student = await userModel.findByIdAndUpdate({ _id:userId},{buildingId, floorId,housingDate, evacuationDate, 
-            roomId },{new:true})
-            if(!student){
-              return res.status(400).json({status: httpStatusText.ERROR , message : 'No student found with that ID'})
-            }
-          return res.status(200).json({status : httpStatusText.SUCCESS , data : {student}})
-        }
-        return res.status(400).json({message:"gender doesn't match"})
-      
-    } 
-    
-)
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+      return res.status(400).json({ status: httpStatusText.ERROR, message: 'No student found with that ID' });
+  }
+
+  const room = await roomsModel.findById(roomId);
+  const floor = await floorModel.findById(floorId);
+  const building = await buildingModel.findById(buildingId);
+
+  const oldrRoom = user.roomId
+
+  await roomsModel.findByIdAndUpdate(oldrRoom, { $pull: { occupants: userId } }, { new: true });
+
+  if (user.gender === 'ذكر') {
+      const updatedStudent = await userModel.findByIdAndUpdate(
+          userId,
+          {
+            buildingName: building.Name,  
+            floorName: floor.Name,        
+            roomName : room.roomNumber,
+            roomId,
+            floorId,
+            buildingId,
+            housingDate, 
+            evacuationDate ,
+          },
+          { new: true }
+      );
+
+      await roomsModel.findByIdAndUpdate(roomId, { $addToSet: { occupants: userId } });
+
+      return res.status(200).json({ status: httpStatusText.SUCCESS, data: { student: updatedStudent } });
+  }
+
+  return res.status(400).json({ message: "Gender doesn't match" });
+});
+
+const updateHousedFemale = errorHandling.asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const { buildingId, floorId, housingDate, evacuationDate, roomId } = req.body;
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+      return res.status(400).json({ status: httpStatusText.ERROR, message: 'No student found with that ID' });
+  }
+
+  const room = await roomsModel.findById(roomId);
+  const floor = await floorModel.findById(floorId);
+  const building = await buildingModel.findById(buildingId);
+
+  const oldrRoom = user.roomId
+
+  await roomsModel.findByIdAndUpdate(oldrRoom, { $pull: { occupants: userId } }, { new: true });
+
+  if (user.gender === 'انثي') {
+      const updatedStudent = await userModel.findByIdAndUpdate(
+          userId,
+          {
+            buildingName: building.Name,  
+            floorName: floor.Name,        
+            roomName : room.roomNumber,
+            roomId,
+            floorId,
+            buildingId,
+            housingDate, 
+            evacuationDate ,
+          },
+          { new: true }
+      );
+
+      await roomsModel.findByIdAndUpdate(roomId, { $addToSet: { occupants: userId } });
+
+      return res.status(200).json({ status: httpStatusText.SUCCESS, data: { student: updatedStudent } });
+  }
+
+  return res.status(400).json({ message: "Gender doesn't match" });
+});
+
+//امر تسكين
+const housingOrder = errorHandling.asyncHandler(async (req, res, next) => {
+  const { studentId } = req.params; 
+
+  const { ofYear } = req.query;
+
+  var query = {
+      ofYear,
+      role: "User",
+      isHoused: true,
+      _id: studentId 
+  };
+
+  const user = await userModel.find(query).select('studentName roomName floorName buildingName housingDate studentCode College HousingType')
+
+  return res.status(200).json({ status: 'success', user });
+});
 
 module.exports = {houseStudents ,
   getStudentFemale , 
   getStudentMale , 
   updateHousedMale,
-  updateHousedFemale
+  updateHousedFemale,
+  housingOrder
 }
 
