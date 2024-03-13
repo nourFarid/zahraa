@@ -674,97 +674,97 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(
 );
 
 //اعداد الطلاب حسب نوع السكن
-const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(
-  async (req, res, next) => {
-    const { ofYear, egyptions, expartriates, oldStudent, newStudent } =
-      req.query;
+// const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(
+//   async (req, res, next) => {
+//     const { ofYear, egyptions, expartriates, oldStudent, newStudent } =
+//       req.query;
 
-    var query = {
-      ofYear,
-      role: "User",
-    };
+//     var query = {
+//       ofYear,
+//       role: "User",
+//     };
 
-    if (egyptions) {
-      query.egyptions = egyptions;
-    }
-    if (expartriates) {
-      query.expartriates = expartriates;
-    }
-    if (oldStudent) {
-      query.oldStudent = oldStudent;
-    }
-    if (newStudent) {
-      query.newStudent = newStudent;
-    }
-    // Loop over each key-value pair in the query object
-    for (const key in query) {
-      if (query.hasOwnProperty(key)) {
-        // If the value is 0, remove the key-value pair from the object
-        if (
-          query[key] == "false" ||
-          query[key] === "undefined" ||
-          query[key] == false ||
-          query[key] == undefined
-        ) {
-          delete query[key];
-        }
-      }
-    }
+//     if (egyptions) {
+//       query.egyptions = egyptions;
+//     }
+//     if (expartriates) {
+//       query.expartriates = expartriates;
+//     }
+//     if (oldStudent) {
+//       query.oldStudent = oldStudent;
+//     }
+//     if (newStudent) {
+//       query.newStudent = newStudent;
+//     }
+//     // Loop over each key-value pair in the query object
+//     for (const key in query) {
+//       if (query.hasOwnProperty(key)) {
+//         // If the value is 0, remove the key-value pair from the object
+//         if (
+//           query[key] == "false" ||
+//           query[key] === "undefined" ||
+//           query[key] == false ||
+//           query[key] == undefined
+//         ) {
+//           delete query[key];
+//         }
+//       }
+//     }
 
-    const students = await User.find(query);
+//     const students = await User.find(query);
 
-    // Object to store counts for each HousingType
-    const countsByHousingType = {};
+//     // Object to store counts for each HousingType
+//     const countsByHousingType = {};
 
-    students.forEach((student) => {
-      // Count statuses for each HousingType
-      if (student.HousingType) {
-        if (!countsByHousingType[student.HousingType]) {
-          countsByHousingType[student.HousingType] = {
-            pending: 0,
-            rejected: 0,
-            isHoused: 0,
-            isEvacuated: 0,
-            waitingForClassification: 0,
-            waitingForHousing: 0,
-          };
-        }
+//     students.forEach((student) => {
+//       // Count statuses for each HousingType
+//       if (student.HousingType) {
+//         if (!countsByHousingType[student.HousingType]) {
+//           countsByHousingType[student.HousingType] = {
+//             pending: 0,
+//             rejected: 0,
+//             isHoused: 0,
+//             isEvacuated: 0,
+//             waitingForClassification: 0,
+//             waitingForHousing: 0,
+//           };
+//         }
 
-        switch (student.statusOfOnlineRequests) {
-          case "pending":
-            countsByHousingType[student.HousingType].pending++;
-            break;
-          case "rejected":
-            countsByHousingType[student.HousingType].rejected++;
-            break;
-        }
+//         switch (student.statusOfOnlineRequests) {
+//           case "pending":
+//             countsByHousingType[student.HousingType].pending++;
+//             break;
+//           case "rejected":
+//             countsByHousingType[student.HousingType].rejected++;
+//             break;
+//         }
 
-        // Count housing status
-        if (student.isHoused) {
-          countsByHousingType[student.HousingType].isHoused++;
-        }
-        if (student.isEvacuated) {
-          countsByHousingType[student.HousingType].isEvacuated++;
-        }
+//         // Count housing status
+//         if (student.isHoused) {
+//           countsByHousingType[student.HousingType].isHoused++;
+//         }
+//         if (student.isEvacuated) {
+//           countsByHousingType[student.HousingType].isEvacuated++;
+//         }
 
-        // Count waitingForClassification
-        if (!student.waitingForClassification) {
-          countsByHousingType[student.HousingType].waitingForClassification++;
-        }
+//         // Count waitingForClassification
+//         if (!student.waitingForClassification) {
+//           countsByHousingType[student.HousingType].waitingForClassification++;
+//         }
 
-        // Count cases where statusOfOnlineRequests is true but isHoused is false
-        if (student.statusOfOnlineRequests && !student.isHoused) {
-          countsByHousingType[student.HousingType].waitingForHousing++;
-        }
-      }
-    });
+//         // Count cases where statusOfOnlineRequests is true but isHoused is false
+//         if (student.statusOfOnlineRequests && !student.isHoused) {
+//           countsByHousingType[student.HousingType].waitingForHousing++;
+//         }
+//       }
+//     });
 
-    // Return the counts along with the student data
-    return res
-      .status(200)
-      .json({ status: httpStatusText.SUCCESS, data: countsByHousingType });
-  }
-);
+//     // Return the counts along with the student data
+//     return res
+//       .status(200)
+//       .json({ status: httpStatusText.SUCCESS, data: countsByHousingType });
+//   }
+// );
 
 module.exports = {
   getNumberOfResidents,
