@@ -20,23 +20,19 @@ const absencePermissions = errorHandling.asyncHandler(
 
     // Check if the student is housed
     if (!student.isHoused) {
-      return res
-        .status(400)
-        .json({
-          status: httpStatusText.ERROR,
-          message:
-            "This student is not currently housed. Cannot grant absence permission",
-        });
+      return res.status(400).json({
+        status: httpStatusText.ERROR,
+        message:
+          "This student is not currently housed. Cannot grant absence permission",
+      });
     }
 
     // Check if dateFrom is before dateTo
     if (new Date(dateFrom) >= new Date(dateTo)) {
-      return res
-        .status(400)
-        .json({
-          status: httpStatusText.ERROR,
-          message: "The start date must be before the end date",
-        });
+      return res.status(400).json({
+        status: httpStatusText.ERROR,
+        message: "The start date must be before the end date",
+      });
     }
 
     // Check if there is a feePayment for the student
@@ -46,12 +42,10 @@ const absencePermissions = errorHandling.asyncHandler(
       !feePayment.paymentDate ||
       !feePayment.PaymentValueNumber
     ) {
-      return res
-        .status(400)
-        .json({
-          status: httpStatusText.ERROR,
-          message: "This student didn't pay his fees",
-        });
+      return res.status(400).json({
+        status: httpStatusText.ERROR,
+        message: "This student didn't pay his fees",
+      });
     }
 
     const absence = await absencesPermissionModel.find({
@@ -96,19 +90,11 @@ const absencePermissions = errorHandling.asyncHandler(
 );
 
 const getPermissions = errorHandling.asyncHandler(async (req, res, next) => {
-  const permission = await absencesPermissionModel.find(
-    {},
-    {
-      __v: false,
-      isCancelled: false,
-      TakeMeal: false,
-      notes: false,
-      _id: false,
-      StudentId: false,
-      paymentDate: false,
-      PaymentValueNumber: false,
-    }
-  );
+  const { StudentId } = req.params;
+
+  const permission = await absencesPermissionModel
+    .find({ StudentId })
+    .select("TypeOfAbsence dateFrom dateTo");
 
   if (!permission) {
     return next(new Error(`لا يوجد اجازات`, { cause: 404 }));
@@ -134,12 +120,10 @@ const allAbsencePermissions = errorHandling.asyncHandler(
 
     // Check if there are housed students
     if (housedStudents.length === 0) {
-      return res
-        .status(404)
-        .json({
-          status: httpStatusText.FAIL,
-          message: "No valid housed students found",
-        });
+      return res.status(404).json({
+        status: httpStatusText.FAIL,
+        message: "No valid housed students found",
+      });
     }
 
     const absencePermissionsArray = [];
@@ -150,12 +134,10 @@ const allAbsencePermissions = errorHandling.asyncHandler(
 
       // Check if dateFrom is before dateTo
       if (new Date(dateFrom) >= new Date(dateTo)) {
-        return res
-          .status(400)
-          .json({
-            status: httpStatusText.ERROR,
-            message: "The start date must be before the end date",
-          });
+        return res.status(400).json({
+          status: httpStatusText.ERROR,
+          message: "The start date must be before the end date",
+        });
       }
 
       // Use the studentId in the findOneAndUpdate query
@@ -178,12 +160,10 @@ const allAbsencePermissions = errorHandling.asyncHandler(
       absencePermissionsArray.push(AllabsencePermission);
     }
 
-    return res
-      .status(201)
-      .json({
-        status: httpStatusText.SUCCESS,
-        data: { AllabsencePermission: absencePermissionsArray },
-      });
+    return res.status(201).json({
+      status: httpStatusText.SUCCESS,
+      data: { AllabsencePermission: absencePermissionsArray },
+    });
   }
 );
 

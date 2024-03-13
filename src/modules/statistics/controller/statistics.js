@@ -1,6 +1,8 @@
 const errorHandling = require("../../../utils/errorHandling.js");
 const httpStatusText = require("../../../utils/httpStatusText.js");
 const User = require("../../../../DB/model/User.model.js");
+const mealsModel = require("../../../../DB/model/meals/mealsModel.js");
+const xlsx = require("xlsx");
 
 const dotenv = require("dotenv");
 const { compare } = require("../../../utils/HashAndCompare.js");
@@ -432,6 +434,7 @@ const getNumberOfPrintedCardsForFemales = errorHandling.asyncHandler(
       .json({ status: httpStatusText.SUCCESS, data: collegeCounts });
   }
 );
+
 //اعداد جميع الطلاب
 const getNumberOfAllStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
@@ -564,8 +567,111 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(
 );
 
 //تجهيز الوجبات
+const MealPreparation = errorHandling.asyncHandler(async (req, res, next) => {
+  const { ofYear, ofWhichMeal, dateOfBookingMeals } = req.query;
+
+  var query = {
+    ofYear,
+  };
+
+  if (dateOfBookingMeals) {
+    query.dateOfBookingMeals = dateOfBookingMeals;
+  }
+
+  if (ofWhichMeal) {
+    query.ofWhichMeal = ofWhichMeal;
+  }
+
+  const mealData = await mealsModel.find(query);
+
+  const excelData = mealData.map((meal) => meal.data);
+
+  // Convert the Excel data to JSON
+  const jsonData = excelData.reduce((acc, excel) => {
+    const workbook = xlsx.read(excel, { type: "buffer" });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const mealJsonData = xlsx.utils.sheet_to_json(worksheet);
+    return acc.concat(mealJsonData);
+  }, []);
+
+  // Log the first row of jsonData to inspect the structure
+  console.log(
+    "First row of jsonData:",
+    jsonData.length > 0 ? jsonData[0] : null
+  );
+
+  // Count studentCode entries for each buildingName
+  const StudentCounts = jsonData.reduce((counts, row) => {
+    const buildingName = row.buildingName;
+    const studentCode = row.studentCode;
+
+    // If the buildingName entry doesn't exist, create it with a count of 1
+    if (!counts[buildingName]) {
+      counts[buildingName] = 1;
+    } else {
+      // If the buildingName entry exists, increment the count
+      counts[buildingName]++;
+    }
+
+    return counts;
+  }, {});
+
+  return res.status(200).json({ status: "success", jsonData, StudentCounts });
+});
 
 //احصائيات استلام الوجبات
+
+//اعداد الطلاب حسب نوع السكن
+const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(
+  async (req, res, next) => {
+    const { ofYear, egyptions, expartriates, oldStudent, newStudent } =
+      req.query;
+
+    var query = {
+      ofYear,
+    };
+
+    if (dateOfReceivingMeals) {
+      query.dateOfReceivingMeals = dateOfReceivingMeals;
+    }
+
+    if (ofWhichMeal) {
+      query.ofWhichMeal = ofWhichMeal;
+    }
+
+    const mealData = await mealsModel.find(query);
+
+    const excelData = mealData.map((meal) => meal.data);
+
+    // Convert the Excel data to JSON
+    const jsonData = excelData.reduce((acc, excel) => {
+      const workbook = xlsx.read(excel, { type: "buffer" });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const mealJsonData = xlsx.utils.sheet_to_json(worksheet);
+      return acc.concat(mealJsonData);
+    }, []);
+    console.log(jsonData);
+
+    const numberOfReceivedMeals = jsonData.reduce((counts, row) => {
+      const buildingName = row.buildingName;
+      const studentCode = row.studentCode;
+
+      // If the buildingName entry doesn't exist, create it with a count of 1
+      if (!counts[buildingName]) {
+        counts[buildingName] = 1;
+      } else {
+        // If the buildingName entry exists, increment the count
+        counts[buildingName]++;
+      }
+
+      return counts;
+    }, {});
+
+    return res.status(200).json({ status: "success", numberOfReceivedMeals });
+  }
+);
 
 //اعداد الطلاب حسب نوع السكن
 const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(
@@ -667,4 +773,8 @@ module.exports = {
   NumberOfStudentsBasedOnHousingType,
   getNumberOfPrintedCardsForMales,
   getNumberOfPrintedCardsForFemales,
+  MealPreparation,
+  MealTakingStatisticsMale,
+  MealTakingStatisticsFemale,
+  numberOfReceivedMeals,
 };

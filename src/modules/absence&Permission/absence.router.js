@@ -16,7 +16,7 @@ router.post(
 );
 
 router.get(
-  "/",
+  "/:StudentId",
   // auth.auth([auth.roles.admin]),
   absenceController.getPermissions
 );
