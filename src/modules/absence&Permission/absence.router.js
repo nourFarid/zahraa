@@ -11,7 +11,7 @@ router.post('/',
   //auth.auth([auth.roles.admin]),
   absenceController.allAbsencePermissions)
 
-router.get('/',
+router.get('/:StudentId',
   // auth.auth([auth.roles.admin]),
   absenceController.getPermissions)
 
