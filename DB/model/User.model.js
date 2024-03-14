@@ -248,11 +248,11 @@ const userSchema = new mongoose.Schema(
       default:false
     },
 
-      // buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
+      buildingId:{ type: mongoose.ObjectId, ref: 'Buildings' },
       buildingName:{type:String},
-      // floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
+      floorId:{ type: mongoose.ObjectId, ref: 'Floor'},
       floorName:{type:String},
-      // roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
+      roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       roomName:{type:String},
 
       housingDate :{type: Date},

@@ -6,7 +6,7 @@ const fs = require('fs');
 //add instructions
 const addInstructions = errorHandling.asyncHandler(async(req,res,next)=>{
     const{contextOfInstructions}= req.body
-    //const userId = req.user._id
+    // const userId = req.user._id
 
     const instructions = await instructionsModel.create({
       //  createdBy:userId,

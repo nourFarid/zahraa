@@ -68,9 +68,9 @@ const absencePermissions = errorHandling.asyncHandler(async (req, res, next) => 
 
 
 const getPermissions = errorHandling.asyncHandler( async(req,res,next)=>{
-  
-  const permission = await absencesPermissionModel.find({}, {"__v":false , "isCancelled":false ,
-  "TakeMeal":false , "notes":false , "_id":false , "StudentId":false , "paymentDate":false , "PaymentValueNumber":false})
+  const { StudentId } = req.params;
+
+  const permission = await absencesPermissionModel.find({StudentId}).select('TypeOfAbsence dateFrom dateTo')
 
   if(!permission){
     return next (new Error (`لا يوجد اجازات`,{cause:404}))

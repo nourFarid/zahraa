@@ -58,9 +58,9 @@ const evacuateStudent = errorHandling.asyncHandler(async (req, res, next) => {
 
   await userModel.findByIdAndUpdate(studentId, {
     isHoused: false,
-    // roomId: null,
-    // floorId: null,
-    // buildingId: null,
+    roomId: null,
+    floorId: null,
+    buildingId: null,
     roomName:null,
     floorName:null,
     buildingName:null
@@ -105,7 +105,6 @@ const getAllHousedStudents = errorHandling.asyncHandler(async (req, res, next) =
 
   return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
 });
-
 
 //إخلاء جماعي
 const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) => {
@@ -158,7 +157,7 @@ const evacuateAllStudents = errorHandling.asyncHandler(async (req, res, next) =>
     await userModel.updateMany(
       { _id: { $in: studentIdsArray } },
       { $set: { isHoused: false,
-        //  roomId: null, floorId: null, buildingId: null,
+         roomId: null, floorId: null, buildingId: null,
         roomName:null,  floorName:null,  buildingName:null } }
     );
 

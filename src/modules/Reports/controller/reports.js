@@ -612,34 +612,20 @@ if(oldStudent)
     query.oldStudent = oldStudent
 }
 
-
-// Loop over each key-value pair in the query object
 for (const key in query) {
   if (query.hasOwnProperty(key)) {
-      // If the value is undefined, set it to false
-      if (
-        query[key] == "false" ||
-        query[key] === "undefined"||
-        query[key] == false ||
-        query[key] == undefined
-      ) {
-        delete query[key];
+      if (query[key] === undefined) {
+          query[key] = false;
       }
   }
 
 const users = await UserModel.find(query).select('studentName studentCode nationalID PassportNumber College').sort({ studentName: 1 })
 
-
-
-console.log('====================================');
-console.log(query);
-console.log('====================================');
-
-
 return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
 
 
 }});
+
 
 
 // تقرير الرسوم انثى
@@ -682,6 +668,7 @@ if(!students)
 return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
 
 }); 
+
 // تقرير الرسوم ذكر
 
 const feesReportMales= errorHandling.asyncHandler(async(req,res,next)=>{
@@ -798,8 +785,6 @@ const printResidenceOrderMale = errorHandling.asyncHandler(async (req, res, next
  penaltiesReport,
   printedMalesCardsReport,printedFemalesCardsReport,
  socialResearchcasesReportMale,socialResearchcasesReportfemale,printResidenceOrderMale, residenceOrderMale, StudentsWhithoutImageReport,feesReportMales,feesReportFemales}
-
-
 
 
         
