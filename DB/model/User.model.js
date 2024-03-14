@@ -47,11 +47,8 @@ const userSchema = new mongoose.Schema(
     },
 
     birthDate: {
-      type: String,
-      // validate: {
-      //   validator: value => validator.isISO8601(value),
-      //   message: 'Invalid date format. Please use the ISO 8601 format (YYYY-MM-DD)',
-      // },
+      type: Date,
+    
     },
 
     placeOfBirth: {
@@ -110,7 +107,7 @@ const userSchema = new mongoose.Schema(
     fatherNationalId: {
       type: String,
       //required: true,
-      unique: true,
+      // unique: true,
     },
     fatherJop: {
       type: String,
@@ -205,12 +202,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    password: {
-      type: String,
-    },
-    confirmPassword: {
-      type: String,
-    },
+   
     policy: {
       type: Boolean,
       required: true,

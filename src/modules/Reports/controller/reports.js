@@ -302,7 +302,7 @@ const printedMalesCardsReport = errorHandling.asyncHandler(async (req, res, next
   const {ofYear}= req.query
   var query={
       role:"User",
-      gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+      gender: "ذكر" ,
       printedCard: true
   }
   if(ofYear)
@@ -626,6 +626,49 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 }});
 
+
+
+// تقرير الرسوم انثى
+
+const feesReportFemales= errorHandling.asyncHandler(async(req,res,next)=>{
+
+const {ofYear}= req.query
+var query={
+  gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } 
+,isHousingFeePaied:true}
+
+if (ofYear) {
+  query.ofYear = ofYear;
+}
+  // Loop over each key-value pair in the query object
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+        // If the value is undefined, set it to false
+        if (
+          query[key] == "false" ||
+          query[key] === "undefined"||
+          query[key] == false ||
+          query[key] == undefined
+        ) {
+          delete query[key];
+        }
+    }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+const students= await UserModel.find(query).sort({College:1});
+if(!students)
+{
+  return next (new Error ("NO USERS FOUND",{cause:404}))
+}
+
+
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+
+}); 
+
 // تقرير الرسوم ذكر
 
 const feesReportMales= errorHandling.asyncHandler(async(req,res,next)=>{
@@ -667,6 +710,73 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students }
 
 }); 
 
+
+//امر التسكين
+
+const residenceOrderMale= errorHandling.asyncHandler(async(req,res,next)=>{
+
+const {ofYear}= req.query
+const query = {
+  gender:"ذكر",
+  isHoused:true
+}
+if(ofYear){
+  query.ofYear = ofYear;
+}
+ // Loop over each key-value pair in the query object
+ for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+      // If the value is undefined, set it to false
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
+  }
+}
+console.log('====================================');
+console.log(query);
+console.log('====================================');
+const students= await UserModel.find(query).sort({College:1})
+console.log(students.length);
+
+if(!students)
+return next (new Error ("NO USERS FOUND",{cause:404}))
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students } });
+
+
+
+
+});
+
+const printResidenceOrderMale = errorHandling.asyncHandler(async (req, res, next) => {
+  const {ofYear}= req.query
+  const { nationalID } = req.body;
+  var query ={
+    ofYear: ofYear,
+    nationalID:nationalID,
+    gender:"ذكر"
+
+  }
+  let students = [];
+
+  await Promise.all(
+    nationalID.map(async (nationalID) => {
+      const student = await UserModel.find(query);
+      students.push("يتم تسكين الطالب: "+student[0].studentName+
+      ", فى مبنى: "+student[0].buildingName +
+      ", فى غرفة رقم: "+student[0].roomName);
+      // console.log(student[0].studentName);
+    })
+  );
+
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: students });
+});
+
  module.exports = 
  {studentLists,
   AbsenceAndPermissionsReport,
@@ -674,7 +784,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students }
   expulsionStudentsMale,expulsionStudentsFemale,
  penaltiesReport,
   printedMalesCardsReport,printedFemalesCardsReport,
- socialResearchcasesReportMale,socialResearchcasesReportfemale,  StudentsWhithoutImageReport,feesReportMales}
+ socialResearchcasesReportMale,socialResearchcasesReportfemale,printResidenceOrderMale, residenceOrderMale, StudentsWhithoutImageReport,feesReportMales,feesReportFemales}
 
 
         
