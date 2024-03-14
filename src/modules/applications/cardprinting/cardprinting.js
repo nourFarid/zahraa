@@ -9,6 +9,7 @@ const unprintedCardsForMales = errorHandling.asyncHandler(async (req, res, next)
     var query={
         role:"User",
         gender:"ذكر",
+        printedCard: false
     }
     if(ofYear)
     {
@@ -17,7 +18,7 @@ const unprintedCardsForMales = errorHandling.asyncHandler(async (req, res, next)
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is 0, remove the key-value pair from the object
-            if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
+            if ( query[key] == undefined|| query[key] =="undefined") {
                 delete query[key];
             }
         }
@@ -30,20 +31,21 @@ const unprintedCardsForMales = errorHandling.asyncHandler(async (req, res, next)
     console.log('====================================');
     console.log(student.length);
     console.log('====================================');
-    const MalesWithUnprintedCards = await User.find({ printedCard: false });
+    // const MalesWithUnprintedCards = await User.find({ printedCard: false });
     if(!student||student.length==0)
     return next (new Error (`NO USERS`,{cause:400}))
 
 return res
     .status(200)
-    .json({ status: httpStatusText.SUCCESS, data: { MalesWithUnprintedCards } });
+    .json({ status: httpStatusText.SUCCESS, data: { student } });
 });
 // للانثي
 const unprintedCardsForFemales = errorHandling.asyncHandler(async (req, res, next) => {
     const {ofYear}= req.query
     var query={
         role:"User",
-        gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+        gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,        printedCard: false
+
     }
     if(ofYear)
     {
@@ -52,7 +54,7 @@ const unprintedCardsForFemales = errorHandling.asyncHandler(async (req, res, nex
     for (const key in query) {
         if (query.hasOwnProperty(key)) {
             // If the value is 0, remove the key-value pair from the object
-            if (query[key] == "false"|| query[key] ==="false"|| query[key] == false|| query[key] =="undefined") {
+            if ( query[key] == undefined|| query[key] =="undefined") {
                 delete query[key];
             }
         }
@@ -65,13 +67,13 @@ const unprintedCardsForFemales = errorHandling.asyncHandler(async (req, res, nex
     console.log('====================================');
     console.log(student.length);
     console.log('====================================');
-    const FemalesWithUnprintedCards = await User.find({ printedCard: false });
+    // const FemalesWithUnprintedCards = await User.find({ printedCard: false });
     if(!student||student.length==0)
     return next (new Error (`NO USERS`,{cause:400}))
 
 return res
     .status(200)
-    .json({ status: httpStatusText.SUCCESS, data: { FemalesWithUnprintedCards } });
+    .json({ status: httpStatusText.SUCCESS, data: { student } });
 });
 
 
