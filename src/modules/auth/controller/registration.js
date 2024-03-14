@@ -7,13 +7,25 @@ const Logs= require("../../../../DB/model/logs.js")
 
 
  const signUp = errorHandling.asyncHandler(async(req,res,next)=>{
-  
-    //check el email mawgood wla la2
-    const isNationalIdExist = await userModel.findOne({nationalID:req.body.nationalID})
+  const {nationalID,PassportNumber}=req.body
+  if(nationalID){
+    const isNationalIdExist = await userModel.findOne({nationalID:nationalID})
     if (isNationalIdExist){
+       
         return next (new Error ("this NationalId is already Exist"))
     }
-    req.body.password = hashAndCompare.hash(req.body.password)
+  }
+  if(PassportNumber)
+  {
+    const isPassportNumber = await userModel.findOne({PassportNumber:PassportNumber})
+    if (isPassportNumber){
+      
+        return next (new Error ("this NationalId is already Exist"))
+    }
+  }
+    
+    
+    // req.body.password = hashAndCompare.hash(req.body.password)
     const user = await userModel.create(req.body)
     return res.status(201).json ({message :"done",user})
 }   

@@ -26,7 +26,7 @@ const classifyOldEgyptionMaleStudents = errorHandling.asyncHandler(
     if (query.hasOwnProperty(key)) {
       if (
         query[key] == "false" ||
-        query[key] === "false" ||
+
         query[key] == false ||
         query[key] == "undefined"||
         query[key] == undefined
@@ -67,6 +67,7 @@ const classifyOldEgyptionMaleStudents = errorHandling.asyncHandler(
     students = await Promise.all(
       students.map(async (student) => {
         const distance = await getCoordinatesAndCalculateDistance(student.residence);
+        
         return { ...student._doc, distance };
       })
     );
@@ -76,16 +77,20 @@ const classifyOldEgyptionMaleStudents = errorHandling.asyncHandler(
 //________________________________________________
 //الاصغر سنا
    // Calculate age for each student
-   students.forEach(student => {
-    const birthdateParts = student.birthDate.split('/'); 
-    const birthYear = parseInt(birthdateParts[2]);
-    const currentYear = new Date().getFullYear();
-    student.age = currentYear - birthYear;
-    console.log('====================================');
-    console.log(student.age);
-    console.log('====================================');
-});
-students.sort((a, b) => a.age - b.age);
+//    students.forEach(student => {
+//     console.log('====================================');
+//     console.log(student.birthDate);
+//     console.log('====================================');
+//     const birthdateParts = student.birthDate.split('-'); 
+ 
+//     const birthYear = parseInt(birthdateParts[2]);
+//     const currentYear = new Date().getFullYear();
+//     student.age = currentYear - birthYear;
+//     console.log('====================================');
+//     console.log(student.age);
+//     console.log('====================================');
+// });
+// students.sort((a, b) => a.age - b.age);
 //________________________________________________________________
 //الاعلى تقديرا
 const arabicGradesOrder = {
@@ -217,16 +222,16 @@ const classifyOldEgyptionFemaleStudents = errorHandling.asyncHandler(
 //________________________________________________
 //الاكبر سنا
    // Calculate age for each student
-   students.forEach(student => {
-    const birthdateParts = student.birthDate.split('/'); 
-    const birthYear = parseInt(birthdateParts[2]);
-    const currentYear = new Date().getFullYear();
-    student.age = currentYear - birthYear;
-    console.log('====================================');
-    console.log(student.age);
-    console.log('====================================');
-});
-students.sort((a, b) => a.age - b.age);
+//    students.forEach(student => {
+//     const birthdateParts = student.birthDate.split('/'); 
+//     const birthYear = parseInt(birthdateParts[2]);
+//     const currentYear = new Date().getFullYear();
+//     student.age = currentYear - birthYear;
+//     console.log('====================================');
+//     console.log(student.age);
+//     console.log('====================================');
+// });
+// students.sort((a, b) => a.age - b.age);
 //________________________________________________________________
 //الاعلى تقديرا
 const arabicGradesOrder = {
