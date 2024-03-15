@@ -4,9 +4,9 @@ const reports = require ("./controller/reports.js")
 const auth = require('../../middleware/auth.js')
 
 
-router.get('/list',
-  // auth.auth([auth.roles.admin]),
-  reports.studentLists)
+router.get('/studentListsMales',reports.studentListsMales)
+router.get('/studentListsFemales',reports.studentListsFemales)
+
 
   router.get('/absenceReport',
   // auth.auth([auth.roles.admin]),
@@ -22,20 +22,25 @@ router.get('/list',
 
 
   router.get("/printedMalesCardsReport",reports.printedMalesCardsReport)
-
   router.get("/printedFemalesCardsReport",reports.printedFemalesCardsReport)
 
 
   router.get("/socialResearchcasesReportMale",reports.socialResearchcasesReportMale)
-  router.get("/socialResearchcasesReportfemale",reports.socialResearchcasesReportfemale)
+  router.get("/socialResearchcasesReportfemale",reports.socialResearchcasesReportFemale)
 
-  router.get("/transferredStudents",reports.transferredStudents)
+  router.get("/transferredMaleStudents",reports.transferredMaleStudents)
+  router.get("/transferredFemaleStudents",reports.transferredFemaleStudents)
+
   router.get("/expulsionStudentsMale",reports.expulsionStudentsMale)
   router.get("/expulsionStudentsFemale",reports.expulsionStudentsFemale)
+
   router.get("/feesReportMales",reports.feesReportMales)
   router.get("/feesReportFemales",reports.feesReportFemales)
+
   router.get("/residenceOrderMale",reports.residenceOrderMale)
-  router.get("/printResidenceOrderMale",reports.printResidenceOrderMale)
+  router.get("/residenceOrderFemale",reports.residenceOrderFemale)
+
+  router.get("/printResidenceOrder",reports.printResidenceOrder)
 
 
 

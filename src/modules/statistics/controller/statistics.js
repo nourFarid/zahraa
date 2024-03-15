@@ -12,8 +12,8 @@ const collegesString = process.env.COLLEGES;
 const colleges = collegesString.split(',');
 
 
-//اعداد المتقدمين
-const getNumberOfAppliers = errorHandling.asyncHandler(async(req,res,next)=>{
+//اعداد المتقدمين للذكر
+const getNumberOfAppliersMale= errorHandling.asyncHandler(async(req,res,next)=>{
 
     var { ofYear,College,
          pending, rejected,waitingForClassification,accepted 
@@ -182,10 +182,180 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { collegeCou
 
 
 });
+//اعداد المتقدمين للانثي
+const getNumberOfAppliersFemale= errorHandling.asyncHandler(async(req,res,next)=>{
+
+  var { ofYear,College,
+       pending, rejected,waitingForClassification,accepted 
+       ,egyptions,expartriates,
+      muslim , christian,
+       normalHousing, specialHousing,
+        oldStudent, newStudent,
+         grade,gradePercentage,
+
+         residentsOfTheYreviousYear, } = req.query;
+
+var onlineRequests = [];
+var years=[]
 
 
-//اعداد المقيمين
-const getNumberOfResidents = errorHandling.asyncHandler(async(req, res, next) => {
+if (pending==='true'){
+  onlineRequests.push("pending")
+  
+}
+if (rejected==='true'){
+   onlineRequests.push("rejected")
+}
+
+if (accepted==='true'){
+onlineRequests.push("accepted")
+}
+var housingTypes = [];
+if (normalHousing === 'true') {
+  housingTypes.push('عادى');
+}
+
+if (specialHousing === 'true') {
+  housingTypes.push('سكن مميز فردى طالبات');
+}
+
+var religions = [];
+if(muslim==='true'){religions.push("مسلم")}
+if(christian==='true'){religions.push("مسيحى")}
+
+
+  // Dynamically set residentsOfTheYreviousYear based on ofYear
+  if(residentsOfTheYreviousYear){
+var [startYear, endYear] = ofYear.split('-');
+  residentsOfTheYreviousYear = `${parseInt(startYear) - 1}-${parseInt(endYear) - 1}`;
+console.log('====================================');
+console.log("residentsOfTheYreviousYear: "+residentsOfTheYreviousYear);
+console.log('====================================');
+years.push(residentsOfTheYreviousYear);
+
+  }
+  if(ofYear){
+      years.push(ofYear)
+  }
+
+var  query={
+  gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+  role:'User'
+}
+if(College){
+  query.College = College
+
+}
+if(egyptions){
+  query.egyptions = egyptions
+}
+if(expartriates){
+  query.expartriates = expartriates
+}
+if(oldStudent){
+  query.oldStudent = oldStudent
+}
+if(newStudent){
+  query.newStudent = newStudent
+}
+if(grade){
+  query.grade = { $exists: true }
+}
+if(gradePercentage){
+  query.gradePercentage = { $exists: true }
+}
+if (housingTypes.length > 0) {
+  query.HousingType = { $in: housingTypes };
+}
+
+if (housingTypes.length > 0) {
+  query.HousingType = { $in: housingTypes };
+}
+
+if (onlineRequests.length > 0) {
+  query.statusOfOnlineRequests = { $in: onlineRequests };
+}
+if (religions.length > 0) {
+  query.religion = { $in: religions };
+}
+if (years.length > 0) {
+  query.ofYear = { $in: years };
+}
+
+if(waitingForClassification){
+  query.waitingForClassification = waitingForClassification
+}
+
+
+
+// Loop over each key-value pair in the query object
+for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+    // If the value is 0, remove the key-value pair from the object
+    if (
+      query[key] == "false" ||
+      query[key] === "undefined"||
+      query[key] == false ||
+      query[key] == undefined
+    ) {
+      delete query[key];
+    }
+  }
+}
+
+const students = await User.find(query);
+const count = students.length;
+
+   
+   // Object to store counts for each college
+   const collegeCounts = {};
+   students.forEach(student => {
+      // Count statuses for each college
+      if (colleges.includes(student.College)) {
+          if (!collegeCounts[student.College]) {
+              collegeCounts[student.College] = {
+                  rejected: 0,
+                  pending: 0,
+                  waitingForClassification:0,
+                  isClassified:0, //فى انتظار السكن
+                  all:0
+              };
+          }
+
+          switch (student.statusOfOnlineRequests) {
+              case "rejected":
+                  collegeCounts[student.College].rejected++;
+                  break;
+              case "pending":
+                  collegeCounts[student.College].pending++;
+                  break;
+          }
+
+      
+          if (student.waitingForClassification&& !student.isClassified&& !student.isHoused) {
+              collegeCounts[student.College].waitingForClassification++;
+          }
+          if (student.isClassified) {
+              collegeCounts[student.College].isClassified++;
+          }
+
+          collegeCounts[student.College].all=collegeCounts[student.College].rejected+collegeCounts[student.College].pending+collegeCounts[student.College].waitingForClassification+collegeCounts[student.College].isClassified;
+      }
+  });
+
+console.log('====================================');
+console.log(query);
+console.log(count);
+console.log('====================================');
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { collegeCounts } });
+
+
+});
+
+
+//اعداد المقيمين للذكر
+const getNumberOfResidentsMale = errorHandling.asyncHandler(async(req, res, next) => {
   // Extract query parameter
   var { ofYear, 
     egyptions, expartriates,
@@ -204,6 +374,109 @@ if (normalHousing === 'true') {
   }
 if (specialHousing === 'true') {
       housingTypes.push('سكن مميز فردى طلبة');
+  }
+
+if (housingTypes.length > 0) {
+      query.HousingType = { $in: housingTypes };
+  }
+if(egyptions)
+{
+    query.egyptions = egyptions
+}
+if(expartriates)
+{
+    query.expartriates = expartriates
+}
+if(ofYear)
+{
+    query.ofYear = ofYear
+}
+if(oldStudent)
+{
+    query.oldStudent = oldStudent
+}
+if(newStudent)
+{
+    query.newStudent = newStudent
+}
+if(isEvacuated)
+{
+    query.isEvacuated = isEvacuated
+}
+if(isHoused)
+{
+    query.isHoused = isHoused
+}
+if(transformed){
+    query.transformed = transformed
+}
+// Loop over each key-value pair in the query object
+for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      // If the value is 0, remove the key-value pair from the object
+      if (
+        query[key] == "false" ||
+        query[key] === "undefined"||
+        query[key] == false ||
+        query[key] == undefined
+      ) {
+        delete query[key];
+      }
+    }
+  }
+  const students = await User.find(query);
+  const count = students.length;
+   
+     // Object to store counts for each college
+     const collegeCounts = {};
+     students.forEach(student => {
+        // Count statuses for each college
+        if (colleges.includes(student.College)) {
+            if (!collegeCounts[student.College]) {
+                collegeCounts[student.College] = {
+                    isHoused:0
+                };
+            }
+
+
+            
+            if (student.isHoused) {
+                collegeCounts[student.College].isHoused++;
+            }
+          
+
+        }
+    });
+
+
+  console.log('====================================');
+  console.log(query);
+  console.log(count);
+  console.log('====================================');
+
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: {collegeCounts } });
+
+});
+//اعداد المقيمين للانثي
+const getNumberOfResidentsFemale = errorHandling.asyncHandler(async(req, res, next) => {
+  // Extract query parameter
+  var { ofYear, 
+    egyptions, expartriates,
+     normalHousing, specialHousing,
+      oldStudent,newStudent,
+      isEvacuated,isHoused ,transformed} = req.query;
+  const housingTypes = [];
+  var query = {};
+  query = {
+    role:"User",
+    gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+  };
+
+if (normalHousing === 'true') {
+      housingTypes.push('عادى');
+  }
+if (specialHousing === 'true') {
+      housingTypes.push('سكن مميز فردى طالبات');
   }
 
 if (housingTypes.length > 0) {
@@ -430,8 +703,8 @@ const getNumberOfPrintedCardsForFemales = errorHandling.asyncHandler(async(req, 
     return res.status(200).json({ status: httpStatusText.SUCCESS, data: collegeCounts });
   });
 
-//اعداد جميع الطلاب
-const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) => {
+//اعداد جميع الطلاب للذكر
+const getNumberOfAllStudentsMale = errorHandling.asyncHandler(async(req, res, next) => {
     const { ofYear,
          egyptions, expartriates,
           oldStudent, newStudent,
@@ -536,6 +809,113 @@ const getNumberOfAllStudents = errorHandling.asyncHandler(async(req, res, next) 
 
     // Return the counts along with the student data
     return res.status(200).json({ status: httpStatusText.SUCCESS, data: collegeCounts });
+});
+//اعداد جميع الطلاب للانثي
+const getNumberOfAllStudentsFemale = errorHandling.asyncHandler(async(req, res, next) => {
+  const { ofYear,
+       egyptions, expartriates,
+        oldStudent, newStudent,
+         normalHousing, specialHousing,
+          withSpecialNeeds } = req.query;
+var students 
+const housingTypes = [];
+  if (normalHousing === 'true') {
+      housingTypes.push('عادى');
+  }
+
+  if (specialHousing === 'true') {
+      housingTypes.push('سكن مميز فردى طالبات');
+  }
+
+  var query = {
+      ofYear,
+      gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+      role: 'User',
+  
+  };
+
+  if (housingTypes.length > 0) {
+      query.HousingType = { $in: housingTypes };
+  }
+  if (egyptions) {
+      query.egyptions = egyptions;
+  }
+  if (expartriates) {
+      query.expartriates = expartriates;
+  }
+  if (oldStudent) {
+      query.oldStudent = oldStudent;
+  }
+  if (newStudent) {
+      query.newStudent = newStudent;
+  }
+  if (withSpecialNeeds) {
+      query.withSpecialNeeds = withSpecialNeeds;
+  }
+// Loop over each key-value pair in the query object
+for (const key in query) {
+  if (query.hasOwnProperty(key)) {
+    // If the value is 0, remove the key-value pair from the object
+    if (
+      query[key] == "false" ||
+      query[key] === "undefined"||
+      query[key] == false ||
+      query[key] == undefined
+    ) {
+      delete query[key];
+    }
+  }
+}
+
+  students = await User.find(query);
+
+
+   // Object to store counts for each college
+   const collegeCounts = {};
+   students.forEach(student => {
+      // Count statuses for each college
+      if (colleges.includes(student.College)) {
+          if (!collegeCounts[student.College]) {
+              collegeCounts[student.College] = {
+                  rejected: 0,
+                  pending: 0,
+                  waitingForClassification:0,
+                  isClassified:0, //فى انتظار السكن
+                  isHoused: 0,
+                  isEvacuated: 0,
+                  all:0
+              };
+          }
+
+          switch (student.statusOfOnlineRequests) {
+              case "rejected":
+                  collegeCounts[student.College].rejected++;
+                  break;
+              case "pending":
+                  collegeCounts[student.College].pending++;
+                  break;
+          }
+
+          // Count housing status
+          if (student.statusOfOnlineRequests=="accepted"&& student.waitingForClassification&& !student.isClassified && !student.isHoused) {
+              collegeCounts[student.College].waitingForClassification++;
+          }
+          if (student.isClassified&& !student.isHoused) {
+              collegeCounts[student.College].isClassified++;
+          }
+          if (student.statusOfOnlineRequests=="accepted"&&student.isHoused &&student.isClassified &&student.waitingForClassification) {
+              collegeCounts[student.College].isHoused++;
+          }
+          if (student.isEvacuated) {
+              collegeCounts[student.College].isEvacuated++;
+          }
+
+          collegeCounts[student.College].all=collegeCounts[student.College].rejected+collegeCounts[student.College].pending+collegeCounts[student.College].waitingForClassification+collegeCounts[student.College].isClassified+collegeCounts[student.College].isHoused+collegeCounts[student.College].isEvacuated;
+      }
+  });
+
+  // Return the counts along with the student data
+  return res.status(200).json({ status: httpStatusText.SUCCESS, data: collegeCounts });
 });
 
 //تجهيز الوجبات
@@ -834,8 +1214,10 @@ const NumberOfStudentsBasedOnHousingType = errorHandling.asyncHandler(async (req
 
 
 
-module.exports = {getNumberOfResidents,
-    getNumberOfAllStudents,getNumberOfAppliers,
+module.exports = {
+    getNumberOfAppliersMale,getNumberOfAppliersFemale,
+    getNumberOfResidentsMale,getNumberOfResidentsFemale,
+    getNumberOfAllStudentsMale,getNumberOfAllStudentsFemale,
     NumberOfStudentsBasedOnHousingType,
     getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales,
     MealPreparation,
