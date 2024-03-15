@@ -1,26 +1,23 @@
 const express = require ('express')
 const router = express.Router()
-const{getNumberOfResidents,getNumberOfAllStudents,getNumberOfPrintedCards,getNumberOfAppliers,NumberOfStudentsBasedOnHousingType,getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales, MealPreparation
+const{getNumberOfAppliersMale,getNumberOfAppliersFemale,getNumberOfAllStudentsMale,getNumberOfPrintedCards,getNumberOfResidentsMale,getNumberOfResidentsFemale,getNumberOfAllStudentsFemale,NumberOfStudentsBasedOnHousingType,getNumberOfPrintedCardsForMales,getNumberOfPrintedCardsForFemales, MealPreparation
   , MealTakingStatisticsMale, MealTakingStatisticsFemale, numberOfReceivedMeals}= require("./controller/statistics")
-//اعداد المتقدمين
 
-router.get('/getNumberOfappliers',getNumberOfAppliers)
+ //اعداد المتقدمين
+router.get('/getNumberOfAppliersMale',getNumberOfAppliersMale)
+router.get('/getNumberOfAppliersFemale',getNumberOfAppliersFemale)
 
 //اعداد المقيمين
-router.get('/getNumberOfResidents',getNumberOfResidents)
+router.get('/getNumberOfResidentsMale',getNumberOfResidentsMale)
+router.get('/getNumberOfResidentsFemale',getNumberOfResidentsFemale)
 
-// احصائيات البطاقات المطبوعة للذكر
+// احصائيات البطاقات المطبوعة
 router.get('/getNumberOfPrintedCardsForMales',getNumberOfPrintedCardsForMales)
-
-// احصائيات البطاقات المطبوعة للانثي
 router.get('/getNumberOfPrintedCardsForFemales',getNumberOfPrintedCardsForFemales)
 
-
-
-
-
 //اعداد جميع الطلاب
-router.get('/getNumberOfAllStudents',getNumberOfAllStudents)
+router.get('/getNumberOfAllStudentsMale',getNumberOfAllStudentsMale)
+router.get('/getNumberOfAllStudentsFemale',getNumberOfAllStudentsFemale)
 
 //تجهيز الوجبات
 router.get('/mealPreparation',MealPreparation)

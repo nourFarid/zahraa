@@ -3,8 +3,8 @@ const httpStatusText = require('../../../utils/httpStatusText.js');
 const User = require('../../../../DB/model/User.model.js');
 const fs = require('fs');
 const path = require('path');
-const AdmZip = require('adm-zip');
-const unrar = require('node-unrar');
+//const AdmZip = require('adm-zip');
+//const unrar = require('node-unrar');
 
 // const uploadStudentPhoto= errorHandling.asyncHandler(async(req,res,next)=>{
 

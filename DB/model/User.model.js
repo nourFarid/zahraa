@@ -191,14 +191,15 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
-    HousingWithoutFood: {
+    housingWithoutFood: {
       type: Boolean,
+      default: false,
     },
     withSpecialNeeds: {
       type: Boolean,
       default: false,
     },
-    ThefamilyIsOutside: {
+    thefamilyIsOutside: {
       type: Boolean,
       default: false,
     },
@@ -254,12 +255,10 @@ const userSchema = new mongoose.Schema(
       floorName:{type:String},
       roomId:{ type: mongoose.ObjectId, ref: 'Rooms'},
       roomName:{type:String},
-
       housingDate :{type: Date},
       evacuationDate:{type: Date},
       expulsionStudent:{ type: Boolean,default:false}, //فصل
       penalty:{type: Boolean,default:false}, //جزاء
-      
       isEvacuated:{type: Boolean,default:false}, //إخلاء
          
     isHoused:{

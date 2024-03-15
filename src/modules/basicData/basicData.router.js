@@ -5,9 +5,9 @@ const {getBasicDataMales,getBasicDataFemales,searchMales,searchFemales} = requir
 
 
 router.get('/getBasicDataMales',getBasicDataMales)
-router.get('/searchMales',searchMales)
+// router.get('/searchMales',searchMales)
 router.get('/getBasicDataFemales',getBasicDataFemales)
-router.get('/searchFemales',searchFemales)
+// router.get('/searchFemales',searchFemales)
 
 
 module.exports = router;
