@@ -75,41 +75,41 @@ const updateStudentCode = errorHandling.asyncHandler(async (req, res, next) => {
 
 
 // change password
-const changeStudentPassword = errorHandling.asyncHandler(async (req, res, next) => {
-  const { newPassword, confirmPassword } = req.body;
+// const changeStudentPassword = errorHandling.asyncHandler(async (req, res, next) => {
+//   const { newPassword, confirmPassword } = req.body;
 
-  if (newPassword !== confirmPassword) {
-    return res
-      .status(400)
-      .json({ message: "NewPassword and confirmPassword do not match" });
-  }
+//   if (newPassword !== confirmPassword) {
+//     return res
+//       .status(400)
+//       .json({ message: "NewPassword and confirmPassword do not match" });
+//   }
 
-  const student = await UserModel.findOne({ nationalID: req.params.nationalID });
+//   const student = await UserModel.findOne({ nationalID: req.params.nationalID });
 
-  if (!student) {
-    return res.status(404).json({ status: httpStatusText.FAIL, data: { data: "No sudent found with that ID" } });
-  }
+//   if (!student) {
+//     return res.status(404).json({ status: httpStatusText.FAIL, data: { data: "No sudent found with that ID" } });
+//   }
 
-  // Hash the new password using bcrypt
-  const hashedPassword = await bcrypt.hash(newPassword, 10); // Adjust the cost factor as needed
+//   // Hash the new password using bcrypt
+//   const hashedPassword = await bcrypt.hash(newPassword, 10); // Adjust the cost factor as needed
 
-  // Update the user's password with the hashed password
-  student.password = hashedPassword;
+//   // Update the user's password with the hashed password
+//   student.password = hashedPassword;
 
-  await student.save();
+//   await student.save();
 
-  const responseData = {
-    nationalID: student.nationalID,
-    studentCode: student.studentCode,
-    studentName: student.studentName,
-    residence: student.residence,
-    College: student.College,
-    year: student.year,
-    updatedAt: student.updatedAt,
-  };
+//   const responseData = {
+//     nationalID: student.nationalID,
+//     studentCode: student.studentCode,
+//     studentName: student.studentName,
+//     residence: student.residence,
+//     College: student.College,
+//     year: student.year,
+//     updatedAt: student.updatedAt,
+//   };
 
-  return res.status(200).json({ status: httpStatusText.SUCCESS, message: "Password changed successfully", data: responseData });
-});
+//   return res.status(200).json({ status: httpStatusText.SUCCESS, message: "Password changed successfully", data: responseData });
+// });
 
 
 //تغيير نوع السكن
@@ -191,7 +191,7 @@ module.exports = {
       correctNationalID,
       updateStudentCode ,
       changeStudentName, 
-      changeStudentPassword,
+      // changeStudentPassword,
       changeHousingType
 }
 

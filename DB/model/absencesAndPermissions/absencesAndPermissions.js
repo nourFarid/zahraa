@@ -14,7 +14,7 @@ const absencesSchema = new mongoose.Schema({
   PaymentValueNumber:{type:String},
   paymentDate:{type:String},
   notes:{type:String},
-  hasBlocked:{type:Boolean},
+  hasBlocked:{type:Boolean , default:false},
 }, {
     timestamps: true
 })

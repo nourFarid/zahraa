@@ -22,9 +22,9 @@ router.put('/name/:studentId',
   //    auth.auth([auth.roles.admin]),
   changeStudentInfoController.changeStudentName)
 
-router.put('/password/:nationalID', 
-  //    auth.auth([auth.roles.admin]),
-  changeStudentInfoController.changeStudentPassword)
+// router.put('/password/:nationalID', 
+//   //    auth.auth([auth.roles.admin]),
+//   changeStudentInfoController.changeStudentPassword)
 
 router.put('/:housing/:userId',
   //  auth.auth([auth.roles.admin]),
