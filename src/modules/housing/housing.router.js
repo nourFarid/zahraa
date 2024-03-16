@@ -19,8 +19,9 @@ router.get('/female',housingController.getStudentFemale)
 
 router.get('/male',housingController.getStudentMale)
 
-router.get('/housingOrder/:studentId',housingController.housingOrder)
+router.get('/housingOrderMale/:studentId',housingController.housingOrderMale)
 
+router.get('/housingOrderFemale/:studentId',housingController.housingOrderFemale)
 
 
 module.exports = router

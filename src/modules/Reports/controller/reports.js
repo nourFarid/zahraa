@@ -13,12 +13,10 @@ const colleges = collegesString.split(',');
 //قوائم الطلاب
 const studentListsMales = errorHandling.asyncHandler(async(req,res,next)=>{
 
-    var { ofYear,College,year,nationality,placeOfBirth,
-      isHoused,egyptions,expartriates,normalHousing,
+    var { ofYear,College,year,nationality,placeOfBirth,residence,
+      isHoused,residentsOfThePreviousYear,egyptions,expartriates,normalHousing,
       specialHousing,withSpecialNeeds,statusOfOnlineRequests,
-      newStudent,oldStudent,gradeOfLastYear,housingDate,evacuationDate,
-      muslim,christian,residentsOfThePreviousYear,withoutFood,
-      withFood,transferred,isClassified} = req.query;
+      isClassified} = req.query;
 
 var years=[]
 
@@ -29,21 +27,6 @@ if (normalHousing === 'true') {
 if (specialHousing === 'true') {
     housingTypes.push('سكن مميز فردى طلبة');
 }
-
-var housingWithoutFood 
-if (withoutFood==true||withoutFood=='true') {
-   housingWithoutFood = 'true';  
-   query.housingWithoutFood = housingWithoutFood
-}
-if (withFood==true||withFood=='true') {
-  housingWithoutFood = 'false';  
-  query.housingWithoutFood = housingWithoutFood
-}
-
-
-var religions = [];
-if(muslim==='true'){religions.push("مسلم")}
-if(christian==='true'){religions.push("مسيحى")}
 
 if (residentsOfThePreviousYear) {
   var [startYear, endYear] = ofYear.split('-');
@@ -76,13 +59,14 @@ if(expartriates){
     query.expartriates = expartriates
 }
 
+if (residence) {
+  query.residence = residence;
+}
+
 if (housingTypes.length > 0) {
     query.HousingType = { $in: housingTypes };
 }
 
-if (religions.length > 0) {
-    query.religion = { $in: religions };
-}
 if (years.length > 0) {
     query.ofYear = { $in: years };
 }
@@ -109,27 +93,7 @@ if (isClassified) {
 if (statusOfOnlineRequests) {
   query.statusOfOnlineRequests = statusOfOnlineRequests;
 }
-if (newStudent) {
-  query.newStudent = newStudent;
-}
-if (oldStudent) {
-  query.oldStudent = oldStudent;
-}
-if (gradeOfLastYear) {
-  query.gradeOfLastYear = gradeOfLastYear;
-}
-if (housingDate) {
-  query.housingDate = housingDate;
-}
-if (evacuationDate) {
-  query.evacuationDate = evacuationDate;
-}
-if (housingWithoutFood) {
-  query.housingWithoutFood = housingWithoutFood;
-}
-if (transferred) {
-  query.transferred = transferred;
-}
+
 
 
   // Loop over each key-value pair in the query object
@@ -146,7 +110,22 @@ if (transferred) {
         }
     }
 
-  const users = await UserModel.find(query).sort({College:1});
+    const selectFields = [
+      'ofYear',
+      'studentName',
+      'studentCode',
+      'nationalID',
+      'placeOfBirth',
+      'religion',
+      'residence',
+      'year',
+      "College",
+      'fatherName',
+      'fatherNationalId',
+      'fatherJop',
+      'fatherPhone'
+  ];
+  const users = await UserModel.find(query).select(selectFields.join(' ')).sort({College:1});
 
 
 
@@ -154,21 +133,24 @@ console.log('====================================');
 console.log(query);
 console.log('====================================');
 
-// const responseData = { status: httpStatusText.SUCCESS, data: { users: users.map(user => ({ ...user.toObject(), residentsOfThePreviousYear: residentsOfThePreviousYear })) } };
 if(! users)
 return next (new Error ("NO USERS FOUND",{cause:404}))
-return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users} });
+
+// const responseData = { status: httpStatusText.SUCCESS, data: { users: users.map(user => ({ ...user.toObject(), residentsOfThePreviousYear: residentsOfThePreviousYear })) } };
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
+
+// return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users} });
 
 }});
+
 //قوائم الطالبات
 const studentListsFemales = errorHandling.asyncHandler(async(req,res,next)=>{
 
-  var { ofYear,College,year,nationality,placeOfBirth,
-    isHoused,egyptions,expartriates,normalHousing,
+  var { ofYear,College,year,nationality,placeOfBirth,residence,
+    isHoused,residentsOfThePreviousYear,egyptions,expartriates,normalHousing,
     specialHousing,withSpecialNeeds,statusOfOnlineRequests,
-    newStudent,oldStudent,gradeOfLastYear,housingDate,evacuationDate,
-    muslim,christian,residentsOfThePreviousYear,withoutFood,
-    withFood,transferred,isClassified} = req.query;
+    isClassified} = req.query;
 
 var years=[]
 
@@ -177,23 +159,8 @@ if (normalHousing === 'true') {
   housingTypes.push('سكن عادى');
 }
 if (specialHousing === 'true') {
-  housingTypes.push('سكن مميز فردى طالبات');
+  housingTypes.push('سكن مميز فردى طلبة');
 }
-
-var housingWithoutFood 
-if (withoutFood==true||withoutFood=='true') {
- housingWithoutFood = 'true';  
- query.housingWithoutFood = housingWithoutFood
-}
-if (withFood==true||withFood=='true') {
-housingWithoutFood = 'false';  
-query.housingWithoutFood = housingWithoutFood
-}
-
-
-var religions = [];
-if(muslim==='true'){religions.push("مسلم")}
-if(christian==='true'){religions.push("مسيحى")}
 
 if (residentsOfThePreviousYear) {
 var [startYear, endYear] = ofYear.split('-');
@@ -212,8 +179,7 @@ if(ofYear){
 
 var  query={
   role:'User',
-    gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } 
-
+  gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } 
 }
 
 if(College){
@@ -227,13 +193,14 @@ if(expartriates){
   query.expartriates = expartriates
 }
 
+if (residence) {
+query.residence = residence;
+}
+
 if (housingTypes.length > 0) {
   query.HousingType = { $in: housingTypes };
 }
 
-if (religions.length > 0) {
-  query.religion = { $in: religions };
-}
 if (years.length > 0) {
   query.ofYear = { $in: years };
 }
@@ -260,27 +227,7 @@ query.isClassified = isClassified;
 if (statusOfOnlineRequests) {
 query.statusOfOnlineRequests = statusOfOnlineRequests;
 }
-if (newStudent) {
-query.newStudent = newStudent;
-}
-if (oldStudent) {
-query.oldStudent = oldStudent;
-}
-if (gradeOfLastYear) {
-query.gradeOfLastYear = gradeOfLastYear;
-}
-if (housingDate) {
-query.housingDate = housingDate;
-}
-if (evacuationDate) {
-query.evacuationDate = evacuationDate;
-}
-if (housingWithoutFood) {
-query.housingWithoutFood = housingWithoutFood;
-}
-if (transferred) {
-query.transferred = transferred;
-}
+
 
 
 // Loop over each key-value pair in the query object
@@ -297,7 +244,22 @@ for (const key in query) {
       }
   }
 
-const users = await UserModel.find(query).sort({College:1});
+  const selectFields = [
+    'ofYear',
+    'studentName',
+    'studentCode',
+    'nationalID',
+    'placeOfBirth',
+    'religion',
+    'residence',
+    'year',
+    "College",
+    'fatherName',
+    'fatherNationalId',
+    'fatherJop',
+    'fatherPhone'
+];
+const users = await UserModel.find(query).select(selectFields.join(' ')).sort({College:1});
 
 
 
@@ -305,10 +267,14 @@ console.log('====================================');
 console.log(query);
 console.log('====================================');
 
-// const responseData = { status: httpStatusText.SUCCESS, data: { users: users.map(user => ({ ...user.toObject(), residentsOfThePreviousYear: residentsOfThePreviousYear })) } };
 if(! users)
 return next (new Error ("NO USERS FOUND",{cause:404}))
-return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users} });
+
+// const responseData = { status: httpStatusText.SUCCESS, data: { users: users.map(user => ({ ...user.toObject(), residentsOfThePreviousYear: residentsOfThePreviousYear })) } };
+
+return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } });
+
+// return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users} });
 
 }});
 
@@ -580,6 +546,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+
 //قوائم البحث الاجتماعي للانثي
 const socialResearchcasesReportFemale= errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent,statusOfOnlineRequests,divorce,deathFather,deathParents}= req.query
@@ -685,6 +652,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
+
 //الطلبة المحولين للانثي 
 const transferredFemaleStudents=errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent}= req.query
@@ -728,8 +696,8 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 
 
 })
-//الطلبة المفصولين للذكر 
 
+//الطلبة المفصولين للذكر 
 const expulsionStudentsMale=errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent}= req.query
 var query={expulsionStudent:true,
@@ -774,7 +742,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users,coun
 })
 
 //الطلبة المفصولين للانثي 
-
 const expulsionStudentsFemale=errorHandling.asyncHandler(async(req,res,next)=>{
   const {ofYear,oldStudent,newStudent}= req.query
 var query={expulsionStudent:true, gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,}
@@ -854,7 +821,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { users } })
 
 
 // تقرير الرسوم انثى
-
 const feesReportFemales= errorHandling.asyncHandler(async(req,res,next)=>{
 
 const {ofYear}= req.query
@@ -895,7 +861,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students }
 }); 
 
 // تقرير الرسوم ذكر
-
 const feesReportMales= errorHandling.asyncHandler(async(req,res,next)=>{
 
 const {ofYear}= req.query
@@ -937,7 +902,6 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students }
 
 
 //امر التسكين للذكر
-
 const residenceOrderMale= errorHandling.asyncHandler(async(req,res,next)=>{
 
 const {ofYear}= req.query
@@ -977,6 +941,7 @@ return res.status(200).json({ status: httpStatusText.SUCCESS, data: { students }
 
 
 });
+
 //امر التسكين للانثي
 const residenceOrderFemale= errorHandling.asyncHandler(async(req,res,next)=>{
 
