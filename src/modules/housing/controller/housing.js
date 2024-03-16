@@ -249,7 +249,7 @@ const updateHousedFemale = errorHandling.asyncHandler(async (req, res, next) => 
 });
 
 //امر تسكين
-const housingOrder = errorHandling.asyncHandler(async (req, res, next) => {
+const housingOrderMale = errorHandling.asyncHandler(async (req, res, next) => {
   const { studentId } = req.params; 
 
   const { ofYear } = req.query;
@@ -257,11 +257,30 @@ const housingOrder = errorHandling.asyncHandler(async (req, res, next) => {
   var query = {
       ofYear,
       role: "User",
+      gender:"ذكر",
       isHoused: true,
       _id: studentId 
   };
 
-  const user = await userModel.find(query).select('studentName roomName floorName buildingName housingDate studentCode College HousingType')
+  const user = await userModel.find(query).select('studentName roomName buildingName housingDate studentCode College HousingType')
+
+  return res.status(200).json({ status: 'success', user });
+});
+
+const housingOrderFemale = errorHandling.asyncHandler(async (req, res, next) => {
+  const { studentId } = req.params; 
+
+  const { ofYear } = req.query;
+
+  var query = {
+      ofYear,
+      role: "User",
+      gender:{ $in: ["انثي", "أنثي", "انثى", "أنثى"] } ,
+      isHoused: true,
+      _id: studentId 
+  };
+
+  const user = await userModel.find(query).select('studentName roomName buildingName housingDate studentCode College HousingType')
 
   return res.status(200).json({ status: 'success', user });
 });
@@ -271,6 +290,7 @@ module.exports = {houseStudents ,
   getStudentMale , 
   updateHousedMale,
   updateHousedFemale,
-  housingOrder
+  housingOrderMale,
+  housingOrderFemale
 }
 
