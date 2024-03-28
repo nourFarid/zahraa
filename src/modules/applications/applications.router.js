@@ -56,8 +56,9 @@ router.post("/receiveMealExcel",uploadFile.upload.single('avatar'),receiveMealEx
 
 
 //رفع الصور
-const {uploadStudentPhoto}= require("./uploadPhotos/uploadPhotos.js")
+const {uploadStudentPhoto,deletePhoto}= require("./uploadPhotos/uploadPhotos.js")
 router.put("/uploadStudentPhoto",uploadFile.upload.array('avatar',1000),uploadStudentPhoto)
+router.put("/deletePhoto",deletePhoto)
 
 
 

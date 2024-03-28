@@ -39,17 +39,20 @@ const uploadStudentPhoto = errorHandling.asyncHandler(async (req, res, next) => 
     const uploadedPhotos = [];
 
     for (const file of req.files) {
-      const { originalname, path } = file;
+      const { originalname, path,mimetype } = file;
       const buffer = fs.readFileSync(path);
       const nationalID = originalname.split('.')[0];
 
       const studentWithOutPhoto = await User.findOneAndUpdate(
         { nationalID: nationalID },
-        { $set: { image: originalname } },
+        { $set: { image: buffer,  contentType: mimetype } },
         { new: true }
       );
 
-      uploadedPhotos.push({ nationalID, originalname });
+      console.log('====================================');
+      console.log(contentType);
+      console.log('====================================');
+      uploadedPhotos.push({ nationalID, originalname,mimetype });
     }
 
     return res.status(201).json({ status: httpStatusText.SUCCESS, data: { uploadedPhotos } });
@@ -59,5 +62,16 @@ const uploadStudentPhoto = errorHandling.asyncHandler(async (req, res, next) => 
 });
 
 
+const deletePhoto= errorHandling.asyncHandler(async(req,res,next)=>{
 
-module.exports = { uploadStudentPhoto };
+const {id}= req.body.id
+
+const user= await User.findOneAndUpdate(
+  { _id: id},
+  { $unset: { image: "" } }
+)
+
+return res.status(201).json({ status: httpStatusText.SUCCESS, data: { user } });
+
+})
+module.exports = { uploadStudentPhoto ,deletePhoto};

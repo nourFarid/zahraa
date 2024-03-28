@@ -7,7 +7,7 @@ const {
 
 const classifyNewEgyptionMaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const {ofYear}= req.query
+    const {ofYear,limit}= req.query
     const query={
       egyptions:true,
       newStudents:true, 
@@ -21,16 +21,24 @@ const classifyNewEgyptionMaleStudents = errorHandling.asyncHandler(
     const students = await User.find(query).sort({HighSchoolGrade:-1});
     if(!students)
     return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "NO STUDENTS"}});
-
+    const updatedStudents = await Promise.all(
+      students.slice(0, limit).map(async (student) => {
+        return await User.findByIdAndUpdate(
+          { _id: student._id },
+          { $set: { isClassified: true } },
+          { new: true }
+        );
+      })
+    );
 return res
       .status(201)
-      .json({ status: httpStatusText.SUCCESS, data: { students } });
+      .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
   }
 );
 
 const classifyNewEgyptionSpecialHousingMaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const {ofYear}= req.query
+    const {ofYear,limit}= req.query
     const query={
       egyptions:true,
       newStudents:true, 
@@ -44,15 +52,23 @@ const classifyNewEgyptionSpecialHousingMaleStudents = errorHandling.asyncHandler
     const students = await User.find(query).sort({HighSchoolGrade:-1});
     if(!students)
     return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "NO STUDENTS"}});
-
+    const updatedStudents = await Promise.all(
+      students.slice(0, limit).map(async (student) => {
+        return await User.findByIdAndUpdate(
+          { _id: student._id },
+          { $set: { isClassified: true } },
+          { new: true }
+        );
+      })
+    );
 return res
       .status(201)
-      .json({ status: httpStatusText.SUCCESS, data: { students } });
+      .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
   }
 );
 const classifyNewEgyptionFemaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const {ofYear}= req.query
+    const {ofYear,limit}= req.query
     const query={
       egyptions:true,
       newStudents:true, 
@@ -66,15 +82,23 @@ const classifyNewEgyptionFemaleStudents = errorHandling.asyncHandler(
     const students = await User.find(query).sort({HighSchoolGrade:-1});
     if(!students)
     return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "NO STUDENTS"}});
-
+    const updatedStudents = await Promise.all(
+      students.slice(0, limit).map(async (student) => {
+        return await User.findByIdAndUpdate(
+          { _id: student._id },
+          { $set: { isClassified: true } },
+          { new: true }
+        );
+      })
+    );
 return res
       .status(201)
-      .json({ status: httpStatusText.SUCCESS, data: { students } });
+      .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
   }
 );
 const classifyNewEgyptionSpecialHousingFemaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const {ofYear}= req.query
+    const {ofYear,limit}= req.query
     const query={
       egyptions:true,
       newStudents:true, 
@@ -88,10 +112,18 @@ const classifyNewEgyptionSpecialHousingFemaleStudents = errorHandling.asyncHandl
     const students = await User.find(query).sort({HighSchoolGrade:-1});
     if(!students)
     return res.status(404).json({status : httpStatusText.FAIL , data : {msg : "NO STUDENTS"}});
-
+    const updatedStudents = await Promise.all(
+      students.slice(0, limit).map(async (student) => {
+        return await User.findByIdAndUpdate(
+          { _id: student._id },
+          { $set: { isClassified: true } },
+          { new: true }
+        );
+      })
+    );
 return res
       .status(201)
-      .json({ status: httpStatusText.SUCCESS, data: { students } });
+      .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
   }
 );
 

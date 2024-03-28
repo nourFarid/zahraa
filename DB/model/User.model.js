@@ -269,8 +269,8 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    image: String,
-  
+    image: Buffer,
+    contentType: String,
 
     statusOfOnlineRequests:{
       type: String,
