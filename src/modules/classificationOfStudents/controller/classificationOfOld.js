@@ -11,7 +11,7 @@ const {
 //تنسيق طلبة مصريين قدامى
 const classifyOldEgyptionMaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-  const {ofYear}= req.query
+  const {ofYear,limit}= req.query
     const query={ 
        egyptions:true,
       oldStudent:true,
@@ -137,7 +137,7 @@ console.log(students.length);
 console.log('====================================');
 
 const updatedStudents = await Promise.all(
-  students.map(async (student) => {
+  students.slice(0, limit).map(async (student) => {
     return await User.findByIdAndUpdate(
       { _id: student._id },
       { $set: { isClassified: true } },
@@ -145,10 +145,13 @@ const updatedStudents = await Promise.all(
     );
   })
 );
+console.log('====================================');
+console.log(limit);
+console.log('====================================');
 
     return res
       .status(201)
-      .json({ status: httpStatusText.SUCCESS, data: { students } });
+      .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
   }
 );
 
@@ -157,7 +160,7 @@ const updatedStudents = await Promise.all(
 // gender: { $in: ["انثي", "أنثي", "انثى", "أنثى"] } 
 const classifyOldEgyptionFemaleStudents = errorHandling.asyncHandler(
   async (req, res, next) => {
-    const {ofYear}= req.query
+    const {ofYear,limit}= req.query
     const query={  egyptions:true,
       oldStudent:true,
       ofYear:ofYear,
@@ -211,7 +214,7 @@ const classifyOldEgyptionFemaleStudents = errorHandling.asyncHandler(
   console.log('Remaining Students:', students.length);
   let distance
     students = await Promise.all(
-      students.map(async (student) => {
+      students.slice(0, limit).map(async (student) => {
         const distance = await getCoordinatesAndCalculateDistance(student.residence);
         return { ...student._doc, distance };
       })
@@ -291,7 +294,7 @@ const updatedStudents = await Promise.all(
 
 const classifyOldEgyptionSpecialHousingMaleStudents= errorHandling.asyncHandler(async(req, res, next)=>{
 
-const {ofYear}= req.query
+const {ofYear,limit}= req.query
 const query={
   oldStudent:true,
   ofYear:ofYear,
@@ -324,7 +327,7 @@ console.log('====================================');
   console.log(students.length);
   console.log('====================================');
   const updatedStudents = await Promise.all(
-    students.map(async (student) => {
+    students.slice(0, limit).map(async (student) => {
       console.log("Updating student:", student._id);
       return await User.findByIdAndUpdate(
         { _id: student._id },
@@ -336,7 +339,7 @@ console.log('====================================');
 
   return res
   .status(201)
-  .json({ status: httpStatusText.SUCCESS, data: { students } });
+  .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
 
 
 
@@ -346,7 +349,7 @@ console.log('====================================');
 
 const classifyOldEgyptionSpecialHousingFemaleStudents= errorHandling.asyncHandler(async(req, res, next)=>{
 
-const {ofYear}= req.query
+const {ofYear,limit}= req.query
 const query={
   oldStudent:true,
   ofYear:ofYear,
@@ -379,7 +382,7 @@ console.log('====================================');
   console.log(students.length);
   console.log('====================================');
   const updatedStudents = await Promise.all(
-    students.map(async (student) => {
+    students.slice(0, limit).map(async (student) => {
       console.log("Updating student:", student._id);
       return await User.findByIdAndUpdate(
         { _id: student._id },
@@ -391,7 +394,7 @@ console.log('====================================');
 
   return res
   .status(201)
-  .json({ status: httpStatusText.SUCCESS, data: { students } });
+  .json({ status: httpStatusText.SUCCESS, data: { updatedStudents } });
 
 
 
